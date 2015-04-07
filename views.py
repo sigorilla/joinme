@@ -7,7 +7,7 @@ def index(request):
 	if (request.method == "POST"):
 		email = request.POST["email"]
 		try:
-			send = send_mail("Test reg", "Hello!", 'noreply@master-igor.com', [email])
+			send = send_mail("Testing", "Hello! It's testing letter for all.", 'sigorilla@gmail.com', [email])
 		except Exception, e:
 			send = False
 		obj = {
