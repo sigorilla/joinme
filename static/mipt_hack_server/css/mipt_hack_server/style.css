@@ -1,0 +1,10 @@
+body {
+	padding-top: 70px;
+	background-color: whitesmoke;
+}
+
+#header,
+#main,
+#footer {
+	padding: 10px 0;
+}

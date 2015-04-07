@@ -1,0 +1,150 @@
+{% load static %}
+<!doctype html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+{% block head %}
+	<head>
+		<meta charset="UTF-8">
+		<title>{% block title %}{{ page_title|default:"Homepage" }} | MIPT{% endblock title %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<meta name="title" content="{{ page_title|default:"MIPT" }}">
+		<meta name="author" content="Igor Stepanov">
+		<meta name="description" content="Homepage">
+		<meta property="og:title" content="{{ page_title|default:"MIPT" }}">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="{{ current_uri }}">
+		<link rel="icon" type="image/x-icon" href="{% static "images/favicon.png" %}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static "mipt_hack_server/css/mipt_hack_server/style.css" %}?v=0.0.1">
+		<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script src="{% static "mipt_hack_server/js/main.js" %}?v=0.0.3"></script>
+		{% block end_script %}{% endblock end_script %}
+		{% block head_script %}{% endblock head_script %}
+	</head>
+{% endblock head %}
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/">HACK</a>
+		</div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		{% block navigation %}
+			<ul class="nav navbar-nav">
+				<li class="active">
+					<a href="#">Link <span class="sr-only">(current)</span></a>
+				</li>
+				<li><a href="#">Link</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+						<li class="divider"></li>
+						<li><a href="#">One more separated link</a></li>
+					</ul>
+				</li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+			</form>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Link</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		{# {% load menu_top %} #}
+		{# {% show_menu %} #}
+		{# {% include "nav.html" %} #}
+	{% endblock navigation %}
+	</div>
+</nav>
+
+{% block header %}
+<header id="header">
+	<div class="container">
+		<h1>{% block page_title %} <i class="fa fa-{{ fa|default:'coffee' }}"></i> {{ page_title|default:"Testing" }} {% endblock page_title %}</h1>
+	</div>
+</header>
+{% endblock header %}
+
+
+<div id="main">
+	<div class="container">
+	{% block page %}
+		<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex rerum consectetur, aspernatur dolore optio, dolor mollitia temporibus ad repellat perspiciatis obcaecati eaque qui similique nemo voluptas repellendus. Ex, magni. Id, corrupti, facilis repellat quo vero fugiat assumenda iste consequuntur in ipsa corporis molestiae provident quae recusandae ipsam optio. Reprehenderit, libero?</div>
+	{% endblock page %}</div>
+</div>
+
+<footer id="footer">
+	<div class="container">
+	{% block footer %}
+		<div>
+			<div class="btn-group btn-group-sm">
+				<button class="btn btn-default" data-fire="totop" title="Go to Top">
+					<i class="fa fa-arrow-up"></i>
+				</button>
+				<button class="btn btn-default" data-fire="print" title="Print this page">
+					<i class="fa fa-print"></i>
+				</button>
+			</div> &copy; 2012&ndash;{% now "Y" %}</div>
+	{% endblock footer %}
+	</div>
+</footer>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+				try {
+						w.yaCounter28303306 = new Ya.Metrika({id:28303306,
+										clickmap:true,
+										trackLinks:true,
+										accurateTrackBounce:true});
+				} catch(e) { }
+		});
+
+		var n = d.getElementsByTagName("script")[0],
+				s = d.createElement("script"),
+				f = function () { n.parentNode.insertBefore(s, n); };
+		s.type = "text/javascript";
+		s.async = true;
+		s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+		if (w.opera == "[object Opera]") {
+				d.addEventListener("DOMContentLoaded", f, false);
+		} else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/28303306" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+</body>
+</html>
