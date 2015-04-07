@@ -1,10 +1,14 @@
 body {
 	padding-top: 70px;
-	background-color: whitesmoke;
+	/*background-color: whitesmoke;*/
 }
 
 #header,
 #main,
 #footer {
 	padding: 10px 0;
+}
+
+#loginForm {
+	padding: 10px;
 }
