@@ -1,6 +1,7 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import SetPasswordForm
 
 class RegistrationForm(forms.Form):
 	email = forms.EmailField(
@@ -30,3 +31,17 @@ class RegistrationForm(forms.Form):
 		u.is_active = False
 		u.save()
 		return u
+
+class ResetForm(SetPasswordForm):
+	# old_password = forms.CharField(
+	# 	label="Old password",
+	# 	widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+	# 	)
+	new_password1 = forms.CharField(
+		label="New password",
+		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+		)
+	new_password2 = forms.CharField(
+		label="Again new password",
+		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+		)

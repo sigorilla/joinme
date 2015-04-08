@@ -13,7 +13,11 @@
 			<div class="panel panel-default bg-info">
 				<div class="panel-heading">Login Form</div>
 				<div class="panel-body">
-					<form method="post" id="loginForm" action="{% url 'index' %}">
+					{% if next %}
+					<form method="post" id="loginForm" action="{% url 'mipt:index' %}?next={{next}}">
+					{% else %}
+					<form method="post" id="loginForm" action="{% url 'mipt:index' %}">
+					{% endif %}
 						{% csrf_token %}
 							{% if created %}
 								<div class="well well-sm text-info">Email will be send.</div>
@@ -24,7 +28,7 @@
 								{% if wrong_data %}
 									<div class="well well-sm text-danger">Check your data.</div>
 								{% endif %}
-								{% if wrong_data %}
+								{% if empty_data %}
 									<div class="well well-sm text-danger">Data should not be empty.</div>
 								{% endif %}
 								{% for field in form %}

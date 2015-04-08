@@ -6,13 +6,20 @@ from django.shortcuts import render, render_to_response,  get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import *
+from django.http import HttpResponseRedirect
 
 from mipt_hack_server.models import UserProfile
-from mipt_hack_server.forms import RegistrationForm
+from mipt_hack_server.forms import RegistrationForm, ResetForm
 
 def index(request):
 	if request.user.is_authenticated():
 		return render(request, "mipt_hack_server/index.html", {"has_account": True})
+
+	next = ""
+	if request.GET:
+		next = request.GET["next"]
+
 	if request.POST:
 		new_data = request.POST.copy()
 		form = RegistrationForm(new_data)
@@ -58,8 +65,12 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 			if user is not None:
 				if user.is_active:
 					login(request, user)
+					if next == "":
+						return HttpResponseRedirect(reverse("mipt:index"))
+					else:
+						return HttpResponseRedirect(next)
 					# redirect to success page
-					return render(request, "mipt_hack_server/index.html", {"has_account": True})
+					# return render(request, "mipt_hack_server/index.html", {"has_account": True})
 				else:
 					# account is disabled
 					return render(request, "mipt_hack_server/index.html", {"is_inactive": True, "form": form})
@@ -70,7 +81,7 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 		form = RegistrationForm()
 		errors = new_data = {}
 
-	return render(request, "mipt_hack_server/index.html", {"form": form})
+	return render(request, "mipt_hack_server/index.html", {"form": form, "next": next})
 
 def confirm(request, activation_key):
 	if request.user.is_authenticated():
@@ -89,6 +100,17 @@ def confirm(request, activation_key):
 	user_account.save()
 	return render(request, "mipt_hack_server/confirm.html", {"confirm": True})
 
-@login_required
+@login_required(login_url=reverse_lazy("mipt:index"))
 def settings(request):
-	return render(request, "mipt_hack_server/settings.html", {})
+	reset_form = ResetForm(user=request.user)
+	if request.POST:
+		if request.POST["name_form"] == "new_pass":
+			reset_form = ResetForm(user=request.user, data=request.POST)
+			if reset_form.is_valid():
+				reset_form.save()
+				return render(request, "mipt_hack_server/settings.html", 
+					{"reset_form": reset_form, "reset_success": True})
+
+	return render(request, "mipt_hack_server/settings.html", {"reset_form": reset_form})
+
+
