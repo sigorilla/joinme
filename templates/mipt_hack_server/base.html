@@ -2,30 +2,30 @@
 <!doctype html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
 {% block head %}
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>{% block title %}{{ page_title|default:"Homepage" }} | MIPT{% endblock title %}</title>
-		<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}{{ page_title|default:"Homepage" }} | MIPT{% endblock title %}</title>
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
 
-		<meta name="title" content="{{ page_title|default:"MIPT" }}">
-		<meta name="author" content="Igor Stepanov">
-		<meta name="description" content="Homepage">
-		<meta property="og:title" content="{{ page_title|default:"MIPT" }}">
-		<meta property="og:type" content="website">
-		<meta property="og:url" content="{{ current_uri }}">
+	<meta name="title" content="{{ page_title|default:"MIPT" }}">
+	<meta name="author" content="Igor Stepanov">
+	<meta name="description" content="Homepage">
+	<meta property="og:title" content="{{ page_title|default:"MIPT" }}">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{{ current_uri }}">
 
-		<link rel="icon" type="image/x-icon" href="{% static "images/favicon.png" %}">
+	<link rel="icon" type="image/x-icon" href="{% static "images/favicon.png" %}">
 
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{% static "mipt_hack_server/css/style.css" %}?v=0.0.1">
-		{% block head_script %}{% endblock head_script %}
-	</head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{% static "mipt_hack_server/css/style.css" %}?v=0.0.1">
+	{% block head_script %}{% endblock head_script %}
+</head>
 {% endblock head %}
 <body>
 
