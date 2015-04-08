@@ -1,3 +1,4 @@
 from django.contrib import admin
+from mipt_hack_server.models import UserProfile
 
-# Register your models here.
+admin.site.register(UserProfile)
