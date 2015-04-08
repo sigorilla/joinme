@@ -2,9 +2,10 @@
 import datetime, random, hashlib
 import re
 from django import forms
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.shortcuts import render, render_to_response,  get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 from mipt_hack_server.models import UserProfile
 from mipt_hack_server.forms import RegistrationForm
@@ -73,17 +74,21 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 
 def confirm(request, activation_key):
 	if request.user.is_authenticated():
-		return render_to_response("mipt_hack_server/confirm.html", {"has_account": True})
+		return render(request, "mipt_hack_server/confirm.html", {"has_account": True})
 	user_profile = get_object_or_404(
 		UserProfile,
 		activation_key=activation_key
 	)
 	if user_profile.key_expires < datetime.datetime.today():
-		return render_to_response("mipt_hack_server/confirm.html", {"expired": True})
-	form = RegistrationForm()
+		return render(request, "mipt_hack_server/confirm.html", {"expired": True})
+	form = RegistrationForm({"email": user_profile.user.email, "password": ""})
 	if user_profile.user.is_active:
-		return render_to_response("mipt_hack_server/confirm.html", {"is_active": True})
+		return render(request, "mipt_hack_server/confirm.html", {"is_active": True, "form": form})
 	user_account = user_profile.user
 	user_account.is_active = True
 	user_account.save()
 	return render(request, "mipt_hack_server/confirm.html", {"confirm": True})
+
+@login_required
+def settings(request):
+	return render(request, "mipt_hack_server/settings.html", {})
