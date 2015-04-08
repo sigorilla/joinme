@@ -22,6 +22,9 @@
 								{% if wrong_data %}
 									<div class="well well-sm text-danger">Check your data.</div>
 								{% endif %}
+								{% if wrong_data %}
+									<div class="well well-sm text-danger">Data should not be empty.</div>
+								{% endif %}
 								{% for field in form %}
 								<div class="form-group">
 									<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>

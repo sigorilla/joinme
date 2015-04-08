@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime, random, hashlib
+import re
 from django import forms
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.core.mail import send_mail
@@ -14,9 +15,15 @@ def index(request):
 	if request.POST:
 		new_data = request.POST.copy()
 		form = RegistrationForm(new_data)
+		if (new_data["email"] is not "") and (new_data["password"] is not ""):
+			match = re.match(r'(?P<email>.+@.+\..+)', new_data["email"])
+			if not (match and match.groupdict()["email"] == new_data["email"]):
+				return render(request, "mipt_hack_server/index.html", {"empty_data": True, "form": form})
+		else:
+			return render(request, "mipt_hack_server/index.html", {"empty_data": True, "form": form})
+
 		errors = form.isValidUsername(new_data["email"])
 		if not errors:
-			# form.do_html2python(new_data)
 			new_user = form.save(new_data)
 
 			salt = hashlib.md5(str(random.random())).hexdigest()[:5]

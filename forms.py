@@ -6,12 +6,12 @@ class RegistrationForm(forms.Form):
 	email = forms.EmailField(
 		max_length=40,
 		required=True,
-		widget=forms.EmailInput(attrs={"class": "form-control"})
+		widget=forms.EmailInput(attrs={"class": "form-control", "required": ""})
 		)
 	password = forms.CharField(
 		max_length=60,
 		required=True,
-		widget=forms.PasswordInput(attrs={"class": "form-control"})
+		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
 		)
 
 	def isValidUsername(self, field_data):
