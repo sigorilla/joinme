@@ -32,8 +32,8 @@ def index(request):
 
 			email_subject = "Your new master-igor.com account confirmation"
 			email_body = "Hello, %s, and thanks for signing up for an \
-master_igor.com account!\n\nTo activate your account, click this link within 48 \
- hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
+master-igor.com account!\n\nTo activate your account, click this link within 48 \
+hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 				new_user.username,
 				new_profile.activation_key
 				)
