@@ -10,7 +10,7 @@
 {% else %}
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
-			<div class="panel panel-default bg-info">
+			<div class="panel panel-primary">
 				<div class="panel-heading">Login Form</div>
 				<div class="panel-body">
 					{% if next %}
@@ -20,16 +20,16 @@
 					{% endif %}
 						{% csrf_token %}
 							{% if created %}
-								<div class="well well-sm text-info">Email will be send.</div>
+								<div class="well well-sm well-material-light-blue-500">Email will be send.</div>
 							{% else %}
 								{% if is_inactive %}
-									<div class="well well-sm text-warning">Confirm your account via link in your email.</div>
+									<div class="well well-sm well-material-deep-orange-500">Confirm your account via link in your email.</div>
 								{% endif %}
 								{% if wrong_data %}
-									<div class="well well-sm text-danger">Check your data.</div>
+									<div class="well well-sm well-material-red-500">Check your data.</div>
 								{% endif %}
 								{% if empty_data %}
-									<div class="well well-sm text-danger">Data should not be empty.</div>
+									<div class="well well-sm well-material-red-500">Data should not be empty.</div>
 								{% endif %}
 								{% for field in form %}
 								<div class="form-group">
@@ -37,13 +37,14 @@
 									{{ field }}
 								</div>
 								{% endfor %}
-								<div class="well well-sm">
-									If you don't register, after submit this form the letter with activation code will be sent to your email.
+								<div class="text-center">
+									<button data-type="submit" class="btn btn-success">Login</button>
+									<button data-type="submit" class="btn btn-info">Register</button>
 								</div>
-								<button data-type="submit" class="btn btn-default btn-success">Submit</button>
 							{% endif %}
 					</form>
 				</div>
+				<div class="panel-footer">If you don't register, after submit this form the letter with activation code will be sent to your email.</div>
 			</div>
 		</div>
 	</div>

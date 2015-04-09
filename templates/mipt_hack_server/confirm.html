@@ -4,23 +4,23 @@
 {% block page %}
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
-			<div class="panel panel-default bg-info">
+			<div class="panel panel-primary">
 				<div class="panel-heading">Confirmation</div>
 				<div class="panel-body">
 					{% if has_account %}
-						<div class="well well-sm text-warning">Logout, please.</div>
+						<div class="well well-sm well-material-deep-orange-500">Logout, please.</div>
 						<a href="{% url "mipt:logout" %}" class="btn btn-default">Logout</a>
 					{% endif %}
 					{% if expired %}
-						<div class="well well-sm text-danger">Time is up! Sorry. Try again.</div>
+						<div class="well well-sm well-material-red-500">Time is up! Sorry. Try again.</div>
 					{% endif %}
 					{% if is_active %}
-						<div class="well well-sm text-info">You are is active user!</div>
+						<div class="well well-sm well-material-light-blue-500">You are is active user!</div>
 					{% endif %}
 					{% if confirm %}
-						<div class="well well-sm text-success">Thank you!</div>
+						<div class="well well-sm well-material-teal">Thank you!</div>
 					{% endif %}
-					{% if is_active or confirm %}
+					{% if confirm or is_active %}
 						<form method="post" id="loginForm" action="{% url 'mipt:index' %}">
 							{% csrf_token %}
 							{% for field in form %}
@@ -29,11 +29,10 @@
 								{{ field }}
 							</div>
 							{% endfor %}
-							<div class="well well-sm">
-								If you don't register, after submit this form the letter with activation code will be sent to your email.
-							</div>
-							<button data-type="submit" class="btn btn-default btn-success">Submit</button>
+							<button data-type="submit" class="btn btn-success">Login</button>
 						</form>
+						</div>
+						<div class="panel-footer">If you don't register, after submit this form the letter with activation code will be sent to your email.
 					{% endif %}
 				</div>
 			</div>
