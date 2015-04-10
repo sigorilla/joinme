@@ -38,32 +38,66 @@
 					<form method="post" id="loginForm" action="{% url 'mipt:index' %}">
 					{% endif %}
 						{% csrf_token %}
-							{% if created %}
-								<div class="well well-sm well-material-light-blue-500">Email will be send.</div>
-							{% else %}
-								{% if is_inactive %}
-									<div class="well well-sm well-material-deep-orange-500">Confirm your account via link in your email.</div>
-								{% endif %}
-								{% if wrong_data %}
-									<div class="well well-sm well-material-red-500">Check your data.</div>
-								{% endif %}
-								{% if empty_data %}
-									<div class="well well-sm well-material-red-500">Data should not be empty.</div>
-								{% endif %}
-								{% for field in form %}
-								<div class="form-group">
-									<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-									{{ field }}
-								</div>
-								{% endfor %}
-								<div class="text-center">
-									<button data-type="submit" class="btn btn-success">Login</button>
-									<button data-type="submit" class="btn btn-info">Register</button>
-								</div>
+						<input type="hidden" name="type_form" value="login">
+						{% if created %}
+							<div class="well well-sm well-material-light-blue-500">Email will be send.</div>
+						{% else %}
+							{% if is_inactive %}
+								<div class="well well-sm well-material-deep-orange-500">Confirm your account via link in your email.</div>
 							{% endif %}
+							{% if wrong_data %}
+								<div class="well well-sm well-material-red-500">Check your data.</div>
+							{% endif %}
+							{% if empty_data %}
+								<div class="well well-sm well-material-red-500">Data should not be empty.</div>
+							{% endif %}
+							{% for field in form %}
+							<div class="form-group">
+								<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+								{{ field }}
+							</div>
+							{% endfor %}
+							<div class="text-center">
+								<button data-type="submit" class="btn btn-success">Login</button>
+								<button data-type="submit" class="btn btn-info">Register</button>
+							</div>
+						{% endif %}
 					</form>
 				</div>
 				<div class="panel-footer">If you don't register, after submit this form the letter with activation code will be sent to your email.</div>
+			</div>
+
+			<div class="panel panel-primary" id="resetPassword">
+				<div class="panel-heading">Reset Password</div>
+				<div class="panel-body">
+					{% if next %}
+					<form method="post" id="resetForm" action="{% url 'mipt:index' %}?next={{next}}">
+					{% else %}
+					<form method="post" id="resetForm" action="{% url 'mipt:index' %}">
+					{% endif %}
+						{% csrf_token %}
+						<input type="hidden" name="type_form" value="reset_password">
+						{% if is_reset %}
+							<div class="well well-sm well-material-light-blue-500">Email will be send.</div>
+						{% else %}
+							{% if wrong_data_reset %}
+								<div class="well well-sm well-material-red-500">Check your data.</div>
+							{% endif %}
+							{% if empty_data_reset %}
+								<div class="well well-sm well-material-red-500">Data should not be empty.</div>
+							{% endif %}
+							{% for field in reset %}
+							<div class="form-group">
+								<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+								{{ field }}
+							</div>
+							{% endfor %}
+							<div class="text-center">
+								<button data-type="submit" class="btn btn-danger">Reset Password</button>
+							</div>
+						{% endif %}
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>

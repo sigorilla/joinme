@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from mipt_hack_server.models import UserProfile, Category, Event, User
-from mipt_hack_server.forms import RegistrationForm, ResetForm
+from mipt_hack_server.forms import RegistrationForm, ResetForm, MyPasswordResetForm
 
 class LoginRequiredMixin(object):
 	@classmethod
@@ -35,6 +35,13 @@ def index(request):
 	if request.POST:
 		new_data = request.POST.copy()
 		form = RegistrationForm(new_data)
+		if (request.POST["type_form"] == "reset_password"):
+			reset_form = MyPasswordResetForm(new_data)
+			if reset_form.is_valid():
+				reset_form.save(new_data, from_email="sigorilla@gmail.com")
+				return render(request, "mipt_hack_server/index.html", {"is_reset": True, "form": form, "reset": reset_form})
+			else:
+				return render(request, "mipt_hack_server/index.html", {"wrong_data_reset": True, "form": form, "reset": reset_form})
 		if (new_data["email"] is not "") and (new_data["password"] is not ""):
 			match = re.match(r'(?P<email>.+@.+\..+)', new_data["email"])
 			if not (match and match.groupdict()["email"] == new_data["email"]):
@@ -90,10 +97,11 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 				# invalid login/password
 				return render(request, "mipt_hack_server/index.html", {"wrong_data": True, "form": form})
 	else:
+		reset_pass = MyPasswordResetForm()
 		form = RegistrationForm()
 		errors = new_data = {}
 
-	return render(request, "mipt_hack_server/index.html", {"form": form, "next": next})
+	return render(request, "mipt_hack_server/index.html", {"form": form, "next": next, "reset": reset_pass})
 
 def confirm(request, activation_key):
 	if request.user.is_authenticated():

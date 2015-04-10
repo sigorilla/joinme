@@ -1,15 +1,18 @@
 from django import forms
 from django.core import validators
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.forms import SetPasswordForm, PasswordResetForm
+from django.utils.translation import ugettext, ugettext_lazy as _
 
 class RegistrationForm(forms.Form):
 	email = forms.EmailField(
+		label=_("Email"),
 		max_length=40,
 		required=True,
 		widget=forms.EmailInput(attrs={"class": "form-control", "required": ""})
 		)
 	password = forms.CharField(
+		label=_("Password"),
 		max_length=60,
 		required=True,
 		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
@@ -38,10 +41,17 @@ class ResetForm(SetPasswordForm):
 	# 	widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
 	# 	)
 	new_password1 = forms.CharField(
-		label="New password",
+		label=_("New password"),
 		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
 		)
 	new_password2 = forms.CharField(
-		label="Confirm new password",
+		label=_("Confirm new password"),
 		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+		)
+
+class MyPasswordResetForm(PasswordResetForm):
+	email = forms.EmailField(
+		label=_("Email"), 
+		max_length=254, 
+		widget=forms.EmailInput(attrs={"class": "form-control", "required": ""})
 		)
