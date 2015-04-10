@@ -110,7 +110,7 @@ def confirm(request, activation_key):
 	user_account = user_profile.user
 	user_account.is_active = True
 	user_account.save()
-	return render(request, "mipt_hack_server/confirm.html", {"confirm": True})
+	return render(request, "mipt_hack_server/confirm.html", {"confirm": True, "form": form})
 
 @login_required(login_url=reverse_lazy("mipt:index"))
 def settings(request):
