@@ -1,0 +1,35 @@
+{% extends "mipt_hack_server/base.html" %}
+{% load static %}
+
+{% block page %}
+<div class="page-header">
+	<h1 class="text-center">{{ event.title }} <small>event</small></h1>
+</div>
+<div class="col-md-6 col-md-offset-3">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<h3>Description</h3>
+			<div>{{ event.description }}</div>
+			<h3>Members</h3>
+			<div>
+				<ul class="list-group">
+					<li class="list-group-item">
+						<h4 class="list-group-item-heading">
+							<i class="mdi-editor-insert-emoticon"></i> {{ event.author }}
+						</h4>
+					</li>
+					{% for user in event.users.all %}
+						<li class="list-group-item">
+							<h4 class="list-group-item-heading">
+								<i class="mdi-social-person"></i> {{ user }}
+							</h4>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="panel-footer">{{ event.datetime }}</div>
+	</div>
+</div>
+
+{% endblock page %}

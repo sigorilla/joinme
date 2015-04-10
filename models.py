@@ -31,9 +31,11 @@ class Category(models.Model):
 	def __unicode__(self):
 		return self.title
 
-	title = models.CharField(max_length=200)
+	title = models.CharField(max_length=100)
 	description = models.TextField(blank=True)
-	icon = models.CharField(max_length=20, blank=True)
+	icon = models.CharField(max_length=100, blank=True, default="mdi-content-send")
+	color = models.CharField(max_length=100, blank=True, default="material-teal")
+	active = models.BooleanField(default=True)
 
 class Event(models.Model):
 

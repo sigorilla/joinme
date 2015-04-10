@@ -12,3 +12,8 @@ body {
 #loginForm {
 	padding: 10px;
 }
+
+body [class^=mdi-],
+body [class*=mdi-] {
+	font-size: inherit;
+}

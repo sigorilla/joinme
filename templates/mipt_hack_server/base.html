@@ -26,7 +26,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
-	<link rel="stylesheet" href="{% static "mipt_hack_server/css/style.css" %}?v=0.0.2">
+	<link rel="stylesheet" href="{% static "mipt_hack_server/css/style.css" %}?v=0.0.3">
 	{% block head_script %}{% endblock head_script %}
 </head>
 {% endblock head %}
@@ -49,7 +49,7 @@
 		{% endblock navigation %}
 		{% if user.is_authenticated %}
 			<ul class="nav navbar-nav">
-				<li><a href="#">My Events</a></li>
+				<li><a href="{% url "mipt:myevents" %}">My Events</a></li>
 			</ul>
 			<form class="navbar-form navbar-left" role="search" method="get" action="{% url "mipt:index" %}">
 				<div class="input-group">
@@ -61,7 +61,7 @@
 			</form>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-user"></i> {{ user.username }} <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="mdi-action-account-circle"></i> {{ user.username }} <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="{% url "mipt:settings" %}"><i class="fa fa-cogs"></i> Settings</a></li>
 						<li class="divider"></li>

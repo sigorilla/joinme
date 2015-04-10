@@ -2,19 +2,25 @@
 import datetime, random, hashlib
 import re
 from django import forms
-from django.shortcuts import render, render_to_response,  get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import *
 from django.http import HttpResponseRedirect
+from django.views import generic
 
-from mipt_hack_server.models import UserProfile
+from mipt_hack_server.models import UserProfile, Category, Event, User
 from mipt_hack_server.forms import RegistrationForm, ResetForm
 
 def index(request):
 	if request.user.is_authenticated():
-		return render(request, "mipt_hack_server/index.html", {"has_account": True})
+		list_categories = Category.objects.filter(active__exact=True)
+		obj = {
+			"has_account": True,
+			"categories": list_categories,
+		}
+		return render(request, "mipt_hack_server/index.html", obj)
 
 	next = ""
 	if request.GET:
@@ -113,4 +119,23 @@ def settings(request):
 
 	return render(request, "mipt_hack_server/settings.html", {"reset_form": reset_form})
 
+class CategoryView(generic.DetailView):
+	model = Category
+	template_name = "mipt_hack_server/category.html"
 
+	def get_context_data(self, **kwargs):
+		context = super(CategoryView, self).get_context_data(**kwargs)
+		context["events"] = Event.objects.filter(category__exact=kwargs["object"].id)
+		return context
+
+class EventView(generic.DetailView):
+	model = Event
+	template_name = "mipt_hack_server/event.html"
+
+class MyEventsList(generic.ListView):
+	template_name = "mipt_hack_server/myevents.html"
+	context_object_name = "events"
+
+	def get_queryset(self):
+		author = UserProfile.objects.filter(user__id=self.request.user.id).values()[0]
+		return Event.objects.filter(author__id=author["id"])
