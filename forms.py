@@ -22,8 +22,8 @@ class RegistrationForm(forms.Form):
 		try:
 			User.objects.get(username=field_data)
 		except User.DoesNotExist:
-			return
-		raise validators.ValidationError("The username '%s' is already taken." % field_data)
+			return field_data
+		return validators.ValidationError("The username '%s' is already taken." % field_data)
 
 	def save(self, new_data):
 		u = User.objects.create_user(
