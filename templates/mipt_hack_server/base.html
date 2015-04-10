@@ -49,6 +49,8 @@
 		{% endblock navigation %}
 		{% if user.is_authenticated %}
 			<ul class="nav navbar-nav">
+				<li><a href="{% url "mipt:index" %}">Categories</a></li>
+				<li><a href="{% url "mipt:allevents" %}">All Events</a></li>
 				<li><a href="{% url "mipt:myevents" %}">My Events</a></li>
 				<li class="divider"></li>
 				<li><a href="#">Create Event</a></li>

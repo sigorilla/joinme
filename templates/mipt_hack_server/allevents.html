@@ -3,13 +3,13 @@
 
 {% block page %}
 <div class="page-header">
-	<h1 class="text-center">My Events</h1>
+	<h1 class="text-center">All Events</h1>
 </div>
 {% for event in events %}
 <div class="col-md-4">
-	<div class="panel panel-default">
+	<div class="panel panel-{{ event.category.color }} event" id="event-{{ event.id }}">
 		<div class="panel-heading">
-			<h2 class="text-center">{{ event.title }}</h2>
+			<h2 class="text-center"><i class="{{ event.category.icon }}"></i> {{ event.title }}</h2>
 		</div>
 		<div class="panel-body">
 			<h3>Author</h3>
@@ -20,6 +20,7 @@
 			<div>{{ event.datetime }}</div>
 		</div>
 		<div class="panel-footer text-right">
+			<span class="pull-left">{{ event.category.title }}</span>
 			<a href="{% url "mipt:event" event.id %}">More details</a>
 		</div>
 	</div>

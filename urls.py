@@ -11,4 +11,5 @@ urlpatterns = patterns("",
   url(r"^category/(?P<pk>\d+)/$", views.CategoryView.as_view(), name="category"),
   url(r"^event/(?P<pk>\d+)/$", views.EventView.as_view(), name="event"),
   url(r"^event/my/$", views.MyEventsList.as_view(), name="myevents"),
+  url(r"^event/all/$", views.AllEventsList.as_view(), name="allevents"),
 )

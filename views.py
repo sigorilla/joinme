@@ -168,7 +168,7 @@ class CategoryView(LoginRequiredMixin, generic.DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(CategoryView, self).get_context_data(**kwargs)
-		context["events"] = Event.objects.filter(category__exact=kwargs["object"].id)
+		context["events"] = Event.objects.filter(category__exact=kwargs["object"].id, active__exact=True)
 		return context
 
 class EventView(LoginRequiredMixin, generic.DetailView):
@@ -181,7 +181,14 @@ class MyEventsList(LoginRequiredMixin, generic.ListView):
 
 	def get_queryset(self):
 		author = UserProfile.objects.filter(user__id=self.request.user.id).values()[0]
-		return Event.objects.filter(author__id=author["id"])
+		return Event.objects.filter(author__id=author["id"], active__exact=True).order_by('-pub_date')
+
+class AllEventsList(LoginRequiredMixin, generic.ListView):
+	template_name = "mipt_hack_server/allevents.html"
+	context_object_name = "events"
+
+	def get_queryset(self):
+		return Event.objects.filter(active__exact=True).order_by('-pub_date')
 
 def search(request):
 	query_string = ''

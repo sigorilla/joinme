@@ -57,3 +57,4 @@ class Event(models.Model):
 	category = models.ForeignKey(Category)
 	author = models.ForeignKey(UserProfile, related_name='author')
 	users = models.ManyToManyField(UserProfile, blank=True)
+	active = models.BooleanField(default=True)
