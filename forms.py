@@ -30,10 +30,10 @@ class RegistrationForm(forms.Form):
 		u = User.objects.create_user(
 			new_data["email"],
 			new_data["email"],
-			new_data["password"]
+			new_data["password"],
+			last_login=datetime.now()
 			)
 		u.is_active = False
-		u.last_login = datetime.now()
 		u.save()
 		return u
 
