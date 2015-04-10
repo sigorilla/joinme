@@ -26,7 +26,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
-	<link rel="stylesheet" href="{% static "mipt_hack_server/css/style.css" %}?v=0.0.3">
+	<link rel="stylesheet" href="{% static "mipt_hack_server/css/style.css" %}?v=0.0.4">
 	{% block head_script %}{% endblock head_script %}
 </head>
 {% endblock head %}
@@ -50,6 +50,8 @@
 		{% if user.is_authenticated %}
 			<ul class="nav navbar-nav">
 				<li><a href="{% url "mipt:myevents" %}">My Events</a></li>
+				<li class="divider"></li>
+				<li><a href="#">Create Event</a></li>
 			</ul>
 			<form class="navbar-form navbar-left" role="search" method="get" action="{% url "mipt:index" %}">
 				<div class="input-group">
@@ -148,7 +150,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.min.js"></script>
-<script src="{% static "mipt_hack_server/js/main.js" %}?v=0.0.4"></script>
+<script src="{% static "mipt_hack_server/js/main.js" %}?v=0.0.5"></script>
 <script>
 $( function() {
 	$.material.init();

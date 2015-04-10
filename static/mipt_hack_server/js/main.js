@@ -12,6 +12,9 @@ $( document ).ready( function () {
 			console.log( "HACK is running." );
 
 			_addListener();
+
+			$active_link = $( "nav a[href='" + window.location.pathname + "']" ).removeAttr( "href" )
+				.parents( "li" ).addClass( "active" );
 		};
 
 		var _addListener = function () {
@@ -25,6 +28,14 @@ $( document ).ready( function () {
 					window.print();
 				}
 			} );
+
+			$( ".category, .event" )
+				.on( "click", _openCatEv )
+				.hover( function() {
+					$( this ).addClass( "shadow-z-4" );
+				}, function() {
+					$( this ).removeClass( "shadow-z-4" );
+				} );
 
 			$loginForm.find( "[data-type=submit]" ).click( function ( event ) {
 				event.preventDefault();
@@ -58,6 +69,15 @@ $( document ).ready( function () {
 				$( this ).parent( ".form-group" ).removeClass( "has-error" );
 			} );
 
+		};
+
+		var _openCatEv = function ( event ) {
+			var $link = $( this ).find( ".panel-footer a" );
+			var url = "";
+			if ( $link.length > 0 ) {
+				url = $link.eq( 0 ).attr( "href" );
+				window.location.pathname = url;
+			}
 		};
 
 		return {

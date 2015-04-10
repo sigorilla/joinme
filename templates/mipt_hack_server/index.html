@@ -9,7 +9,7 @@
 </div>
 {% for category in categories %}
 <div class="col-md-4">
-	<div class="panel panel-{{ category.color }}">
+	<div class="panel panel-{{ category.color }} category" id="category-{{ category.id }}">
 		<div class="panel-heading">
 			<h2 class="text-center"><i class="{{ category.icon }}"></i> {{ category.title }}</h2>
 		</div>
