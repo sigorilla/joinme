@@ -67,7 +67,7 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 			send_mail(
 				email_subject,
 				email_body,
-				"sigorilla@gmail.com",
+				"noreply@master-igor.com",
 				[new_user.email]
 				)
 
