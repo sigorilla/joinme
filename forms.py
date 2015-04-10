@@ -45,7 +45,7 @@ class ResetForm(SetPasswordForm):
 		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
 		)
 	new_password2 = forms.CharField(
-		label=_("Confirm new password"),
+		label=_("New password confirmation"),
 		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
 		)
 
