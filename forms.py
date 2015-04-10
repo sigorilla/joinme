@@ -3,6 +3,7 @@ from django.core import validators
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import SetPasswordForm, PasswordResetForm
 from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.timezone import datetime
 
 class RegistrationForm(forms.Form):
 	email = forms.EmailField(
@@ -32,6 +33,7 @@ class RegistrationForm(forms.Form):
 			new_data["password"]
 			)
 		u.is_active = False
+		u.last_login = datetime.now()
 		u.save()
 		return u
 
