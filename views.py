@@ -13,6 +13,12 @@ from django.views import generic
 from mipt_hack_server.models import UserProfile, Category, Event, User
 from mipt_hack_server.forms import RegistrationForm, ResetForm
 
+class LoginRequiredMixin(object):
+	@classmethod
+	def as_view(cls, **initkwargs):
+		view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+		return login_required(view, login_url=reverse_lazy("mipt:index"))
+
 def index(request):
 	if request.user.is_authenticated():
 		list_categories = Category.objects.filter(active__exact=True)
@@ -119,7 +125,7 @@ def settings(request):
 
 	return render(request, "mipt_hack_server/settings.html", {"reset_form": reset_form})
 
-class CategoryView(generic.DetailView):
+class CategoryView(LoginRequiredMixin, generic.DetailView):
 	model = Category
 	template_name = "mipt_hack_server/category.html"
 
@@ -128,11 +134,11 @@ class CategoryView(generic.DetailView):
 		context["events"] = Event.objects.filter(category__exact=kwargs["object"].id)
 		return context
 
-class EventView(generic.DetailView):
+class EventView(LoginRequiredMixin, generic.DetailView):
 	model = Event
 	template_name = "mipt_hack_server/event.html"
 
-class MyEventsList(generic.ListView):
+class MyEventsList(LoginRequiredMixin, generic.ListView):
 	template_name = "mipt_hack_server/myevents.html"
 	context_object_name = "events"
 

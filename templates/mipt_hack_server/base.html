@@ -70,6 +70,11 @@
 				</li>
 			</ul>
 		{% else %}
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="{% url "mipt:index" %}"><i class="fa fa-sign-in"></i> {{ user.username }}</a>
+				</li>
+			</ul>
 		{% endif %}
 		</div>
 	</div>
