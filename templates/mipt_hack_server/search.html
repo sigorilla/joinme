@@ -6,10 +6,6 @@
 <div class="page-header">
 	<h1 class="text-center"><i class="fa fa-search"></i> {{ query }}</h1>
 </div>
-{% for result in results %}
-{% include "mipt_hack_server/event-temp.html" with event=result %}
-{% empty %}
-<h2 class="text-center"><i class="fa fa-exclamation-triangle"></i> Nothing found</h2>
-{% endfor %}
+{% include "mipt_hack_server/event-temp.html" with events=event_list %}
 
 {% endblock page %}

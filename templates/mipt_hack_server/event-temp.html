@@ -1,17 +1,44 @@
-<div class="col-md-4">
-	<div class="panel panel-{{ event.category.color }} event" id="event-{{ event.id }}">
-		<div class="panel-heading">
-			<span class="badge pull-right">{{ event.users.all|length }}</span>
-			<h2 class="text-center"><i class="{{ event.category.icon }}"></i> {{ event.title }}</h2>
+{% if events %}
+	<div class="js-masonry">
+	{% for event in events %}
+		<div class="col-md-4 item">
+			<div class="panel panel-{{ event.category.color }} event" id="event-{{ event.id }}">
+				<div class="panel-heading">
+					<span class="badge pull-right">{{ event.users.all|length }}</span>
+					<h2 class="text-center"><i class="{{ event.category.icon }}"></i> {{ event.title }}</h2>
+				</div>
+				<div class="panel-body">
+					<div>{{ event.description }}</div>
+					<hr>
+					<div>By <code>{{ event.author }}</code></div>
+				</div>
+				<div class="panel-footer text-right">
+					<span class="pull-left">{{ event.datetime }}</span>
+					<a href="{% url "mipt:event" event.id %}">More details</a>
+				</div>
+			</div>
 		</div>
-		<div class="panel-body">
-			<div>{{ event.description }}</div>
-			<hr>
-			<div>By <code>{{ event.author }}</code></div>
-		</div>
-		<div class="panel-footer text-right">
-			<span class="pull-left">{{ event.datetime }}</span>
-			<a href="{% url "mipt:event" event.id %}">More details</a>
-		</div>
+	{% endfor %}
 	</div>
-</div>
+	<script>
+	$( ".js-masonry" ).masonry( {
+		itemSelector: ".item",
+		containerStyle: { position: 'relative' },
+	} );
+	</script>
+	{% if is_paginated %}
+	<div class="text-center">
+		<ul class="pagination">
+			{% for num in paginator.page_range %}
+				{% ifequal num page_obj.number %}
+					<li class="active"><a>{{ num }}</a></li>
+				{% else %}
+					<li><a href="?page={{ num }}">{{ num }}</a></li>
+				{% endifequal %}
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+{% else %}
+	<h2 class="text-center"><i class="fa fa-exclamation-triangle"></i> Nothing found</h2>
+{% endif %}
