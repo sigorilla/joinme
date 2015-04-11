@@ -13,7 +13,7 @@ $( document ).ready( function () {
 
 			_addListener();
 
-			$active_link = $( "nav a[href='" + window.location.pathname + "']" ).removeAttr( "href" )
+			$active_link = $( "nav a[href='" + window.location.pathname + "']" )
 				.parents( "li" ).addClass( "active" );
 		};
 
