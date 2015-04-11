@@ -55,22 +55,26 @@ def index(request):
 				user=new_user,
 				activation_key=activation_key,
 				key_expires=key_expires
-				)
+			)
 			new_profile.save()
 
 			email_subject = "Your new master-igor.com account confirmation"
 			email_body = "Hello, %s, and thanks for signing up for an \
 master-igor.com account!\n\nTo activate your account, click this link within 48 \
-hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
+hours:\n\nhttp://master-igor.com%s" % (
 				new_user.username,
-				new_profile.activation_key
+				reverse_lazy(
+					"joinme:confirm-key", 
+					kwargs={"activation_key": new_profile.activation_key}
 				)
+			)
+
 			send_mail(
 				email_subject,
 				email_body,
 				"noreply@master-igor.com",
 				[new_user.email]
-				)
+			)
 
 			return render(request, "joinme/index.html", {"created": True})
 		else:
