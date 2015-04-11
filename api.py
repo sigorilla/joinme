@@ -60,6 +60,7 @@ hours:\n\nhttp://master-igor.com%s" % (
 					kwargs={"activation_key": new_profile.activation_key}
 				)
 			)
+
 			try:
 				send_mail(
 					email_subject,
@@ -77,7 +78,7 @@ hours:\n\nhttp://master-igor.com%s" % (
 		return JsonResponse({"error": "It should be POST request."})
 
 '''
-@api {post} /login/:login:password
+@api {get} /login/:login:password
 
 @apiParam {String} login Users unique login/email
 @apiParam {String} password Users password

@@ -69,12 +69,15 @@ hours:\n\nhttp://master-igor.com%s" % (
 				)
 			)
 
-			send_mail(
-				email_subject,
-				email_body,
-				"noreply@master-igor.com",
-				[new_user.email]
-			)
+			try:
+				send_mail(
+					email_subject,
+					email_body,
+					"noreply@master-igor.com",
+					[new_user.email]
+				)
+			except Exception, e:
+				return render(request, "joinme/index.html", {"empty_data": True, "form": form})
 
 			return render(request, "joinme/index.html", {"created": True})
 		else:
