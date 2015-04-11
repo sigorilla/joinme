@@ -180,7 +180,7 @@ class ResetPassword(generic.FormView):
 		else:
 			return self.form_invalid(form)
 
-class SearchList(generic.ListView):
+class SearchList(LoginRequiredMixin, generic.ListView):
 	model = Event
 	template_name = "mipt_hack_server/search.html"
 	paginate_by = 10
