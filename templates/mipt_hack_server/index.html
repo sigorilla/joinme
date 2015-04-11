@@ -53,6 +53,7 @@
 							{% endif %}
 							{% if wrong_data %}
 								<div class="well well-sm well-material-red-500">Check your data. Or maybe this email is already taken.</div>
+                                <div class="well weel-sm well-material-light-blue-500">If you forget your password, you can use <a href="{% url "mipt:reset-password" %}">reset form.</a></div>
 							{% endif %}
 							{% if empty_data %}
 								<div class="well well-sm well-material-red-500">Data should not be empty.</div>
