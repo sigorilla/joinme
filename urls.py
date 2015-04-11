@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 from django.core.urlresolvers import *
 
-from joinme import views
+from joinme import views, api
 
 urlpatterns = patterns("",
 	url(r"^$", views.index, name="index"),
@@ -27,5 +27,8 @@ urlpatterns = patterns("",
 	url(r"^event/all/$", views.AllEventsList.as_view(), name="allevents"),
 	url(r"^event/create/$", views.CreateEventView.as_view(), name="create-event"),
 	url(r"^search/$", views.SearchList.as_view(), name="search"),
+
+	url(r"^api/reg/$", api.reg, name="api-reg"),
+	url(r"^api/login/$", api.login, name="api-login"),
 
 )
