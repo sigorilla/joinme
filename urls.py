@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 
-from mipt_hack_server import views
+from joinme import views
 
 urlpatterns = patterns("",
   url(r"^$", views.index, name="index"),
-  url(r"^thanks/$", TemplateView.as_view(template_name="mipt_hack_server/thanks.html"), name="thanks"),
+  url(r"^thanks/$", TemplateView.as_view(template_name="joinme/thanks.html"), name="thanks"),
 
   url(r"^confirm/(?P<activation_key>[a-z0-9]{,32})/$", views.confirm, name="confirm-key"),
   url(r"^logout/$", "django.contrib.auth.views.logout", {"next_page": "/test/"}, name="logout"),

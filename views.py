@@ -11,8 +11,8 @@ from django.core.urlresolvers import *
 from django.http import HttpResponseRedirect
 from django.views import generic
 
-from mipt_hack_server.models import UserProfile, Category, Event, User
-from mipt_hack_server.forms import *
+from joinme.models import UserProfile, Category, Event, User
+from joinme.forms import *
 
 class LoginRequiredMixin(object):
 	@classmethod
@@ -27,7 +27,7 @@ def index(request):
 			"has_account": True,
 			"categories": list_categories,
 		}
-		return render(request, "mipt_hack_server/index.html", obj)
+		return render(request, "joinme/index.html", obj)
 
 	next = ""
 	if request.GET:
@@ -39,9 +39,9 @@ def index(request):
 		if (new_data["email"] is not "") and (new_data["password"] is not ""):
 			match = re.match(r'(?P<email>.+@.+\..+)', new_data["email"])
 			if not (match and match.groupdict()["email"] == new_data["email"]):
-				return render(request, "mipt_hack_server/index.html", {"empty_data": True, "form": form})
+				return render(request, "joinme/index.html", {"empty_data": True, "form": form})
 		else:
-			return render(request, "mipt_hack_server/index.html", {"empty_data": True, "form": form})
+			return render(request, "joinme/index.html", {"empty_data": True, "form": form})
 
 		errors = form.isValidUsername(new_data["email"])
 		if not errors:
@@ -72,7 +72,7 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 				[new_user.email]
 				)
 
-			return render(request, "mipt_hack_server/index.html", {"created": True})
+			return render(request, "joinme/index.html", {"created": True})
 		else:
 			user = authenticate(username=new_data["email"], password=new_data["password"])
 			if user is not None:
@@ -83,35 +83,35 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 					else:
 						return HttpResponseRedirect(next)
 					# redirect to success page
-					# return render(request, "mipt_hack_server/index.html", {"has_account": True})
+					# return render(request, "joinme/index.html", {"has_account": True})
 				else:
 					# account is disabled
-					return render(request, "mipt_hack_server/index.html", {"is_inactive": True, "form": form})
+					return render(request, "joinme/index.html", {"is_inactive": True, "form": form})
 			else:
 				# invalid login/password
-				return render(request, "mipt_hack_server/index.html", {"wrong_data": True, "form": form})
+				return render(request, "joinme/index.html", {"wrong_data": True, "form": form})
 	else:
 		form = RegistrationForm()
 		errors = new_data = {}
 
-	return render(request, "mipt_hack_server/index.html", {"form": form, "next": next})
+	return render(request, "joinme/index.html", {"form": form, "next": next})
 
 def confirm(request, activation_key):
 	if request.user.is_authenticated():
-		return render(request, "mipt_hack_server/confirm.html", {"has_account": True})
+		return render(request, "joinme/confirm.html", {"has_account": True})
 	user_profile = get_object_or_404(
 		UserProfile,
 		activation_key=activation_key
 	)
 	if user_profile.key_expires < datetime.datetime.today():
-		return render(request, "mipt_hack_server/confirm.html", {"expired": True})
+		return render(request, "joinme/confirm.html", {"expired": True})
 	form = RegistrationForm({"email": user_profile.user.email, "password": ""})
 	if user_profile.user.is_active:
-		return render(request, "mipt_hack_server/confirm.html", {"is_active": True, "form": form})
+		return render(request, "joinme/confirm.html", {"is_active": True, "form": form})
 	user_account = user_profile.user
 	user_account.is_active = True
 	user_account.save()
-	return render(request, "mipt_hack_server/confirm.html", {"confirm": True, "form": form})
+	return render(request, "joinme/confirm.html", {"confirm": True, "form": form})
 
 @login_required(login_url=reverse_lazy("mipt:index"))
 def settings(request):
@@ -121,14 +121,14 @@ def settings(request):
 			reset_form = ResetForm(user=request.user, data=request.POST)
 			if reset_form.is_valid():
 				reset_form.save()
-				return render(request, "mipt_hack_server/settings.html", 
+				return render(request, "joinme/settings.html",
 					{"reset_form": reset_form, "reset_success": True})
 
-	return render(request, "mipt_hack_server/settings.html", {"reset_form": reset_form})
+	return render(request, "joinme/settings.html", {"reset_form": reset_form})
 
 class CategoryView(LoginRequiredMixin, generic.DetailView):
 	model = Category
-	template_name = "mipt_hack_server/category.html"
+	template_name = "joinme/category.html"
 
 	def get_context_data(self, **kwargs):
 		context = super(CategoryView, self).get_context_data(**kwargs)
@@ -137,7 +137,7 @@ class CategoryView(LoginRequiredMixin, generic.DetailView):
 
 class EventView(LoginRequiredMixin, generic.DetailView):
 	model = Event
-	template_name = "mipt_hack_server/event.html"
+	template_name = "joinme/event.html"
 	paginate_by = 10
 
 def join_event(request, pk):
@@ -156,7 +156,7 @@ def leave_event(request, pk):
 	return HttpResponseRedirect(reverse_lazy("mipt:event", kwargs={'pk': pk}))
 
 class MyEventsList(LoginRequiredMixin, generic.ListView):
-	template_name = "mipt_hack_server/myevents.html"
+	template_name = "joinme/myevents.html"
 	context_object_name = "events"
 	paginate_by = 10
 
@@ -165,7 +165,7 @@ class MyEventsList(LoginRequiredMixin, generic.ListView):
 		return Event.objects.filter(author__id=author["id"], active__exact=True).order_by('-pub_date')
 
 class AllEventsList(LoginRequiredMixin, generic.ListView):
-	template_name = "mipt_hack_server/allevents.html"
+	template_name = "joinme/allevents.html"
 	context_object_name = "events"
 	paginate_by = 10
 
@@ -173,7 +173,7 @@ class AllEventsList(LoginRequiredMixin, generic.ListView):
 		return Event.objects.filter(active__exact=True).order_by('-pub_date')
 
 class ResetPassword(generic.FormView):
-	template_name = "mipt_hack_server/reset-pass.html"
+	template_name = "joinme/reset-pass.html"
 	form_class = PasswordResetForm
 	success_url = reverse_lazy("mipt:thanks")
 
@@ -197,7 +197,7 @@ class ResetPassword(generic.FormView):
 
 class SearchList(LoginRequiredMixin, generic.ListView):
 	model = Event
-	template_name = "mipt_hack_server/search.html"
+	template_name = "joinme/search.html"
 	paginate_by = 10
 
 	def normalize_query(self,
@@ -248,7 +248,7 @@ class SearchList(LoginRequiredMixin, generic.ListView):
 		return context
 
 class CreateEventView(LoginRequiredMixin, generic.FormView):
-	template_name = "mipt_hack_server/create-event.html"
+	template_name = "joinme/create-event.html"
 	form_class = CreationEventForm
 
 	def set_url(self, pk=0):

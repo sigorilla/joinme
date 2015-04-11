@@ -1,4 +1,4 @@
-{% extends "mipt_hack_server/base.html" %}
+{% extends "joinme/base.html" %}
 {% load static %}
 
 {% block page %}
@@ -6,6 +6,6 @@
 <div class="page-header">
 	<h1 class="text-center"><i class="fa fa-search"></i> {{ query }}</h1>
 </div>
-{% include "mipt_hack_server/event-temp.html" with events=event_list %}
+{% include "joinme/event-temp.html" with events=event_list %}
 
 {% endblock page %}
