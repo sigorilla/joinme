@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from mipt_hack_server.models import UserProfile, Category, Event, User
-from mipt_hack_server.forms import RegistrationForm, ResetForm
+from mipt_hack_server.forms import RegistrationForm, ResetForm, PasswordResetForm
 
 def normalize_query(query_string,
 					findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
@@ -47,7 +47,7 @@ def get_query(query_string, search_fields):
 		if query is None:
 			query = or_query
 		else:
-			query = query & or_query
+			query = query | or_query
 	return query
 
 class LoginRequiredMixin(object):
@@ -189,6 +189,25 @@ class AllEventsList(LoginRequiredMixin, generic.ListView):
 
 	def get_queryset(self):
 		return Event.objects.filter(active__exact=True).order_by('-pub_date')
+
+class ResetPassword(generic.FormView):
+	template_name = "mipt_hack_server/reset-pass.html"
+	form_class = PasswordResetForm
+
+	def get(self, request, *args, **kwargs):
+		if request.user.is_authenticated:
+			return HttpResponseRedirect(reverse("mipt:settings"))
+
+	def post(self, request, *args, **kwargs):
+		if request.user.is_authenticated:
+			return HttpResponseRedirect(reverse("mipt:settings"))
+		form = self.get_form()
+		email = request.POST["email"]
+		if form.isValidEmail(email):
+			form.send_password(email)
+			return self.form_valid(form)
+		else:
+			return self.form_invalid(form)
 
 def search(request):
 	query_string = ''

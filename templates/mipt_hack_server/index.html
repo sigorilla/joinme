@@ -36,9 +36,9 @@
 				<div class="panel-heading">Sign In</div>
 				<div class="panel-body">
 					{% if next %}
-					<form method="post" id="loginForm" action="{% url 'mipt:index' %}?next={{next}}" autofocus>
+					<form method="post" id="loginForm" action="{% url 'mipt:index' %}?next={{next}}">
 					{% else %}
-					<form method="post" id="loginForm" action="{% url 'mipt:index' %}" autofocus>
+					<form method="post" id="loginForm" action="{% url 'mipt:index' %}">
 					{% endif %}
 						{% csrf_token %}
 						<input type="hidden" name="type_form" value="login">
@@ -70,7 +70,10 @@
 						{% endif %}
 					</form>
 				</div>
-				<div class="panel-footer">If you don't register, after submit this form the letter with activation code will be sent to your email.</div>
+				<div class="panel-footer">
+                    <div>If you don't register, after submit this form the letter with activation code will be sent to your email.</div>
+                    <div class="text-right"><a href="{% url "mipt:reset-password" %}">Reset Password</a></div>
+                </div>
 			</div>
 		</div>
 	</div>

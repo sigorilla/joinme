@@ -1,0 +1,30 @@
+{% extends "mipt_hack_server/base.html" %}
+{% load static %}
+
+{% block page %}
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Reset Password</div>
+			<div class="panel-body">
+				<form method="post" id="resetPassForm" action="">
+					{% csrf_token %}
+					{% if form.has_error %}
+						<div class="well well-sm well-material-red-500">Check your email.</div>
+					{% endif %}
+					{% for field in form %}
+					<div class="form-group">
+						<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+						{{ field }}
+					</div>
+					{% endfor %}
+					<div class="text-center">
+						<button data-type="submit" class="btn btn-danger">Reset Password</button>
+					</div>
+				</form>
+			</div>
+			<div class="panel-footer">If you don't register, after submit this form the letter with activation code will be sent to your email.</div>
+		</div>
+	</div>
+</div>
+{% endblock page %}

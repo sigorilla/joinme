@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
 
 from mipt_hack_server import views
 
@@ -12,4 +12,5 @@ urlpatterns = patterns("",
   url(r"^event/(?P<pk>\d+)/$", views.EventView.as_view(), name="event"),
   url(r"^event/my/$", views.MyEventsList.as_view(), name="myevents"),
   url(r"^event/all/$", views.AllEventsList.as_view(), name="allevents"),
+  url(r"^reset-password/$", views.ResetPassword.as_view(), name="reset-password"),
 )
