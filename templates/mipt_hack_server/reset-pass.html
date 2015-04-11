@@ -9,13 +9,16 @@
 			<div class="panel-body">
 				<form method="post" id="resetPassForm" action="">
 					{% csrf_token %}
-					{% if form.has_error %}
-						<div class="well well-sm well-material-red-500">Check your email.</div>
-					{% endif %}
 					{% for field in form %}
-					<div class="form-group">
+					<div class="form-group {{ field.errors|yesno:"has-error," }}">
 						<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
 						{{ field }}
+						{% for error in field.errors %}
+							<p class="help-block">{{ error }}</p>
+						{% endfor %}
+						{% if field.help_text %}
+							<p class="help-text">{{ field.help_text }}</p>
+						{% endif %}
 					</div>
 					{% endfor %}
 					<div class="text-center">
@@ -23,7 +26,7 @@
 					</div>
 				</form>
 			</div>
-			<div class="panel-footer">If you don't register, after submit this form the letter with activation code will be sent to your email.</div>
+			<div class="panel-footer">After reset you get email.</div>
 		</div>
 	</div>
 </div>

@@ -65,6 +65,7 @@ class PasswordResetForm(forms.Form):
 		try:
 			return User.objects.get(username=data)
 		except User.DoesNotExist:
+			self.add_error("email", "User with email %s does not exist. " % data)
 			return None
 
 	def generate_password(self):
