@@ -91,7 +91,7 @@ class PasswordResetForm(forms.Form):
 		curr_user.save()
 		email_subject = "Reset password"
 		email_body = "Hello, %s, and you reset password for an \
-master-igor.com account!\n\nYour new password: <s>%s</s> \n\n\
+master-igor.com account!\n\nYour new password: %s \n\n\
 After sign in, please, change you password in Settings page of your account:\n\
 \thttp://master-igor.com/%s" % (
 			curr_user.username,
