@@ -18,7 +18,7 @@ class LoginRequiredMixin(object):
 	@classmethod
 	def as_view(cls, **initkwargs):
 		view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
-		return login_required(view, login_url=reverse_lazy("mipt:index"))
+		return login_required(view, login_url=reverse_lazy("joinme:index"))
 
 def index(request):
 	if request.user.is_authenticated():
@@ -79,7 +79,7 @@ hours:\n\nhttp://master-igor.com/test/confirm/%s/" % (
 				if user.is_active:
 					login(request, user)
 					if next == "":
-						return HttpResponseRedirect(reverse("mipt:index"))
+						return HttpResponseRedirect(reverse("joinme:index"))
 					else:
 						return HttpResponseRedirect(next)
 					# redirect to success page
@@ -113,7 +113,7 @@ def confirm(request, activation_key):
 	user_account.save()
 	return render(request, "joinme/confirm.html", {"confirm": True, "form": form})
 
-@login_required(login_url=reverse_lazy("mipt:index"))
+@login_required(login_url=reverse_lazy("joinme:index"))
 def settings(request):
 	reset_form = ResetForm(user=request.user)
 	if request.POST:
@@ -146,14 +146,14 @@ def join_event(request, pk):
 		print(event.users)
 		event.users.add(request.user.userprofile)
 		event.save()
-	return HttpResponseRedirect(reverse_lazy("mipt:event", kwargs={'pk': pk}))
+	return HttpResponseRedirect(reverse_lazy("joinme:event", kwargs={'pk': pk}))
 
 def leave_event(request, pk):
 	event = Event.objects.get(pk=pk)
 	if (event.author.id != request.user.userprofile.id):
 		event.users.remove(request.user.userprofile)
 		event.save()
-	return HttpResponseRedirect(reverse_lazy("mipt:event", kwargs={'pk': pk}))
+	return HttpResponseRedirect(reverse_lazy("joinme:event", kwargs={'pk': pk}))
 
 class MyEventsList(LoginRequiredMixin, generic.ListView):
 	template_name = "joinme/myevents.html"
@@ -179,18 +179,18 @@ class AllEventsList(LoginRequiredMixin, generic.ListView):
 class ResetPassword(generic.FormView):
 	template_name = "joinme/reset-pass.html"
 	form_class = PasswordResetForm
-	success_url = reverse_lazy("mipt:thanks")
+	success_url = reverse_lazy("joinme:thanks")
 
 	def get(self, request, *args, **kwargs):
 		if request.user.is_active:
-			return HttpResponseRedirect(reverse("mipt:settings"))
+			return HttpResponseRedirect(reverse("joinme:settings"))
 		else:
 			form = self.get_form()
 			return self.render_to_response(self.get_context_data(form=form))
 
 	def post(self, request, *args, **kwargs):
 		if request.user.is_active:
-			return HttpResponseRedirect(reverse("mipt:settings"))
+			return HttpResponseRedirect(reverse("joinme:settings"))
 		form = self.get_form()
 		email = request.POST["email"]
 		if form.isValidEmail(email):
@@ -256,7 +256,7 @@ class CreateEventView(LoginRequiredMixin, generic.FormView):
 	form_class = CreationEventForm
 
 	def set_url(self, pk=0):
-		self.success_url = reverse_lazy("mipt:event", kwargs={'pk': pk})
+		self.success_url = reverse_lazy("joinme:event", kwargs={'pk': pk})
 
 	def post(self, request, *args, **kwargs):
 		form = self.get_form()

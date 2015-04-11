@@ -35,9 +35,9 @@
 					<a href="#" class="btn btn-warning">Edit this Event</a>
 				{% else %}
 					{% if user.userprofile in event.users.all %}
-						<a href="{% url "mipt:leave-event" event.id %}" class="btn btn-danger">Leave Event</a>
+						<a href="{% url "joinme:leave-event" event.id %}" class="btn btn-danger">Leave Event</a>
 					{% else %}
-						<a href="{% url "mipt:join-event" event.id %}" class="btn btn-success">Join Event</a>
+						<a href="{% url "joinme:join-event" event.id %}" class="btn btn-success">Join Event</a>
 					{% endif %}
 				{% endif %}
 			</div>

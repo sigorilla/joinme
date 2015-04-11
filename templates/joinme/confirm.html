@@ -9,7 +9,7 @@
 				<div class="panel-body">
 					{% if has_account %}
 						<div class="well well-sm well-material-deep-orange-500">Logout, please.</div>
-						<a href="{% url "mipt:logout" %}" class="btn btn-default">Logout</a>
+						<a href="{% url "joinme:logout" %}" class="btn btn-default">Logout</a>
 					{% endif %}
 					{% if expired %}
 						<div class="well well-sm well-material-red-500">Time is up! Sorry. Try again.</div>
@@ -21,7 +21,7 @@
 						<div class="well well-sm well-material-teal">Thank you!</div>
 					{% endif %}
 					{% if confirm or is_active %}
-						<form method="post" id="loginForm" action="{% url 'mipt:index' %}">
+						<form method="post" id="loginForm" action="{% url 'joinme:index' %}">
 							{% csrf_token %}
 							{% for field in form %}
 							<div class="form-group">

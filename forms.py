@@ -98,7 +98,7 @@ After sign in, please, change you password in Settings page of your account:\n\
 \thttp://master-igor.com/%s" % (
 			curr_user.username,
 			new_pass,
-			reverse("mipt:settings")
+			reverse("joinme:settings")
 			)
 		return send_mail(
 			email_subject,
