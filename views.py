@@ -161,8 +161,12 @@ class MyEventsList(LoginRequiredMixin, generic.ListView):
 	paginate_by = 10
 
 	def get_queryset(self):
-		author = UserProfile.objects.filter(user__id=self.request.user.id).values()[0]
-		return Event.objects.filter(author__id=author["id"], active__exact=True).order_by('-pub_date')
+		author = UserProfile.objects.filter(user__id=self.request.user.id).values()
+		try:
+			author = author[0]["id"]
+		except Exception, e:
+			author = 0
+		return Event.objects.filter(author__id=author, active__exact=True).order_by('-pub_date')
 
 class AllEventsList(LoginRequiredMixin, generic.ListView):
 	template_name = "joinme/allevents.html"
