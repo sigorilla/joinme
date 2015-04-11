@@ -193,6 +193,7 @@ class AllEventsList(LoginRequiredMixin, generic.ListView):
 class ResetPassword(generic.FormView):
 	template_name = "mipt_hack_server/reset-pass.html"
 	form_class = PasswordResetForm
+	success_url = reverse_lazy("mipt:reset-password")
 
 	def get(self, request, *args, **kwargs):
 		if request.user.is_active:
