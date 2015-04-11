@@ -140,6 +140,21 @@ class EventView(LoginRequiredMixin, generic.DetailView):
 	template_name = "mipt_hack_server/event.html"
 	paginate_by = 10
 
+def join_event(request, pk):
+	event = Event.objects.get(pk=pk)
+	if (event.author.id != request.user.userprofile.id):
+		print(event.users)
+		event.users.add(request.user.userprofile)
+		event.save()
+	return HttpResponseRedirect(reverse_lazy("mipt:event", kwargs={'pk': pk}))
+
+def leave_event(request, pk):
+	event = Event.objects.get(pk=pk)
+	if (event.author.id != request.user.userprofile.id):
+		event.users.remove(request.user.userprofile)
+		event.save()
+	return HttpResponseRedirect(reverse_lazy("mipt:event", kwargs={'pk': pk}))
+
 class MyEventsList(LoginRequiredMixin, generic.ListView):
 	template_name = "mipt_hack_server/myevents.html"
 	context_object_name = "events"
