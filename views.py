@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from mipt_hack_server.models import UserProfile, Category, Event, User
-from mipt_hack_server.forms import RegistrationForm, ResetForm, PasswordResetForm
+from mipt_hack_server.forms import *
 
 class LoginRequiredMixin(object):
 	@classmethod
@@ -192,7 +192,7 @@ class SearchList(LoginRequiredMixin, generic.ListView):
 		''' Splits the query string in individual keywords, getting rid of unecessary spaces
 			and grouping quoted words together.
 			Example:
-			>>> normalize_query('  some random  words "with   quotes  " and   spaces')
+			normalize_query('  some random  words "with   quotes  " and   spaces')
 			['some', 'random', 'words', 'with quotes', 'and', 'spaces']
 		'''
 		return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
@@ -231,3 +231,24 @@ class SearchList(LoginRequiredMixin, generic.ListView):
 		context = super(SearchList, self).get_context_data(**kwargs)
 		context["query"] = self.request.GET['q']
 		return context
+
+class CreateEventView(LoginRequiredMixin, generic.FormView):
+	template_name = "mipt_hack_server/create-event.html"
+	form_class = CreationEventForm
+
+	def set_url(self, pk=0):
+		self.success_url = reverse_lazy("mipt:event", kwargs={'pk': pk})
+
+	def post(self, request, *args, **kwargs):
+		form = self.get_form()
+		if not request.user.is_active:
+			return self.form_invalid(form)
+		else:
+			event = Event(author=request.user.userprofile)
+			form = CreationEventForm(request.POST, instance=event)
+			if form.is_valid():
+				new_event = form.save()
+				self.set_url(new_event.pk)
+			else:
+				return self.form_invalid(form)
+			return self.form_valid(form)

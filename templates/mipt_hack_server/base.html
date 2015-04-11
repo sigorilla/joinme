@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 <!doctype html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
 {% block head %}
@@ -56,7 +57,7 @@
 						<li><a href="{% url "mipt:allevents" %}">All Events</a></li>
 						<li><a href="{% url "mipt:myevents" %}">My Events</a></li>
 						<li class="divider"></li>
-						<li><a href="#">Create Event</a></li>
+						<li><a href="{% url "mipt:create-event" %}">Create Event</a></li>
 					</ul>
 				</li>
 			</ul>

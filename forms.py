@@ -8,6 +8,8 @@ from django.utils.timezone import datetime
 from django.core.mail import send_mail
 from django.core.urlresolvers import *
 
+from mipt_hack_server.models import *
+
 class RegistrationForm(forms.Form):
 	email = forms.EmailField(
 		label=_("Email"),
@@ -105,3 +107,18 @@ After sign in, please, change you password in Settings page of your account:\n\
 			[curr_user.email]
 			)
 
+class CreationEventForm(forms.ModelForm):
+	class Meta:
+		model = Event
+		fields = ('title', 'description', 'category', 'datetime', 'count_users')
+		labels = {
+			'datetime': 'Date of Event',
+			'count_users': 'Limit of Members'
+		}
+		help_text = {
+		}
+		error_message = {
+		}
+		widgets = {
+			'description': forms.Textarea(attrs={'rows': 4}),
+		}
