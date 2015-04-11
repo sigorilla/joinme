@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from joinme.models import UserProfile, Category, Event, User
-from joinme.forms import *
+from joinme.forms import ResetForm, RegistrationForm, CreationEventForm, PasswordResetForm
 
 class LoginRequiredMixin(object):
 	@classmethod
