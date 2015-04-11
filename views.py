@@ -77,7 +77,7 @@ hours:\n\nhttp://master-igor.com%s" % (
 					[new_user.email]
 				)
 			except Exception, e:
-				return render(request, "joinme/index.html", {"empty_data": True, "form": form})
+				return render(request, "joinme/index.html", {"server_fail": True, "form": form})
 
 			return render(request, "joinme/index.html", {"created": True})
 		else:

@@ -47,6 +47,9 @@
 						{% if created %}
 							<div class="well well-sm well-material-light-blue-500">Email will be send.</div>
 						{% else %}
+							{% if server_fail %}
+								<div class="well well-sm">Server is failed. Try again later, please.</div>
+							{% endif %}
 							{% if is_inactive %}
 								<div class="well well-sm well-material-deep-orange-500">Confirm your account via link in your email.</div>
 							{% endif %}
