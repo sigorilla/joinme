@@ -2,28 +2,12 @@
 {% load static %}
 
 {% block page %}
+
 <div class="page-header">
 	<h1 class="text-center">My Events</h1>
 </div>
 {% for event in events %}
-<div class="col-md-4">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h2 class="text-center">{{ event.title }}</h2>
-		</div>
-		<div class="panel-body">
-			<h3>Author</h3>
-			<div>{{ event.author }}</div>
-			<h3>Members</h3>
-			<div>{{ event.users.all|length }} members</div>
-			<h3>Date</h3>
-			<div>{{ event.datetime }}</div>
-		</div>
-		<div class="panel-footer text-right">
-			<a href="{% url "mipt:event" event.id %}">More details</a>
-		</div>
-	</div>
-</div>
+{% include "mipt_hack_server/event-temp.html" with event=event %}
 {% empty %}
 <h2 class="text-center"><i class="fa fa-exclamation-triangle"></i> Nothing found</h2>
 {% endfor %}
