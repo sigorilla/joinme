@@ -9,7 +9,7 @@
 </div>
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
-		<div class="panel panel-default event-detail" id="event-{{ event.id }}">
+		<div class="panel panel-{{ event.category.color|default:"primary" }} event-detail" id="event-{{ event.id }}">
 			<div class="panel-body">
 				{% if event.author.id == user.userprofile.id %}
 					<div class="btn-group-vertical pull-right" role="group">

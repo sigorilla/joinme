@@ -125,7 +125,7 @@ class CreateEventForm(forms.ModelForm):
 class EditEventForm(CreateEventForm):
 	class Meta:
 		model = Event
-		fields = ('title', 'description', 'datetime')
+		fields = ('title', 'description', 'category', 'datetime')
 		labels = {
 			'datetime': 'Date of Event'
 		}

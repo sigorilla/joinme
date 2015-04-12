@@ -27,7 +27,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
-	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.4">
+	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.5">
 	{% block head_script %}{% endblock head_script %}
 </head>
 {% endblock head %}
@@ -50,7 +50,7 @@
 		{% endblock navigation %}
 		{% if user.is_authenticated %}
 			<ul class="nav navbar-nav">
-				<li><a href="{% url "joinme:index" %}">Categories</a></li>
+				<li><a href="{% url "joinme:categories" %}">Categories</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-star"></i> Events <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">

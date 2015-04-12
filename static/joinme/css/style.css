@@ -3,6 +3,10 @@ body {
 	/*background-color: whitesmoke;*/
 }
 
+label {
+	display: block;
+}
+
 textarea {
 	resize: vertical;
 }
