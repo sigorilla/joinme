@@ -5,7 +5,9 @@
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-{{ object.category.color|default:"primary" }}">
-			<div class="panel-heading">{{ object.pk|yesno:"Edit,Create" }} Event</div>
+			<div class="panel-heading">
+				<h3 class="text-center">{{ object.pk|yesno:"Edit,Create" }} Event</h3>
+			</div>
 			<div class="panel-body">
 			{% if object and object.author.id != user.userprofile.id %}
 				<div class="well">Permission denied.</div>
