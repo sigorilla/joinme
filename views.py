@@ -181,7 +181,9 @@ class MyEventsList(LoginRequiredMixin, generic.ListView):
 	paginate_by = 10
 
 	def get_queryset(self):
-		return Event.objects.filter(users__id=self.request.user.id, active=True).order_by('-pub_date')
+		id = self.request.user.userprofile.id
+		query = Q(users__id=id) | Q(author__id=id)
+		return Event.objects.filter(Q(active=True), query).order_by('-pub_date')
 
 	def get_context_data(self, **kwargs):
 		context = super(MyEventsList, self).get_context_data(**kwargs)
@@ -194,12 +196,9 @@ class CreatedEventsList(LoginRequiredMixin, generic.ListView):
 	paginate_by = 10
 
 	def get_queryset(self):
-		author = UserProfile.objects.filter(user__id=self.request.user.id).values()
-		try:
-			author = author[0]["id"]
-		except Exception, e:
-			author = 0
-		return Event.objects.filter(author__id=author, active=True).order_by('-pub_date')
+		return Event.objects.filter(
+			author__id=self.request.user.userprofile.id, 
+			active=True).order_by('-pub_date')
 
 	def get_context_data(self, **kwargs):
 		context = super(CreatedEventsList, self).get_context_data(**kwargs)
