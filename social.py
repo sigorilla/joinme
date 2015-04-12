@@ -10,10 +10,10 @@ from joinme.models import UserProfile, Category, Event, User
 
 api_url = 'https://oauth.vk.com/access_token'
 
-def get_access_token(code):
+def get_access_token(code, host='127.0.0.1:8000'):
 	url = api_url + '?client_id=' + glob_setting.VK_API_ID + \
 	'&client_secret=' + glob_setting.VK_API_SECRET + \
-	'&code=' + code + '&redirect_uri=http://127.0.0.1:8000' + reverse("joinme:vk-auth") 
+	'&code=' + code + '&redirect_uri=http://' + host + reverse("joinme:vk-auth") 
 	response = urllib2.urlopen(url).read()
 	data = json.loads(response)
 	return data
@@ -23,7 +23,8 @@ def vk_auth(request):
 	if request.GET:
 		if ('code' in request.GET) and request.GET['code'].strip():
 			code = request.GET['code']
-			data = get_access_token(code)
+			host = request.get_host()
+			data = get_access_token(code, host)
 			if 'access_token' in data:
 				user = UserProfile.objects.get(pk=request.user.userprofile.id)
 				user.vk_user_id = data['user_id']
@@ -37,3 +38,10 @@ def vk_auth(request):
 			return JsonResponse({"error": "No field code."})
 	else:
 		return JsonResponse({"error": "It should be GET request."})
+
+def vk_auth_delete(request):
+	if request.user.is_active:
+		user = UserProfile.objects.get(pk=request.user.userprofile.id)
+		user.vk_user_id = 0
+		user.save()
+	return HttpResponseRedirect(redirect_to=reverse("joinme:settings"))

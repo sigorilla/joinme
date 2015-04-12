@@ -129,10 +129,20 @@ def settings(request):
 			reset_form = ResetForm(user=request.user, data=request.POST)
 			if reset_form.is_valid():
 				reset_form.save()
-				return render(request, "joinme/settings.html",
-					{"reset_form": reset_form, "reset_success": True, "title": "Settings", "VK_API_ID": glob_setting.VK_API_ID})
+				return render(request, "joinme/settings.html", {
+					"reset_form": reset_form, 
+					"reset_success": True, 
+					"title": "Settings", 
+					"VK_API_ID": glob_setting.VK_API_ID,
+					"host": request.get_host()
+				})
 
-	return render(request, "joinme/settings.html", {"reset_form": reset_form, "title": "Settings", "VK_API_ID": glob_setting.VK_API_ID})
+	return render(request, "joinme/settings.html", {
+		"reset_form": reset_form, 
+		"title": "Settings", 
+		"VK_API_ID": glob_setting.VK_API_ID,
+		"host": request.get_host()
+	})
 
 class CategoryView(LoginRequiredMixin, generic.DetailView):
 	model = Category

@@ -40,5 +40,6 @@ urlpatterns = patterns("",
 
 	# Social
 	url(r"^vk_auth/$", social.vk_auth, name="vk-auth"),
+	url(r"^vk_auth/delete/$", social.vk_auth_delete, name="vk-auth-delete"),
 
 )
