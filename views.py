@@ -6,6 +6,7 @@ from django.conf import settings as glob_setting
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.urlresolvers import *
@@ -20,6 +21,12 @@ class LoginRequiredMixin(object):
 	def as_view(cls, **initkwargs):
 		view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
 		return login_required(view, login_url=reverse_lazy("joinme:index"))
+
+class NeverCacheMixin(object):
+	@classmethod
+	def as_view(cls, **initkwargs):
+		view = super(NeverCacheMixin, cls).as_view(**initkwargs)
+		return never_cache(view)
 
 def index(request):
 	if request.user.is_authenticated():
@@ -121,6 +128,7 @@ def confirm(request, activation_key):
 	user_account.save()
 	return render(request, "joinme/confirm.html", {"confirm": True, "form": form})
 
+@never_cache
 @login_required(login_url=reverse_lazy("joinme:index"))
 def settings(request):
 	reset_form = ResetForm(user=request.user)
@@ -156,11 +164,12 @@ class CategoryView(LoginRequiredMixin, generic.DetailView):
 		)
 		return context
 
-class EventView(LoginRequiredMixin, generic.DetailView):
+class EventView(NeverCacheMixin, LoginRequiredMixin, generic.DetailView):
 	model = Event
 	template_name = "joinme/event.html"
 	paginate_by = 10
 
+@never_cache
 def join_event(request, pk):
 	event = Event.objects.get(pk=pk)
 	if (event.author.id != request.user.userprofile.id):
@@ -168,6 +177,7 @@ def join_event(request, pk):
 		event.save()
 	return HttpResponseRedirect(event.get_absolute_url())
 
+@never_cache
 def leave_event(request, pk):
 	event = Event.objects.get(pk=pk)
 	if (event.author.id != request.user.userprofile.id):
@@ -175,7 +185,7 @@ def leave_event(request, pk):
 		event.save()
 	return HttpResponseRedirect(event.get_absolute_url())
 
-class MyEventsList(LoginRequiredMixin, generic.ListView):
+class MyEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 	template_name = "joinme/event_list.html"
 	context_object_name = "events"
 	paginate_by = 10
@@ -190,7 +200,7 @@ class MyEventsList(LoginRequiredMixin, generic.ListView):
 		context["title"] = "My Events"
 		return context
 
-class CreatedEventsList(LoginRequiredMixin, generic.ListView):
+class CreatedEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 	template_name = "joinme/event_list.html"
 	context_object_name = "events"
 	paginate_by = 10
@@ -205,7 +215,7 @@ class CreatedEventsList(LoginRequiredMixin, generic.ListView):
 		context["title"] = "My created Events"
 		return context
 
-class AllEventsList(LoginRequiredMixin, generic.ListView):
+class AllEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 	template_name = "joinme/event_list.html"
 	context_object_name = "events"
 	paginate_by = 10
