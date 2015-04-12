@@ -1,5 +1,5 @@
 {% extends "joinme/base.html" %}
-{% load static %}
+{% load filters %}
 
 {% block page %}
 	<div class="row">
@@ -11,7 +11,9 @@
 				<div class="panel-body">
 					{% if has_account %}
 						<div class="well well-sm well-material-deep-orange-500">Logout, please.</div>
-						<a href="{% url "joinme:logout" %}" class="btn btn-default">Logout</a>
+						<div class="text-center">
+							<a href="{% url "joinme:logout" %}" class="btn btn-info">Logout</a>
+						</div>
 					{% endif %}
 					{% if expired %}
 						<div class="well well-sm well-material-red-500">Time is up! Sorry. Try again.</div>
@@ -28,7 +30,7 @@
 							{% for field in form %}
 							<div class="form-group">
 								<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-								{{ field }}
+								{{ field|add_class:"form-control" }}
 							</div>
 							{% endfor %}
 							<button data-type="submit" class="btn btn-success">Login</button>
