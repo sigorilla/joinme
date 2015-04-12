@@ -8,6 +8,7 @@ class UserProfile(models.Model):
 	class Meta:
 		verbose_name = "UserProfile"
 		verbose_name_plural = "UserProfiles"
+		unique_together = (("user", "vk_user_id"),)
 
 	def __str__(self):
 		return self.user.username
@@ -18,6 +19,9 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	activation_key = models.CharField(max_length=40)
 	key_expires = models.DateTimeField()
+	vk_user_id = models.IntegerField(default=0)
+	vk_access_token = models.CharField(max_length=254, default="", blank=True)
+	vk_expires_in = models.CharField(max_length=254, default="", blank=True)
 
 class Category(models.Model):
 

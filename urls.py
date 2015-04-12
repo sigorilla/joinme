@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 from django.core.urlresolvers import *
 
-from joinme import views, api
+from joinme import views, api, social
 
 urlpatterns = patterns("",
 	url(r"^$", views.index, name="index"),
@@ -34,7 +34,11 @@ urlpatterns = patterns("",
 	url(r"^event/new/$", views.CreateEventView.as_view(), name="create-event"),
 	url(r"^search/$", views.SearchList.as_view(), name="search"),
 
+	# API
 	url(r"^api/reg/$", api.reg, name="api-reg"),
 	url(r"^api/login/$", api.login, name="api-login"),
+
+	# Social
+	url(r"^vk_auth/$", social.vk_auth, name="vk-auth"),
 
 )

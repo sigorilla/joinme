@@ -2,6 +2,7 @@
 import datetime, random, hashlib
 import re
 from django import forms
+from django.conf import settings as glob_setting
 from django.shortcuts import render, render_to_response, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
@@ -129,9 +130,9 @@ def settings(request):
 			if reset_form.is_valid():
 				reset_form.save()
 				return render(request, "joinme/settings.html",
-					{"reset_form": reset_form, "reset_success": True, "title": "Settings"})
+					{"reset_form": reset_form, "reset_success": True, "title": "Settings", "VK_API_ID": glob_setting.VK_API_ID})
 
-	return render(request, "joinme/settings.html", {"reset_form": reset_form, "title": "Settings"})
+	return render(request, "joinme/settings.html", {"reset_form": reset_form, "title": "Settings", "VK_API_ID": glob_setting.VK_API_ID})
 
 class CategoryView(LoginRequiredMixin, generic.DetailView):
 	model = Category
