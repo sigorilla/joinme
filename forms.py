@@ -42,14 +42,7 @@ class RegistrationForm(forms.Form):
 		return u
 
 class ResetForm(SetPasswordForm):
-	new_password1 = forms.CharField(
-		label=_("New password"),
-		widget=forms.PasswordInput()
-		)
-	new_password2 = forms.CharField(
-		label=_("New password confirmation"),
-		widget=forms.PasswordInput()
-		)
+	pass
 
 class PasswordResetForm(forms.Form):
 	email = forms.EmailField(
