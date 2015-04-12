@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from joinme.models import UserProfile, Category, Event, User
-from joinme.forms import ResetForm, RegistrationForm, CreationEventForm, PasswordResetForm
+from joinme.forms import ResetForm, RegistrationForm, CreationEventForm, PasswordResetForm, EditEventForm
 
 class LoginRequiredMixin(object):
 	@classmethod
@@ -280,6 +280,46 @@ class CreateEventView(LoginRequiredMixin, generic.FormView):
 		else:
 			event = Event(author=request.user.userprofile)
 			form = CreationEventForm(request.POST, instance=event)
+			if form.is_valid():
+				new_event = form.save()
+				self.set_url(new_event.pk)
+			else:
+				return self.form_invalid(form)
+			return self.form_valid(form)
+
+class EditEventView(LoginRequiredMixin, generic.FormView):
+	template_name = "joinme/create-event.html"
+	form_class = EditEventForm
+
+	def set_url(self, pk=0):
+		self.success_url = reverse_lazy("joinme:event", kwargs={'pk': pk})
+
+	def get(self, request, *args, **kwargs):
+		form = self.get_form()
+		event = get_object_or_404(Event, pk=kwargs["pk"])
+		if event.author_id == self.request.user.userprofile.id:
+			form = EditEventForm(instance=event)
+		else:
+			return self.render_to_response(self.get_context_data(
+				error_denied=True, 
+				pk=event.id,
+				edit=True
+			))
+		return self.render_to_response(self.get_context_data(form=form, edit=True))
+
+	def post(self, request, *args, **kwargs):
+		form = self.get_form()
+		if not request.user.is_active:
+			return self.form_invalid(form)
+		else:
+			event = get_object_or_404(Event, pk=kwargs["pk"])
+			if event.author_id != self.request.user.userprofile.id:
+				return self.render_to_response(self.get_context_data(
+					error_denied=True, 
+					pk=event.id,
+					edit=True
+				))
+			form = EditEventForm(request.POST, instance=event)
 			if form.is_valid():
 				new_event = form.save()
 				self.set_url(new_event.pk)

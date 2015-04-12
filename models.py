@@ -53,7 +53,6 @@ class Event(models.Model):
 	description = models.TextField()
 	datetime = models.DateTimeField()
 	pub_date = models.DateTimeField("date published", default=dt.now())
-	count_users = models.IntegerField(blank=True, default=100)
 	category = models.ForeignKey(Category)
 	author = models.ForeignKey(UserProfile, related_name='author')
 	users = models.ManyToManyField(UserProfile, blank=True)

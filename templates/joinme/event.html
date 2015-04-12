@@ -31,8 +31,7 @@
 					</ul>
 				</div>
 				{% if event.author.id == user.userprofile.id %}
-					{# TODO: create form for editing event #}
-					<a href="#" class="btn btn-warning">Edit this Event</a>
+					<a href="{% url "joinme:edit-event" event.id %}" class="btn btn-warning">Edit this Event</a>
 				{% else %}
 					{% if user.userprofile in event.users.all %}
 						<a href="{% url "joinme:leave-event" event.id %}" class="btn btn-danger">Leave Event</a>

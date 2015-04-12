@@ -5,15 +5,20 @@
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-primary">
-			<div class="panel-heading">Create Event</div>
+			<div class="panel-heading">{{ edit|yesno:"Edit,Create" }} Event</div>
 			<div class="panel-body">
+				{{form.invalid}}
+				{% if error_denied %}
+					<div class="well">Permission denied. <a href="{% url "joinme:event" pk %}">Back to Event</a></div>
+				{% else %}
 				<form method="post" id="createEventForm" action="">
 					{% csrf_token %}
 					{% for field in form %}
 					<div class="form-group {{ field.errors|yesno:"has-error," }}">
 						<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
 						{% with placeholder="placeholder:"|add:field.label %}
-							{{ field|add_class:"form-control"|add_class:"floating-label"|append_attr:placeholder }}
+							{# |add_class:"floating-label"|append_attr:placeholder #}
+							{{ field|add_class:"form-control" }}
 						{% endwith %}
 						{% for error in field.errors %}
 							<p class="help-block">{{ error }}</p>
@@ -24,9 +29,10 @@
 					</div>
 					{% endfor %}
 					<div class="text-center">
-						<button data-type="submit" class="btn btn-success">Create</button>
+						<button data-type="submit" class="btn btn-success">{{ edit|yesno:"Edit,Create" }}</button>
 					</div>
 				</form>
+				{% endif %}
 			</div>
 			<div class="panel-footer">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, hic.</div>
 		</div>

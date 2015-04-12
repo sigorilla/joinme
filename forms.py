@@ -110,14 +110,24 @@ After sign in, please, change you password in Settings page of your account:\n\
 class CreationEventForm(forms.ModelForm):
 	class Meta:
 		model = Event
-		fields = ('title', 'description', 'category', 'datetime', 'count_users')
+		fields = ('title', 'description', 'category', 'datetime')
 		labels = {
-			'datetime': 'Date of Event',
-			'count_users': 'Limit of Members'
+			'datetime': 'Date of Event'
 		}
 		help_text = {
 		}
 		error_message = {
+		}
+		widgets = {
+			'description': forms.Textarea(attrs={'rows': 4}),
+		}
+
+class EditEventForm(CreationEventForm):
+	class Meta:
+		model = Event
+		fields = ('title', 'description', 'datetime')
+		labels = {
+			'datetime': 'Date of Event'
 		}
 		widgets = {
 			'description': forms.Textarea(attrs={'rows': 4}),
