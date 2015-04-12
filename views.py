@@ -288,6 +288,10 @@ class CreateEventView(LoginRequiredMixin, generic.CreateView):
 	form_class = CreateEventForm
 	template_name_suffix = "_create_form"
 
+	def form_valid(self, form):
+		form.instance.author = self.request.user.userprofile
+		return super(CreateEventView, self).form_valid(form)
+
 class EditEventView(LoginRequiredMixin, generic.UpdateView):
 	model = Event
 	form_class = EditEventForm
