@@ -17,9 +17,11 @@ urlpatterns = patterns("",
 	url(r"^reset-password/$", views.ResetPassword.as_view(), name="reset-password"),
 	url(r"^settings/$", views.settings, name="settings"),
 
+	url(r"^category/$", views.index),
 	url(r"^category/(?P<pk>\d+)/$", views.CategoryView.as_view(), name="category"),
 	# TODO:: add form for creation of category if user is_staff
 
+	url(r"^event/$", views.index),
 	url(r"^event/(?P<pk>\d+)/$", views.EventView.as_view(), name="event"),
 	url(r"^event/(?P<pk>\d+)/join/$", views.join_event, name="join-event"),
 	url(r"^event/(?P<pk>\d+)/leave/$", views.leave_event, name="leave-event"),
