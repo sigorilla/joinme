@@ -11,18 +11,23 @@
 			<div class="panel-body">
 				<form method="post" id="resetPassForm" action="">
 					{% csrf_token %}
-					{% for field in form %}
-					<div class="form-group {{ field.errors|yesno:"has-error," }}">
-						<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-						{{ field }}
-						{% for error in field.errors %}
+
+					<div class="form-group {{ form.email.errors|yesno:"has-error," }}">
+						<label class="control-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+						<div class="input-group">
+							{{ form.email|add_class:"form-control"|append_attr:"required" }}
+							<span class="input-group-addon">
+								<i class="mdi-action-lock"></i>
+							</span>
+						</div>
+						{% for error in form.email.errors %}
 							<p class="help-block">{{ error }}</p>
 						{% endfor %}
-						{% if field.help_text %}
-							<p class="help-text">{{ field.help_text }}</p>
+						{% if form.email.help_text %}
+							<p class="help-text">{{ form.email.help_text }}</p>
 						{% endif %}
 					</div>
-					{% endfor %}
+
 					<div class="text-center">
 						<button data-type="submit" class="btn btn-danger">Reset Password</button>
 					</div>

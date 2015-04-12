@@ -27,13 +27,13 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
-	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.5">
+	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.6">
 	{% block head_script %}{% endblock head_script %}
 </head>
 {% endblock head %}
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -52,15 +52,15 @@
 			<ul class="nav navbar-nav">
 				<li><a href="{% url "joinme:categories" %}">Categories</a></li>
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-star"></i> Events <span class="caret"></span></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Events <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="{% url "joinme:all-events" %}">All Events</a></li>
 						<li><a href="{% url "joinme:my-events" %}">My Events</a></li>
 						<li class="divider"></li>
-						<li><a href="{% url "joinme:created-events" %}">What I Create</a></li>
-						<li><a href="{% url "joinme:create-event" %}">Create Event</a></li>
+						<li><a href="{% url "joinme:created-events" %}">Created Events</a></li>
 					</ul>
 				</li>
+				<li><a href="{% url "joinme:create-event" %}"><i class="fa fa-star"></i> New Event</a></li>
 			</ul>
 			<form class="navbar-form navbar-left" role="search" method="get" action="{% url "joinme:search" %}">
 				<div class="input-group">

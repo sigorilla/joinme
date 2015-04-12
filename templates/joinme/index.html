@@ -1,5 +1,5 @@
 {% extends "joinme/base.html" %}
-{% load static %}
+{% load filters %}
 
 {% block page %}
 {% if has_account %}
@@ -59,12 +59,26 @@
 						{% if empty_data %}
 							<div class="well well-sm well-material-red-500">Data should not be empty.</div>
 						{% endif %}
-						{% for field in form %}
+
 						<div class="form-group">
-							<label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-							{{ field }}
+							<label class="control-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+							<div class="input-group">
+								{{ form.email|add_class:"form-control"|append_attr:"required" }}
+								<span class="input-group-addon">
+									<i class="mdi-communication-email"></i>
+								</span>
+							</div>
 						</div>
-						{% endfor %}
+						<div class="form-group">
+							<label class="control-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+							<div class="input-group">
+								{{ form.password|add_class:"form-control"|append_attr:"required" }}
+								<span class="input-group-addon">
+									<i class="mdi-action-lock"></i>
+								</span>
+							</div>
+						</div>
+
 						<div class="text-center">
 							<button data-type="submit" class="btn btn-success">Sign In</button>
 							<button data-type="submit" class="btn btn-info">Sign Up</button>

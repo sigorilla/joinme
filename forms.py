@@ -15,13 +15,12 @@ class RegistrationForm(forms.Form):
 		label=_("Email"),
 		max_length=40,
 		required=True,
-		widget=forms.EmailInput(attrs={"class": "form-control", "required": ""})
 		)
 	password = forms.CharField(
 		label=_("Password"),
 		max_length=60,
 		required=True,
-		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+		widget=forms.PasswordInput()
 		)
 
 	def isValidUsername(self, field_data):
@@ -43,24 +42,19 @@ class RegistrationForm(forms.Form):
 		return u
 
 class ResetForm(SetPasswordForm):
-	# old_password = forms.CharField(
-	# 	label="Old password",
-	# 	widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
-	# 	)
 	new_password1 = forms.CharField(
 		label=_("New password"),
-		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+		widget=forms.PasswordInput()
 		)
 	new_password2 = forms.CharField(
 		label=_("New password confirmation"),
-		widget=forms.PasswordInput(attrs={"class": "form-control", "required": ""})
+		widget=forms.PasswordInput()
 		)
 
 class PasswordResetForm(forms.Form):
 	email = forms.EmailField(
 		label=_("Email"), 
-		max_length=254, 
-		widget=forms.EmailInput(attrs={"class": "form-control", "required": ""})
+		max_length=254
 		)
 
 	def isValidEmail(self, data):
