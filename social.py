@@ -41,7 +41,7 @@ def vk_auth(request):
 
 def vk_auth_delete(request):
 	if request.user.is_active:
-		user = UserProfile.objects.get(pk=request.user.userprofile.id)
-		user.vk_user_id = 0
+		user = UserProfile.objects.get(user__id=request.user.id)
+		user.vk_user_id = "0"
 		user.save()
 	return HttpResponseRedirect(redirect_to=reverse("joinme:settings"))
