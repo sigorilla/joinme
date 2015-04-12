@@ -74,6 +74,16 @@
 						</div>
 					</div>
 
+					{% if not object.active %}
+					<div class="form-group {{ form.active.errors|yesno:"has-error," }}">
+						<div class="checkbox">
+							<label class="control-label" for="{{ form.active.id_for_label }}">
+								{{ form.active }} {{ form.active.label }}
+							</label>
+						</div>
+					</div>
+					{% endif %}
+
 					<div class="text-center">
 						<button data-type="submit" class="btn btn-success">{{ object.pk|yesno:"Edit,Create" }}</button>
 					</div>

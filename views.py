@@ -192,8 +192,8 @@ class MyEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 
 	def get_queryset(self):
 		id = self.request.user.userprofile.id
-		query = Q(users__id=id) | Q(author__id=id)
-		return Event.objects.filter(Q(active=True), query).order_by('-pub_date')
+		query = (Q(active=True) & Q(users__id=id)) | Q(author__id=id)
+		return Event.objects.filter(query).order_by('-pub_date')
 
 	def get_context_data(self, **kwargs):
 		context = super(MyEventsList, self).get_context_data(**kwargs)
@@ -207,8 +207,7 @@ class CreatedEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 
 	def get_queryset(self):
 		return Event.objects.filter(
-			author__id=self.request.user.userprofile.id, 
-			active=True).order_by('-pub_date')
+			author__id=self.request.user.userprofile.id).order_by('-pub_date')
 
 	def get_context_data(self, **kwargs):
 		context = super(CreatedEventsList, self).get_context_data(**kwargs)

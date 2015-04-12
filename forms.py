@@ -104,9 +104,10 @@ After sign in, please, change you password in Settings page of your account:\n\
 class CreateEventForm(forms.ModelForm):
 	class Meta:
 		model = Event
-		fields = ('title', 'description', 'category', 'datetime')
+		fields = ('title', 'description', 'category', 'datetime', 'active')
 		labels = {
-			'datetime': 'Date of Event'
+			'datetime': 'Date of Event',
+			'active': 'Publish an Event? (After publish you cannot change this field)',
 		}
 		help_text = {
 		}
@@ -119,9 +120,10 @@ class CreateEventForm(forms.ModelForm):
 class EditEventForm(CreateEventForm):
 	class Meta:
 		model = Event
-		fields = ('title', 'description', 'category', 'datetime')
+		fields = ('title', 'description', 'category', 'datetime', 'active')
 		labels = {
-			'datetime': 'Date of Event'
+			'datetime': 'Date of Event',
+			'active': 'Publish an Event? (After publish you cannot change this field)',
 		}
 		widgets = {
 			'description': forms.Textarea(attrs={'rows': 4}),

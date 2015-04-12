@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block page %}
+{% if event.active or event.author.id == user.userprofile.id %}
 <div class="page-header">
 	<h1 class="text-center">{{ event.title }} 
 		<small><i class="{{ event.category.icon }}"></i> {{ event.category.title }}</small>
@@ -50,9 +51,20 @@
 				{% endif %}
 				</div>
 			</div>
-			<div class="panel-footer">{{ event.datetime }}</div>
+			<div class="panel-footer">
+				{% if not event.active %}
+				<div class="pull-right text-danger"><i class="fa fa-exclamation-circle"></i> Inactive</div>
+				{% endif %}
+				<div>{{ event.datetime }}</div>
+			</div>
 		</div>
 	</div>
 </div>
+{% else %}
+<div class="page-header">
+	<h1 class="text-center"><i class="fa fa-exclamation-circle"></i> Event is inactive</h1>
+</div>
+<h2 class="text-center">Author has not yet published this Event.</h2>
+{% endif %}
 
 {% endblock page %}
