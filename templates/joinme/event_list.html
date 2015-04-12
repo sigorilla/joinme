@@ -4,8 +4,8 @@
 {% block page %}
 
 <div class="page-header">
-	<h1 class="text-center">All Events</h1>
+	<h1 class="text-center">{{ title }}</h1>
 </div>
-{% include "joinme/event-temp.html" with events=events %}
+{% include "joinme/event_iterator.html" with events=events %}
 
 {% endblock page %}

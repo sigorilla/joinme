@@ -11,6 +11,16 @@
 	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-default event-detail" id="event-{{ event.id }}">
 			<div class="panel-body">
+				{% if event.author.id == user.userprofile.id %}
+					<div class="btn-group-vertical pull-right" role="group">
+						<a href="{{ event.get_edit_url }}" class="btn btn-default">
+							<i class="fa fa-pencil"></i>
+						</a>
+						<a href="{{ event.get_delete_url }}" class="btn btn-default">
+							<i class="fa fa-trash-o"></i>
+						</a>
+					</div>
+				{% endif %}
 				<h3>Description</h3>
 				<div>{{ event.description }}</div>
 				<h3>Members</h3>
@@ -30,15 +40,15 @@
 						{% endfor %}
 					</ul>
 				</div>
-				{% if event.author.id == user.userprofile.id %}
-					<a href="{% url "joinme:edit-event" event.id %}" class="btn btn-warning">Edit this Event</a>
-				{% else %}
+				<div class="text-center">
+				{% if event.author.id != user.userprofile.id %}
 					{% if user.userprofile in event.users.all %}
-						<a href="{% url "joinme:leave-event" event.id %}" class="btn btn-danger">Leave Event</a>
+						<a href="{{ event.get_leave_url }}" class="btn btn-danger">Leave Event</a>
 					{% else %}
-						<a href="{% url "joinme:join-event" event.id %}" class="btn btn-success">Join Event</a>
+						<a href="{{ event.get_join_url }}" class="btn btn-success">Join Event</a>
 					{% endif %}
 				{% endif %}
+				</div>
 			</div>
 			<div class="panel-footer">{{ event.datetime }}</div>
 		</div>

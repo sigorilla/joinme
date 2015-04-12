@@ -1,0 +1,28 @@
+{% extends "joinme/base.html" %}
+{% load filters %}
+
+{% block page %}
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading">Delete Event</div>
+			<div class="panel-body">
+			{% if object and object.author.id != user.userprofile.id %}
+				<div class="well">Permission denied.</div>
+			{% else %}
+				<form method="post" id="removeEventForm" action="">
+					{% csrf_token %}
+					<div class="well well-sm">Are you sure you want to delete "{{ object }}"?</div>
+					<div class="text-center">
+						<button data-type="submit" class="btn btn-danger btn-lg">Confirm</button>
+					</div>
+				</form>
+			{% endif %}
+			</div>
+			{% if object %}
+				<div class="panel-footer"><a href="{{ object.get_absolute_url }}">Back to Event</a></div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock page %}

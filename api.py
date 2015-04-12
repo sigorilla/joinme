@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.core.urlresolvers import *
 from django.http import JsonResponse
 
-from joinme.forms import ResetForm, RegistrationForm, CreationEventForm, PasswordResetForm
+from joinme.forms import ResetForm, RegistrationForm, CreateEventForm, PasswordResetForm
 from joinme.models import UserProfile, Category, Event, User
 
 '''

@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from joinme.models import UserProfile, Category, Event, User
-from joinme.forms import ResetForm, RegistrationForm, CreationEventForm, PasswordResetForm, EditEventForm
+from joinme.forms import ResetForm, RegistrationForm, CreateEventForm, PasswordResetForm, EditEventForm
 
 class LoginRequiredMixin(object):
 	@classmethod
@@ -129,9 +129,9 @@ def settings(request):
 			if reset_form.is_valid():
 				reset_form.save()
 				return render(request, "joinme/settings.html",
-					{"reset_form": reset_form, "reset_success": True})
+					{"reset_form": reset_form, "reset_success": True, "title": "Settings"})
 
-	return render(request, "joinme/settings.html", {"reset_form": reset_form})
+	return render(request, "joinme/settings.html", {"reset_form": reset_form, "title": "Settings"})
 
 class CategoryView(LoginRequiredMixin, generic.DetailView):
 	model = Category
@@ -139,7 +139,10 @@ class CategoryView(LoginRequiredMixin, generic.DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(CategoryView, self).get_context_data(**kwargs)
-		context["events"] = Event.objects.filter(category__exact=kwargs["object"].id, active__exact=True)
+		context["events"] = Event.objects.filter(
+			category__exact=kwargs["object"].id, 
+			active__exact=True
+		)
 		return context
 
 class EventView(LoginRequiredMixin, generic.DetailView):
@@ -150,28 +153,32 @@ class EventView(LoginRequiredMixin, generic.DetailView):
 def join_event(request, pk):
 	event = Event.objects.get(pk=pk)
 	if (event.author.id != request.user.userprofile.id):
-		print(event.users)
 		event.users.add(request.user.userprofile)
 		event.save()
-	return HttpResponseRedirect(reverse_lazy("joinme:event", kwargs={'pk': pk}))
+	return HttpResponseRedirect(event.get_absolute_url())
 
 def leave_event(request, pk):
 	event = Event.objects.get(pk=pk)
 	if (event.author.id != request.user.userprofile.id):
 		event.users.remove(request.user.userprofile)
 		event.save()
-	return HttpResponseRedirect(reverse_lazy("joinme:event", kwargs={'pk': pk}))
+	return HttpResponseRedirect(event.get_absolute_url())
 
 class MyEventsList(LoginRequiredMixin, generic.ListView):
-	template_name = "joinme/myevents.html"
+	template_name = "joinme/event_list.html"
 	context_object_name = "events"
 	paginate_by = 10
 
 	def get_queryset(self):
 		return Event.objects.filter(users__id=self.request.user.id, active=True).order_by('-pub_date')
 
+	def get_context_data(self, **kwargs):
+		context = super(MyEventsList, self).get_context_data(**kwargs)
+		context["title"] = "My Events"
+		return context
+
 class CreatedEventsList(LoginRequiredMixin, generic.ListView):
-	template_name = "joinme/createdevents.html"
+	template_name = "joinme/event_list.html"
 	context_object_name = "events"
 	paginate_by = 10
 
@@ -183,13 +190,23 @@ class CreatedEventsList(LoginRequiredMixin, generic.ListView):
 			author = 0
 		return Event.objects.filter(author__id=author, active=True).order_by('-pub_date')
 
+	def get_context_data(self, **kwargs):
+		context = super(CreatedEventsList, self).get_context_data(**kwargs)
+		context["title"] = "My created Events"
+		return context
+
 class AllEventsList(LoginRequiredMixin, generic.ListView):
-	template_name = "joinme/allevents.html"
+	template_name = "joinme/event_list.html"
 	context_object_name = "events"
 	paginate_by = 10
 
 	def get_queryset(self):
 		return Event.objects.filter(active__exact=True).order_by('-pub_date')
+
+	def get_context_data(self, **kwargs):
+		context = super(AllEventsList, self).get_context_data(**kwargs)
+		context["title"] = "All Events"
+		return context
 
 class ResetPassword(generic.FormView):
 	template_name = "joinme/reset-pass.html"
@@ -266,63 +283,16 @@ class SearchList(LoginRequiredMixin, generic.ListView):
 		context["query"] = self.request.GET['q']
 		return context
 
-class CreateEventView(LoginRequiredMixin, generic.FormView):
-	template_name = "joinme/create-event.html"
-	form_class = CreationEventForm
+class CreateEventView(LoginRequiredMixin, generic.CreateView):
+	model = Event
+	form_class = CreateEventForm
+	template_name_suffix = "_create_form"
 
-	def set_url(self, pk=0):
-		self.success_url = reverse_lazy("joinme:event", kwargs={'pk': pk})
-
-	def post(self, request, *args, **kwargs):
-		form = self.get_form()
-		if not request.user.is_active:
-			return self.form_invalid(form)
-		else:
-			event = Event(author=request.user.userprofile)
-			form = CreationEventForm(request.POST, instance=event)
-			if form.is_valid():
-				new_event = form.save()
-				self.set_url(new_event.pk)
-			else:
-				return self.form_invalid(form)
-			return self.form_valid(form)
-
-class EditEventView(LoginRequiredMixin, generic.FormView):
-	template_name = "joinme/create-event.html"
+class EditEventView(LoginRequiredMixin, generic.UpdateView):
+	model = Event
 	form_class = EditEventForm
+	template_name_suffix = "_create_form"
 
-	def set_url(self, pk=0):
-		self.success_url = reverse_lazy("joinme:event", kwargs={'pk': pk})
-
-	def get(self, request, *args, **kwargs):
-		form = self.get_form()
-		event = get_object_or_404(Event, pk=kwargs["pk"])
-		if event.author_id == self.request.user.userprofile.id:
-			form = EditEventForm(instance=event)
-		else:
-			return self.render_to_response(self.get_context_data(
-				error_denied=True, 
-				pk=event.id,
-				edit=True
-			))
-		return self.render_to_response(self.get_context_data(form=form, edit=True))
-
-	def post(self, request, *args, **kwargs):
-		form = self.get_form()
-		if not request.user.is_active:
-			return self.form_invalid(form)
-		else:
-			event = get_object_or_404(Event, pk=kwargs["pk"])
-			if event.author_id != self.request.user.userprofile.id:
-				return self.render_to_response(self.get_context_data(
-					error_denied=True, 
-					pk=event.id,
-					edit=True
-				))
-			form = EditEventForm(request.POST, instance=event)
-			if form.is_valid():
-				new_event = form.save()
-				self.set_url(new_event.pk)
-			else:
-				return self.form_invalid(form)
-			return self.form_valid(form)
+class DeleteEventView(LoginRequiredMixin, generic.DeleteView):
+	model = Event
+	success_url = reverse_lazy("joinme:index")

@@ -7,7 +7,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{% block title %}{{ page_title|default:"Homepage" }} | MIPT{% endblock title %}</title>
+	<title>{% block title %}{{ title|default:"Homepage" }} | JoinMe{% endblock title %}</title>
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -54,10 +54,10 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-star"></i> Events <span class="caret"></span></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="{% url "joinme:allevents" %}">All Events</a></li>
-						<li><a href="{% url "joinme:myevents" %}">My Events</a></li>
+						<li><a href="{% url "joinme:all-events" %}">All Events</a></li>
+						<li><a href="{% url "joinme:my-events" %}">My Events</a></li>
 						<li class="divider"></li>
-						<li><a href="{% url "joinme:createdevents" %}">What I Create</a></li>
+						<li><a href="{% url "joinme:created-events" %}">What I Create</a></li>
 						<li><a href="{% url "joinme:create-event" %}">Create Event</a></li>
 					</ul>
 				</li>
@@ -115,7 +115,7 @@
 <footer id="footer">
 	<div class="container">
 	{% block footer %}
-		<div class="text-center">CodeBusters &copy; 2012&ndash;{% now "Y" %}</div>
+		<div class="text-center">CodeBusters <a href="https://github.com/banditi/" target="_blank"><i class="fa fa-github"></i></a> &copy; 2012&ndash;{% now "Y" %}</div>
 	{% endblock footer %}
 	</div>
 </footer>

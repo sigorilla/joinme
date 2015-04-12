@@ -1,6 +1,6 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django.db.models import Count
 from django.utils.timezone import datetime as dt
 
 class UserProfile(models.Model):
@@ -31,6 +31,9 @@ class Category(models.Model):
 	def __unicode__(self):
 		return self.title
 
+	def get_absolute_url(self):
+		return reverse("joinme:category", kwargs={"pk": self.pk})
+
 	title = models.CharField(max_length=100)
 	description = models.TextField(blank=True)
 	icon = models.CharField(max_length=100, blank=True, default="mdi-content-send")
@@ -48,6 +51,17 @@ class Event(models.Model):
 
 	def __unicode__(self):
 		return self.title
+
+	def get_absolute_url(self):
+		return reverse("joinme:event", kwargs={"pk": self.pk})
+	def get_edit_url(self):
+		return reverse("joinme:edit-event", kwargs={"pk": self.pk})
+	def get_delete_url(self):
+		return reverse("joinme:delete-event", kwargs={"pk": self.pk})
+	def get_join_url(self):
+		return reverse("joinme:join-event", kwargs={"pk": self.pk})
+	def get_leave_url(self):
+		return reverse("joinme:leave-event", kwargs={"pk": self.pk})
 
 	title = models.CharField(max_length=200)
 	description = models.TextField()

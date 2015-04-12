@@ -107,7 +107,7 @@ After sign in, please, change you password in Settings page of your account:\n\
 			[curr_user.email]
 			)
 
-class CreationEventForm(forms.ModelForm):
+class CreateEventForm(forms.ModelForm):
 	class Meta:
 		model = Event
 		fields = ('title', 'description', 'category', 'datetime')
@@ -122,7 +122,7 @@ class CreationEventForm(forms.ModelForm):
 			'description': forms.Textarea(attrs={'rows': 4}),
 		}
 
-class EditEventForm(CreationEventForm):
+class EditEventForm(CreateEventForm):
 	class Meta:
 		model = Event
 		fields = ('title', 'description', 'datetime')
