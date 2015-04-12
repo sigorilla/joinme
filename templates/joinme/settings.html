@@ -6,26 +6,40 @@
 		<div class="col-md-5 col-md-offset-1">
 			<div class="panel panel-default bg-info">
 				<div class="panel-heading">
-					<h3 class="text-center">Common settings</h3>
+					<h3 class="text-center">Settings</h3>
 				</div>
 				<div class="panel-body">
 					<h4>Main infomation</h4>
-					<div>
-						<ul class="list-group">
-							<li class="list-group-item">
-								<b>First name:</b> {{ user.first_name|default:"none" }}
-							</li>
-							<li class="list-group-item">
-								<b>Last name:</b> {{ user.last_name|default:"none" }}
-							</li>
-						</ul>
-					</div>
+					{% if user_success %}
+						<div class="well well-sm text-success">Your information will be updated.</div>
+					{% endif %}
+					<form method="post" action="" class="form-horizontal">
+						{% csrf_token %}
+						<input type="hidden" name="name_form" value="user_edit">
+						{% for field in user_form %}
+						<div class="form-group {{ field.errors|yesno:"has-error," }}">
+							<label class="control-label col-sm-4" for="{{ field.id_for_label }}">{{ field.label }}</label>
+							<div class="col-sm-8">
+								{{ field|add_class:"form-control" }}
+							</div>
+							{% for error in field.errors %}
+								<p class="help-block">{{ error }}</p>
+							{% endfor %}
+							{% if field.help_text %}
+								<p class="help-text">{{ field.help_text }}</p>
+							{% endif %}
+						</div>
+						{% endfor %}
+						<div class="col-sm-8 col-sm-offset-4">
+							<button type="submit" class="btn btn-default btn-info">Update</button>
+						</div>
+					</form>
+					<h4>Social networks</h4>
 					{% if user.userprofile.vk_user_id == 0 %}
 					<div>
-						<a href="https://oauth.vk.com/authorize?client_id={{ VK_API_ID }}&scope=friends,groups,email,offline&redirect_uri=http://{{ host }}{% url "joinme:vk-auth" %}&response_type=code&v=5.29&state=test" class="btn btn-primary"><i class="fa fa-vk"></i></a>
+						<a href="https://oauth.vk.com/authorize?client_id={{ VK_API_ID }}&scope=friends,groups,email,offline&redirect_uri=http://{{ host }}{% url "joinme:vk-auth" %}&response_type=code&v=5.29&state=test" class="btn btn-primary" title="VK"><i class="fa fa-vk"></i> Join VK</a>
 					</div>
 					{% else %}
-					<h4>Social</h4>
 					<div>
 						<i class="fa fa-vk"></i>
 						<a href="https://vk.com/id{{ user.userprofile.vk_user_id }}" target="_blank">Your VK account</a>

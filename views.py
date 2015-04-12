@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 
 from joinme.models import UserProfile, Category, Event, User
-from joinme.forms import ResetForm, RegistrationForm, CreateEventForm, PasswordResetForm, EditEventForm
+from joinme.forms import ResetForm, RegistrationForm, CreateEventForm, PasswordResetForm, EditEventForm, EditUser, EditUserProfile
 
 class LoginRequiredMixin(object):
 	@classmethod
@@ -128,29 +128,45 @@ def confirm(request, activation_key):
 	user_account.save()
 	return render(request, "joinme/confirm.html", {"confirm": True, "form": form})
 
-@never_cache
-@login_required(login_url=reverse_lazy("joinme:index"))
-def settings(request):
-	reset_form = ResetForm(user=request.user)
-	if request.POST:
-		if request.POST["name_form"] == "new_pass":
-			reset_form = ResetForm(user=request.user, data=request.POST)
+class SettingsView(NeverCacheMixin, LoginRequiredMixin, generic.View):
+
+	def get(self, request):
+		reset_form = ResetForm(user=request.user, prefix="reset_form")
+		user_form = EditUser(instance=request.user, prefix="user_form")
+		return render(request, "joinme/settings.html", {
+			"reset_form": reset_form,
+			"user_form": user_form,
+			"title": "Settings",
+			"VK_API_ID": glob_setting.VK_API_ID,
+			"host": request.get_host()
+		})
+
+	def post(self, request):
+		reset_form = ResetForm(user=request.user, prefix="reset_form")
+		user_form = EditUser(instance=request.user, prefix="user_form")
+		reset_success = False
+		user_success = False
+		action = request.POST["name_form"]
+		if action == "new_pass":
 			if reset_form.is_valid():
 				reset_form.save()
-				return render(request, "joinme/settings.html", {
-					"reset_form": reset_form, 
-					"reset_success": True, 
-					"title": "Settings", 
-					"VK_API_ID": glob_setting.VK_API_ID,
-					"host": request.get_host()
-				})
+				reset_success = True
+		elif action == "user_edit":
+			user_form = EditUser(request.POST, instance=request.user, prefix="user_form")
+			if user_form.is_valid():
+				user_form.save()
+				user_success = True
+		context = {
+			"reset_form": reset_form,
+			"user_form": user_form,
+			"reset_success": reset_success,
+			"user_success": user_success,
+			"title": "Settings",
+			"VK_API_ID": glob_setting.VK_API_ID,
+			"host": request.get_host(),
+		}
+		return render(request, "joinme/settings.html", context)
 
-	return render(request, "joinme/settings.html", {
-		"reset_form": reset_form, 
-		"title": "Settings", 
-		"VK_API_ID": glob_setting.VK_API_ID,
-		"host": request.get_host()
-	})
 
 class CategoryView(LoginRequiredMixin, generic.DetailView):
 	model = Category

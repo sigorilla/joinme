@@ -41,6 +41,16 @@ class RegistrationForm(forms.Form):
 		u.save()
 		return u
 
+class EditUser(forms.ModelForm):
+	class Meta:
+		model = User
+		fields = ('first_name', 'last_name',)
+
+class EditUserProfile(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ('user',)
+
 class ResetForm(SetPasswordForm):
 	pass
 

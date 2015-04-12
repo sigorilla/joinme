@@ -15,7 +15,7 @@ urlpatterns = patterns("",
 		name="logout"
 	),
 	url(r"^reset-password/$", views.ResetPassword.as_view(), name="reset-password"),
-	url(r"^settings/$", views.settings, name="settings"),
+	url(r"^settings/$", views.SettingsView.as_view(), name="settings"),
 
 	url(r"^category/$", views.index, name="categories"),
 	url(r"^category/(?P<pk>\d+)/$", views.CategoryView.as_view(), name="category"),
