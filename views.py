@@ -277,6 +277,8 @@ class SearchList(LoginRequiredMixin, generic.ListView):
 			query_string = self.request.GET['q']
 			entry_query = self.get_query(query_string, ['title', 'description',])
 			return Event.objects.filter(entry_query).order_by('-pub_date')
+		else:
+			self.paginate_by = None
 
 	def get_context_data(self, **kwargs):
 		context = super(SearchList, self).get_context_data(**kwargs)
