@@ -74,18 +74,17 @@
 						</div>
 					</div>
 
-					{% if not object.active %}
 					<div class="form-group {{ form.active.errors|yesno:"has-error," }}">
-						<div class="checkbox">
+						<div class="togglebutton">
 							<label class="control-label" for="{{ form.active.id_for_label }}">
-								{{ form.active }} {{ form.active.label }}
+								{{ form.active }} 
+								{% if object.active %}
+								<i class="mdi-action-lock"></i>
+								{% endif %} 
+								{{ form.active.label }}
 							</label>
 						</div>
 					</div>
-					{% else %}
-						{# TODO: change it! #}
-						{{ form.active|append_attr:"type:hidden"|append_attr:"readonly"|append_attr:"disabled" }}
-					{% endif %}
 
 					<div class="text-center">
 						<button data-type="submit" class="btn btn-success">{{ object.pk|yesno:"Edit,Create" }}</button>

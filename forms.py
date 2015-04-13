@@ -131,3 +131,15 @@ class EditEventForm(CreateEventForm):
 		widgets = {
 			'description': forms.Textarea(attrs={'rows': 4}),
 		}
+
+    def __init__(self, *args, **kwargs):
+        super(EditEventForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk and instance.active:
+            self.fields['active'].widget.attrs['disabled'] = True
+
+    def clean_active(self):
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk and instance.active:
+            return instance.active
+        return self.cleaned_data['active']
