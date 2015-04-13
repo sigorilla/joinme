@@ -111,11 +111,7 @@ $( function() {
 									<label class="control-label">{{ form.category.label }}</label>
 										<input type="hidden" id="inputCategory" name="{{ form.category.name }}" value="{{ form.category.value }}">
 										<button type="button" style="margin: 0;" class="btn btn-default btn-sm btn-block {{ form.category.errors|yesno:"btn-danger," }}" data-toggle="modal" data-target="#selectCategory">
-										{% if form.category.value %}
-											{{ cat_current|default:"Choose category" }}
-										{% else %}
-											Choose category
-										{% endif %}
+										{{ form.category.0.choice_label }}
 										</button>
 									{% for error in form.category.errors %}
 										<p class="help-block">{{ error }}</p>
@@ -131,7 +127,6 @@ $( function() {
 					<div class="form-group {{ form.active.errors|yesno:"has-error," }}">
 						<div class="togglebutton">
 							<label class="control-label" for="{{ form.active.id_for_label }}">
-								{# TODO: field reset after editing with errors #}
 								{{ form.active }} 
 								{% if object.active %}
 								<i class="mdi-action-lock"></i>
