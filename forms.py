@@ -128,6 +128,7 @@ class CreateEventForm(forms.ModelForm):
         error_message = {
         }
         widgets = {
+            'category': forms.RadioSelect(),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
 
@@ -142,17 +143,19 @@ class EditEventForm(forms.ModelForm):
             'active': 'Publish an Event? (After publish you cannot change this field)',
         }
         widgets = {
+            'category': forms.RadioSelect(),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
 
     def __init__(self, *args, **kwargs):
         super(EditEventForm, self).__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
-        if instance and instance.pk and instance.active:
+        if instance and instance.active:
             self.fields['active'].widget.attrs['disabled'] = True
+        kwargs['current'] = instance.category.title
 
     def clean_active(self):
         instance = getattr(self, 'instance', None)
-        if instance and instance.pk and instance.active:
+        if instance and instance.active:
             return instance.active
         return self.cleaned_data['active']

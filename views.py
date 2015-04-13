@@ -345,7 +345,11 @@ class EditEventView(LoginRequiredMixin, generic.UpdateView):
     model = Event
     form_class = EditEventForm
     template_name_suffix = "_create_form"
-    # TODO: add `active` after submit, as True
+
+    def get_context_data(self, **kwargs):
+        context = super(EditEventView, self).get_context_data(**kwargs)
+        context["cat_current"] = self.get_object().category.title
+        return context
 
 
 class DeleteEventView(LoginRequiredMixin, generic.DeleteView):
