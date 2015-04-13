@@ -7,9 +7,23 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate
 from django.core.urlresolvers import *
 from django.http import JsonResponse
+from django.middleware.csrf import _get_new_csrf_key
 
 from joinme.forms import RegistrationForm
 from joinme.models import UserProfile
+
+
+"""
+@api {get} /csrf/
+
+@apiSuccess {String} token Token to access.
+
+@apiError {String} error Message about error.
+"""
+
+
+def csrf(request):
+    return JsonResponse({"token": _get_new_csrf_key()})
 
 
 """

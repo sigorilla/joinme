@@ -36,6 +36,7 @@ urlpatterns = patterns(
     url(r"^search/$", views.SearchList.as_view(), name="search"),
 
     # API
+    url(r"^api/csrf/$", api.csrf, name="android-csrf"),
     url(r"^api/reg/$", api.reg, name="api-reg"),
     url(r"^api/login/$", api.login, name="api-login"),
 
