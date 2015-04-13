@@ -180,7 +180,7 @@ class SettingsView(NeverCacheMixin, LoginRequiredMixin, generic.View):
         return render(request, "joinme/settings.html", context)
 
 
-class CategoryView(NeverCachedMixin, LoginRequiredMixin, generic.DetailView):
+class CategoryView(NeverCacheMixin, LoginRequiredMixin, generic.DetailView):
     model = Category
     template_name = "joinme/category.html"
 
