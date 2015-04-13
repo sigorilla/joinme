@@ -1,5 +1,23 @@
 {% extends "joinme/base.html" %}
+{% load static %}
 {% load filters %}
+
+{% block head_script %}
+<link rel="stylesheet" href="{% static "joinme/css/bootstrap-material-datepicker.css" %}">
+{% endblock head_script %}
+{% block end_script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="{% static "joinme/js/bootstrap-material-datepicker.js" %}"></script>
+<script>
+$( function() {
+	$( "input[name=datetime]" ).bootstrapMaterialDatePicker( {
+		weekStart: 1,
+		time: true,
+		format: "YYYY-MM-DD HH:mm"
+	} );
+} );
+</script>
+{% endblock end_script %}
 
 {% block page %}
 <div class="row">
@@ -46,8 +64,8 @@
 						<div class="col-xs-6">
 							<div class="form-group {{ form.datetime.errors|yesno:"has-error," }}">
 								<label class="control-label" for="{{ form.datetime.id_for_label }}">{{ form.datetime.label }}</label>
-								{% with placeholder="placeholder:Format YYYY-MM-DD HH:mm:ss" %}
-									{{ form.datetime|add_class:"form-control"|add_class:"floating-label"|append_attr:placeholder }}
+								{% with placeholder="placeholder:Format YYYY-MM-DD HH:mm" %}
+									{{ form.datetime|append_attr:placeholder|add_class:"form-control floating-label" }}
 								{% endwith %}
 								{% for error in form.datetime.errors %}
 									<p class="help-block">{{ error }}</p>

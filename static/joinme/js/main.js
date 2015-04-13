@@ -1,15 +1,15 @@
-var HACK;
+var JM;
 
 $( document ).ready( function () {
 
-	HACK = ( function () {
+	JM = ( function () {
 
 		var $loginForm = $( "#loginForm" );
 
 		var regEmail = /.+@.+\..+/i;
 
 		var _init = function () {
-			console.log( "HACK is running." );
+			console.log( "JM is running." );
 
 			_addListener();
 
@@ -83,5 +83,5 @@ $( document ).ready( function () {
 
 	}() );
 
-	HACK.init();
+	JM.init();
 } );
