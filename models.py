@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.timezone import datetime as dt
 
-
 class UserProfile(models.Model):
 
     class Meta:
@@ -17,12 +16,20 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
 
+    def get_username(self):
+        return "%s %s" % (self.user.first_name, self.user.last_name)
+
+    def get_user_photo(self):
+        return self.vk_photo_200
+
     user = models.OneToOneField(User)
     activation_key = models.CharField(max_length=40)
     key_expires = models.DateTimeField()
     vk_user_id = models.IntegerField(default=0)
     vk_access_token = models.CharField(max_length=254, default="", blank=True)
     vk_expires_in = models.CharField(max_length=254, default="", blank=True)
+    vk_email = models.CharField(max_length=60, blank=True)
+    vk_photo_200 = models.CharField(max_length=255, blank=True)
 
 
 class Category(models.Model):
