@@ -3,11 +3,11 @@
 {% load filters %}
 
 {% block head_script %}
-<link rel="stylesheet" href="{% static "joinme/css/bootstrap-material-datepicker.css" %}">
+<link rel="stylesheet" href="{% static "joinme/css/bootstrap-material-datepicker.css" %}?v=0.0.1">
 {% endblock head_script %}
 {% block end_script %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-<script src="{% static "joinme/js/bootstrap-material-datepicker.js" %}"></script>
+<script src="{% static "joinme/js/bootstrap-material-datepicker.js" %}?v=0.0.1"></script>
 <script>
 $( function() {
 	$( "input[name=datetime]" ).bootstrapMaterialDatePicker( {
