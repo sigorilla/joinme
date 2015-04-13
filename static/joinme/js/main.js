@@ -13,8 +13,7 @@ $( document ).ready( function () {
 
 			_addListener();
 
-			$active_link = $( "nav a[href='" + window.location.pathname + "']" )
-				.parents( "li" ).addClass( "active" );
+			$( "nav a[href='" + window.location.pathname + "']" ).parents( "li" ).addClass( "active" );
 		};
 
 		var _addListener = function () {
@@ -40,8 +39,6 @@ $( document ).ready( function () {
 			$loginForm.find( "[data-type=submit]" ).click( function ( event ) {
 				event.preventDefault();
 
-				var checkin = true;
-
 				$( this ).parent( ".form-group" ).removeClass( "has-error has-success" );
 				var $email = $( this ).parents( "#loginForm" ).find( "input[name=email]" );
 				var $password = $( this ).parents( "#loginForm" ).find( "input[name=password]" );
@@ -65,13 +62,13 @@ $( document ).ready( function () {
 				}
 			} );
 
-			$loginForm.find( "input" ).on( "focus", function ( event ) {
+			$loginForm.find( "input" ).on( "focus", function () {
 				$( this ).parent( ".form-group" ).removeClass( "has-error" );
 			} );
 
 		};
 
-		var _openCatEv = function ( event ) {
+		var _openCatEv = function () {
 			var $link = $( this ).find( ".panel-footer a" );
 			var url = "";
 			if ( $link.length > 0 ) {
@@ -81,7 +78,7 @@ $( document ).ready( function () {
 		};
 
 		return {
-			init: _init,
+			init: _init
 		};
 
 	}() );

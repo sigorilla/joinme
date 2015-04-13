@@ -29,3 +29,7 @@ body [class*=mdi-] {
 .event[id^=event] {
 	cursor: pointer;
 }
+.category .panel-heading,
+.event .panel-heading {
+	word-break: break-word;
+}
