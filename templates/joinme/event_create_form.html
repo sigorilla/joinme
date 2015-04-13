@@ -82,6 +82,9 @@
 							</label>
 						</div>
 					</div>
+					{% else %}
+						{# TODO: change it! #}
+						{{ form.active|append_attr:"type:hidden"|append_attr:"readonly"|append_attr:"disabled" }}
 					{% endif %}
 
 					<div class="text-center">

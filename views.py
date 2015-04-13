@@ -333,6 +333,7 @@ class EditEventView(LoginRequiredMixin, generic.UpdateView):
 	model = Event
 	form_class = EditEventForm
 	template_name_suffix = "_create_form"
+	# TODO: add `active` after submit, as True
 
 class DeleteEventView(LoginRequiredMixin, generic.DeleteView):
 	model = Event
