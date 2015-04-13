@@ -13,6 +13,8 @@ $( document ).ready( function () {
 
 			_addListener();
 
+			_addHashLink();
+
 			$( "nav a[href='" + window.location.pathname + "']" ).parents( "li" ).addClass( "active" );
 		};
 
@@ -66,6 +68,24 @@ $( document ).ready( function () {
 				$( this ).parent( ".form-group" ).removeClass( "has-error" );
 			} );
 
+		};
+
+		var _addHashLink = function() {
+
+			var search = $( "form[role=search]" ).attr( "action" );
+
+			function hasher ( str, param, offset, initial ) {
+				var query = encodeURIComponent( str );
+				return "<a href='" + search + "?q=" + query + "'>" + str + "</a>";
+			}
+
+			$( ".event" ).each( function( index, element ) {
+				var $text = $( element ).find( ".panel-body > div:first" );
+				var text = $text.text();
+				var regexp = /(\#\w+)/g;
+				var new_string = text.replace( regexp, hasher );
+				$text.html( new_string );
+			} );
 		};
 
 		var _openCatEv = function () {
