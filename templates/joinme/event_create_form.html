@@ -111,7 +111,7 @@ $( function() {
 									<label class="control-label">{{ form.category.label }}</label>
 										<input type="hidden" id="inputCategory" name="{{ form.category.name }}" value="{{ form.category.value }}">
 										<button type="button" style="margin: 0;" class="btn btn-default btn-sm btn-block {{ form.category.errors|yesno:"btn-danger," }}" data-toggle="modal" data-target="#selectCategory">
-										{{ form.category.0.choice_label }}
+										{{ cat_current|default:form.category.0.choice_label }}
 										</button>
 									{% for error in form.category.errors %}
 										<p class="help-block">{{ error }}</p>
