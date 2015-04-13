@@ -42,9 +42,9 @@ def csrf(request):
 
 
 """
-@api {post} /reg/:login:password
+@api {post} /reg/:email:password
 
-@apiParam {String} login Users unique login/email
+@apiParam {String} email Users unique email
 @apiParam {String} password Users password
 
 @apiSuccess {String} token Token to access.
@@ -57,7 +57,7 @@ def csrf(request):
 def reg(request):
     if request.POST:
         new_data = {
-            "email": request.POST['login'],
+            "email": request.POST['email'],
             "password": request.POST['password']
         }
         form = RegistrationForm(new_data)
