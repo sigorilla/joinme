@@ -58,6 +58,56 @@
 				<div>{{ event.datetime }}</div>
 			</div>
 		</div>
+
+		{# Comments #}
+		<div class="comment-head text-center">
+			<h2 data-toggle="collapse"  data-target="#comments">Comments <span class="caret"></span></h2>
+		</div>
+		<div id="comments" class="collapse">
+
+			<div class="list-group">
+				{% for comment in event.comments.all %}
+				<div id="comment-{{ comment.id }}" class="list-group-item comment">
+					<div class="row-picture comment-user-photo">
+						{% with comment.user.get_user_photo as photo %}
+							{% if photo %}
+							<img class="circle" src="{{ photo }}" alt="icon">
+							{% else %}
+							<i class="mdi-social-person"></i>
+							{% endif %}
+						{% endwith %}
+					</div>
+					<div class="row-content">
+						<div class="least-content comment-date">{{ comment.pub_date|date:"d E Y H:i" }}</div>
+						<h4 class="list-group-item-heading comment-username">{{ comment.user.get_username }}</h4>
+						<p class="list-group-item-text comment-message">{{ comment.message }}</p>
+					</div>
+				</div>
+				<div class="list-group-separator"></div>
+				{% endfor %}
+			</div>
+
+			{# Form to add Comment #}
+			<div class="">
+				<form class="form-horizontal" id="commentForm" action="" method="post">
+					{% csrf_token %}
+					<fieldset>
+						<legend>Add comment</legend>
+						<div class="form-group">
+							<label for="commentMessage" class="control-label col-lg-2">Message</label>
+							<div class="col-lg-10">
+								<textarea name="message" id="commentMessage" rows="4" class="form-control" data-hint="Don't use any HTML tags"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">
+								<button data-type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
 {% else %}

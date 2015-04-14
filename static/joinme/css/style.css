@@ -33,3 +33,8 @@ body [class*=mdi-] {
 .event .panel-heading {
 	word-break: break-word;
 }
+
+/* Comments */
+.comment-head {
+	cursor: pointer;
+}

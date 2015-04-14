@@ -11,10 +11,11 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.urlresolvers import *
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views import generic
+from django.utils import formats
 
-from joinme.models import UserProfile, Category, Event
+from joinme.models import UserProfile, Category, Event, Comment
 from joinme.forms import ResetForm, RegistrationForm, CreateEventForm, PasswordResetForm, EditEventForm, EditUser
 
 
@@ -200,21 +201,40 @@ class EventView(NeverCacheMixin, LoginRequiredMixin, generic.DetailView):
 
 
 @never_cache
+@login_required(login_url=reverse_lazy("joinme:index"))
 def join_event(request, pk):
     event = Event.objects.get(pk=pk)
     if event.author.id != request.user.userprofile.id:
         event.users.add(request.user.userprofile)
-        event.save()
     return HttpResponseRedirect(event.get_absolute_url())
 
 
 @never_cache
+@login_required(login_url=reverse_lazy("joinme:index"))
 def leave_event(request, pk):
     event = Event.objects.get(pk=pk)
     if event.author.id != request.user.userprofile.id:
         event.users.remove(request.user.userprofile)
-        event.save()
     return HttpResponseRedirect(event.get_absolute_url())
+
+
+@login_required(login_url=reverse_lazy("joinme:index"))
+def add_comment_event(request, pk):
+    if request.method == "POST":
+        if ("message" in request.POST) and request.POST["message"].strip():
+            event = Event.objects.get(pk=pk)
+            comment = event.comments.create(user=request.user.userprofile, message=request.POST["message"])
+            return JsonResponse({
+                "error": False,
+                "comment": {
+                    "id": comment.id,
+                    "date": formats.date_format(comment.pub_date, "DATETIME_FORMAT"),
+                }, 
+                "username": request.user.userprofile.get_username(),
+                "user_photo": request.user.userprofile.get_user_photo()})
+        else:
+            return JsonResponse({"error": True})
+    return JsonResponse({"error": True})
 
 
 class MyEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):

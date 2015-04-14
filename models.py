@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django.utils.timezone import datetime as dt
+from django.utils.timezone import now
 
 class UserProfile(models.Model):
 
@@ -29,6 +29,7 @@ class UserProfile(models.Model):
     vk_access_token = models.CharField(max_length=254, default="", blank=True)
     vk_expires_in = models.CharField(max_length=254, default="", blank=True)
     vk_email = models.CharField(max_length=60, blank=True)
+    # TODO: set default photo
     vk_photo_200 = models.CharField(max_length=255, blank=True)
 
 
@@ -52,6 +53,23 @@ class Category(models.Model):
     icon = models.CharField(max_length=100, blank=True, default="mdi-content-send")
     color = models.CharField(max_length=100, blank=True, default="material-teal")
     active = models.BooleanField(default=True)
+
+
+class Comment(models.Model):
+
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+
+    def __str__(self):
+        return self.message
+
+    def __unicode__(self):
+        return self.message
+
+    user = models.ForeignKey(UserProfile, default=0)
+    message = models.TextField()
+    pub_date = models.DateTimeField("date published", default=now)
 
 
 class Event(models.Model):
@@ -84,8 +102,9 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     datetime = models.DateTimeField()
-    pub_date = models.DateTimeField("date published", default=dt.now())
+    pub_date = models.DateTimeField("date published", default=now)
     category = models.ForeignKey(Category, default=1)
     author = models.ForeignKey(UserProfile, related_name='author')
     users = models.ManyToManyField(UserProfile, blank=True)
     active = models.BooleanField(default=True)
+    comments = models.ManyToManyField(Comment, blank=True)

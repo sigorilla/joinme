@@ -1,15 +1,28 @@
 var JM;
 
-$( document ).ready( function () {
+$( document ).ready( function() {
 
-	JM = ( function () {
+	JM = ( function() {
 
-		var $loginForm = $( "#loginForm" );
+		var $loginForm = $( "#loginForm" )
+		, $commentForm = $( "form#commentForm" )
+		;
 
-		var regEmail = /.+@.+\..+/i;
+		var regEmail = /.+@.+\..+/i
+		, csrftoken
+		;
 
-		var _init = function () {
+		var _init = function() {
 			console.log( "JM is running." );
+
+			csrftoken = getCookie('csrftoken');
+			$.ajaxSetup( {
+				beforeSend: function( xhr, settings ) {
+					if ( !csrfSafeMethod( settings.type ) && sameOrigin( settings.url ) ) {
+						xhr.setRequestHeader( "X-CSRFToken", csrftoken );
+					}
+				}
+			} );
 
 			_addListener();
 
@@ -18,9 +31,9 @@ $( document ).ready( function () {
 			$( "nav a[href='" + window.location.pathname + "']" ).parents( "li" ).addClass( "active" );
 		};
 
-		var _addListener = function () {
+		var _addListener = function() {
 
-			$( "[data-fire]" ).click( function () {
+			$( "[data-fire]" ).click( function() {
 				var fire = $( this ).data( "fire" );
 				if ( fire == "totop" ) {
 					$( "html, body" ).animate( { scrollTop: 0 } );
@@ -38,7 +51,7 @@ $( document ).ready( function () {
 					$( this ).removeClass( "shadow-z-4" );
 				} );
 
-			$loginForm.find( "[data-type=submit]" ).click( function ( event ) {
+			$loginForm.find( "[data-type=submit]" ).click( function( event ) {
 				event.preventDefault();
 
 				$( this ).parent( ".form-group" ).removeClass( "has-error has-success" );
@@ -64,9 +77,11 @@ $( document ).ready( function () {
 				}
 			} );
 
-			$loginForm.find( "input" ).on( "focus", function () {
+			$loginForm.find( "input" ).on( "focus", function() {
 				$( this ).parent( ".form-group" ).removeClass( "has-error" );
 			} );
+
+			$commentForm.submit( _saveComment );
 
 		};
 
@@ -74,7 +89,7 @@ $( document ).ready( function () {
 
 			var search = $( "form[role=search]" ).attr( "action" );
 
-			function hasher ( str, param, offset, initial ) {
+			function hasher( str, param, offset, initial ) {
 				var query = encodeURIComponent( str );
 				return "<a href='" + search + "?q=" + query + "'>" + str + "</a>";
 			}
@@ -88,13 +103,89 @@ $( document ).ready( function () {
 			} );
 		};
 
-		var _openCatEv = function () {
+		var _openCatEv = function() {
 			var $link = $( this ).find( ".panel-footer a" );
 			var url = "";
 			if ( $link.length > 0 ) {
 				url = $link.eq( 0 ).attr( "href" );
 				window.location.pathname = url;
 			}
+		};
+
+		var _saveComment = function( event ) {
+			event.preventDefault();
+			var path = location.path;
+			var $text = $commentForm.find( "textarea[name=message]" );
+			var message = $.trim( $text.val() );
+			if ( message != "" ) {
+				var output = {
+					"csrfmiddlewaretoken": $commentForm.find( "input[name=csrfmiddlewaretoken]" ).val(),
+					"message": message,
+				};
+				$.ajax( {
+					type: "POST",
+					url: "comment/",
+					data: output,
+					dataType: "json",
+					success: function( data ) {
+						console.log( data );
+						if ( data["error"] ) {
+							console.log( "Something is wrong." );
+						} else {
+							var selector = "#comments .list-group > div:not(.list-group-separator)";
+							var $template = $( selector ).last().clone();
+							$template.attr( "id", "comment-" + data["comment"]["id"] );
+							$template.find( ".comment-user-photo" )
+							.html( "<img class='circle' src='" + data["user_photo"] + 
+								"' alt='icon'>" );
+							$template.find( ".comment-username" ).text( data["username"] );
+							$template.find( ".comment-date" ).text( data["comment"]["date"] );
+							$template.find( ".comment-message" ).text( message );
+							$( "#comments .list-group" ).append( $template );
+							$( "#comments .list-group" )
+							.append( "<div class='list-group-separator'></div>" );
+							$text.val( "" );
+						}
+					},
+					error: function( jqXHR, textStatus, errorThrown ) {
+						console.log( jqXHR, textStatus, errorThrown );
+					}
+				} );
+			} else {
+				console.log( "Enter message!" );
+			}
+		};
+
+		var getCookie = function( name ) {
+			var cookieValue = null;
+			if ( document.cookie && document.cookie != "" ) {
+				var cookies = document.cookie.split( ";" );
+				for ( var i = 0; i < cookies.length; i++ ) {
+					var cookie = jQuery.trim( cookies[ i ] );
+					// Does this cookie string begin with the name we want?
+					if ( cookie.substring( 0, name.length + 1 ) == ( name + "=" ) ) {
+						cookieValue = decodeURIComponent( cookie.substring( name.length + 1 ) );
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		};
+
+		var csrfSafeMethod =function( method ) {
+			return ( /^(GET|HEAD|OPTIONS|TRACE)$/.test( method ) );
+		};
+
+		var sameOrigin = function( url ) {
+			var host = document.location.host;
+			var protocol = document.location.protocol;
+			var sr_origin = "//" + host;
+			var origin = protocol + sr_origin;
+			// Allow absolute or scheme relative URLs to same origin
+			return ( url == origin || url.slice( 0, origin.length + 1 ) == origin + "/" ) ||
+				( url == sr_origin || url.slice( 0, sr_origin.length + 1 ) == sr_origin + "/" ) ||
+				// or any other URL that isn't scheme relative or absolute i.e relative.
+				!( /^(\/\/|http:|https:).*/.test( url ) );
 		};
 
 		return {
