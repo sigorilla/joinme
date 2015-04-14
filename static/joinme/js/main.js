@@ -115,8 +115,8 @@ $( document ).ready( function() {
 		var _saveComment = function( event ) {
 			event.preventDefault();
 			var path = location.path;
-			var $text = $commentForm.find( "textarea[name=message]" );
-			var message = $.trim( $text.val() );
+			var $message = $commentForm.find( "textarea[name=message]" );
+			var message = $.trim( $message.val() );
 			if ( message != "" ) {
 				var output = {
 					"csrfmiddlewaretoken": $commentForm.find( "input[name=csrfmiddlewaretoken]" ).val(),
@@ -132,19 +132,30 @@ $( document ).ready( function() {
 						if ( data["error"] ) {
 							console.log( "Something is wrong." );
 						} else {
-							var selector = "#comments .list-group > div:not(.list-group-separator)";
-							var $template = $( selector ).last().clone();
+							var $template = $( "<div class='list-group-item comment'>" + 
+								"<div class='row-picture comment-user-photo'></div>" + 
+								"<div class='row-content'>" + 
+									"<div class='least-content comment-date'></div>" + 
+									"<h4 class='list-group-item-heading comment-username'></h4>" + 
+									"<p class='list-group-item-text comment-message'></p>" + 
+								"</div>" + 
+							"</div>" );
 							$template.attr( "id", "comment-" + data["comment"]["id"] );
-							$template.find( ".comment-user-photo" )
-							.html( "<img class='circle' src='" + data["user_photo"] + 
-								"' alt='icon'>" );
+							if ( data["user_photo"] != "" ) {
+								$template.find( ".comment-user-photo" )
+								.html( "<img class='circle' src='" + data["user_photo"] + 
+									"' alt='icon'>" );
+							} else {
+								$template.find( ".comment-user-photo" )
+								.html( "<i class='mdi-social-person'></i>" );
+							}
 							$template.find( ".comment-username" ).text( data["username"] );
 							$template.find( ".comment-date" ).text( data["comment"]["date"] );
 							$template.find( ".comment-message" ).text( message );
 							$( "#comments .list-group" ).append( $template );
 							$( "#comments .list-group" )
 							.append( "<div class='list-group-separator'></div>" );
-							$text.val( "" );
+							$message.val( "" );
 						}
 					},
 					error: function( jqXHR, textStatus, errorThrown ) {
