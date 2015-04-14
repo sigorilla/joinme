@@ -33,6 +33,8 @@ $( document ).ready( function() {
 
 		var _addListener = function() {
 
+			$( "[data-toggle='tooltip']" ).tooltip();
+
 			$( "[data-fire]" ).click( function() {
 				var fire = $( this ).data( "fire" );
 				if ( fire == "totop" ) {
@@ -46,9 +48,9 @@ $( document ).ready( function() {
 			$( ".category, .event" )
 				.on( "click", _openCatEv )
 				.hover( function() {
-					$( this ).addClass( "shadow-z-4" );
+					$( this ).addClass( "shadow-z-2" );
 				}, function() {
-					$( this ).removeClass( "shadow-z-4" );
+					$( this ).removeClass( "shadow-z-2" );
 				} );
 
 			$loginForm.find( "[data-type=submit]" ).click( function( event ) {
@@ -95,7 +97,7 @@ $( document ).ready( function() {
 			}
 
 			$( ".event" ).each( function( index, element ) {
-				var $text = $( element ).find( ".panel-body > div:first" );
+				var $text = $( element ).find( ".panel-body > .lead" );
 				var text = $text.text();
 				var regexp = /(\#\w+)/g;
 				var new_string = text.replace( regexp, hasher );
@@ -108,7 +110,7 @@ $( document ).ready( function() {
 			var url = "";
 			if ( $link.length > 0 ) {
 				url = $link.eq( 0 ).attr( "href" );
-				window.location.pathname = url;
+				// window.location.pathname = url;
 			}
 		};
 

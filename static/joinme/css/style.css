@@ -20,6 +20,14 @@ textarea {
 	padding: 10px;
 }
 
+#iconEvent {
+	position: absolute;
+	right: -20px;
+}
+#iconEvent > div {
+	margin: 10px;
+}
+
 body [class^=mdi-],
 body [class*=mdi-] {
 	font-size: inherit;
@@ -27,11 +35,19 @@ body [class*=mdi-] {
 
 .category[id^=category],
 .event[id^=event] {
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 .category .panel-heading,
 .event .panel-heading {
 	word-break: break-word;
+}
+.event .date {
+	padding: 5px;
+	border-radius: 100%;
+	width: 40px;
+	height: 40px;
+	font-weight: bold;
+	line-height: 1;
 }
 
 /* Comments */

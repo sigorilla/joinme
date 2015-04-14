@@ -136,15 +136,15 @@ $( function() {
 						</div>
 					</div>
 
-					<div class="text-center">
+					<div class="">
 						<button data-type="submit" class="btn btn-success">{{ object.pk|yesno:"Edit,Create" }}</button>
+						{% if object %}
+						<a href="{{ object.get_absolute_url }}" class="btn btn-default">Cancel</a>
+						{% endif %}
 					</div>
 				</form>
 			{% endif %}
 			</div>
-			{% if object %}
-				<div class="panel-footer"><a href="{{ object.get_absolute_url }}">Back to Event</a></div>
-			{% endif %}
 		</div>
 	</div>
 </div>

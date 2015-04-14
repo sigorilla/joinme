@@ -12,24 +12,50 @@
 	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-{{ event.category.color|default:"primary" }} event-detail" id="event-{{ event.id }}">
 			<div class="panel-body">
+
+				<div id="iconEvent" role="group">
 				{% if event.author.id == user.userprofile.id %}
-					<div class="btn-group-vertical pull-right" role="group">
-						<a href="{{ event.get_edit_url }}" class="btn btn-default">
-							<i class="fa fa-pencil"></i>
+					{% if not event.active %}
+					<div>
+						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Inactive">
+							<i class="fa fa-exclamation"></i>
 						</a>
-						<a href="{{ event.get_delete_url }}" class="btn btn-default">
+					</div>
+					{% endif %}
+					<div>
+						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-primary" data-toggle="tooltip" data-placement="left" title="Edit Event">
+							<i class="mdi-content-create"></i>
+						</a>
+					</div>
+					<div>
+						<a href="{{ event.get_delete_url }}" class="btn btn-fab btn-raised btn-warning" data-toggle="tooltip" data-placement="left" title="Delete Event">
 							<i class="fa fa-trash-o"></i>
 						</a>
 					</div>
 				{% endif %}
+				{% if event.author.id != user.userprofile.id %}
+				<div>
+					{% if user.userprofile in event.users.all %}
+						<a href="{{ event.get_leave_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Leave Event">
+							<i class="mdi-image-exposure-minus-1"></i>
+						</a>
+					{% else %}
+						<a href="{{ event.get_join_url }}" class="btn btn-fab btn-raised btn-success" data-toggle="tooltip" data-placement="left" title="Join Event">
+							<i class="mdi-image-exposure-plus-1"></i>
+						</a>
+					{% endif %}
+				</div>
+				{% endif %}
+				</div>
+
 				<h3>Description</h3>
-				<div>{{ event.description }}</div>
+				<div class="lead">{{ event.description }}</div>
 				<h3>Members</h3>
 				<div>
 					<ul class="list-group">
 						<li class="list-group-item">
 							<h4 class="list-group-item-heading">
-								<i class="mdi-editor-insert-emoticon"></i> {{ event.author }}
+								<i class="mdi-social-person"></i> {{ event.author }} (creator)
 							</h4>
 						</li>
 						{% for user in event.users.all %}
@@ -41,30 +67,19 @@
 						{% endfor %}
 					</ul>
 				</div>
-				<div class="text-center">
-				{% if event.author.id != user.userprofile.id %}
-					{% if user.userprofile in event.users.all %}
-						<a href="{{ event.get_leave_url }}" class="btn btn-danger">Leave Event</a>
-					{% else %}
-						<a href="{{ event.get_join_url }}" class="btn btn-success">Join Event</a>
-					{% endif %}
-				{% endif %}
-				</div>
-			</div>
-			<div class="panel-footer">
-				{% if not event.active %}
-				<div class="pull-right text-danger"><i class="fa fa-exclamation-circle"></i> Inactive</div>
-				{% endif %}
-				<div>{{ event.datetime }}</div>
+				<h3><small>Date</small> {{ event.datetime }}</h3>
 			</div>
 		</div>
 
 		{# Comments #}
+		{# TODO: hide commets if user is not in event #}
+		{# TODO: paginator for comments #}
+		{# TODO: child comments #}
 		<div class="comment-head text-center">
-			<h2 data-toggle="collapse"  data-target="#comments">Comments <span class="caret"></span></h2>
+			<h2 data-toggle="collapse" data-target="#comments">Comments <span class="caret"></span></h2>
 		</div>
 		<div id="comments" class="collapse">
-
+			{% if event.comments.count %}
 			<div class="list-group">
 				{% for comment in event.comments.all %}
 				<div id="comment-{{ comment.id }}" class="list-group-item comment">
@@ -86,6 +101,7 @@
 				<div class="list-group-separator"></div>
 				{% endfor %}
 			</div>
+			{% endif %}
 
 			{# Form to add Comment #}
 			<div class="">

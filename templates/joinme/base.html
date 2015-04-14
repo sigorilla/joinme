@@ -27,7 +27,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
-	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.7">
+	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.8">
 	{% block head_script %}{% endblock head_script %}
 </head>
 {% endblock head %}
@@ -59,7 +59,7 @@
 						<li><a href="{% url "joinme:created-events" %}">Created Events</a></li>
 					</ul>
 				</li>
-				<li><a href="{% url "joinme:create-event" %}"><i class="fa fa-star"></i> New Event</a></li>
+				<li><a href="{% url "joinme:create-event" %}">Create Event</a></li>
 			</ul>
 			<form class="navbar-form navbar-left" role="search" method="get" action="{% url "joinme:search" %}">
 				<div class="input-group">
@@ -139,10 +139,15 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/ripples.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/js/material.min.js"></script>
-<script src="{% static "joinme/js/main.js" %}?v=0.0.9"></script>
+<script src="{% static "joinme/js/main.js" %}?v=0.0.10"></script>
 <script>
 $( function() {
 	$.material.init();
+
+	$( ".js-masonry" ).masonry( {
+		itemSelector: ".item",
+		containerStyle: { position: 'relative' }
+	} );
 } );
 </script>
 {% block end_script %}{% endblock end_script %}
