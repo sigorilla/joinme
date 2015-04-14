@@ -67,7 +67,7 @@ $( function() {
 						<label class="control-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
 						{% with placeholder="placeholder:"|add:form.title.label %}
 							{# |add_class:"floating-label"|append_attr:placeholder #}
-							{{ form.title|add_class:"form-control" }}
+							{{ form.title|add_class:"form-control"|append_attr:"data-hint:Maximum - 45 letters" }}
 						{% endwith %}
 						{% for error in form.title.errors %}
 							<p class="help-block">{{ error }}</p>

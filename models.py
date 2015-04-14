@@ -99,7 +99,7 @@ class Event(models.Model):
     def get_leave_url(self):
         return reverse("joinme:leave-event", kwargs={"pk": self.pk})
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=45)
     description = models.TextField()
     datetime = models.DateTimeField()
     pub_date = models.DateTimeField("date published", default=now)
