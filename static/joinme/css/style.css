@@ -53,6 +53,12 @@ body [class*=mdi-] {
 	margin-right: 56px;
 	margin-left: 20px;
 }
+.rating-xs {
+	font-size: 1.6em;
+}
+.event-detail .star-rating:not(.rating-disabled) .rating-stars:before {
+	cursor: pointer;
+}
 
 /* Comments */
 .comment-head {

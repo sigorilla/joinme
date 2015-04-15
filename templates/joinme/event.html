@@ -68,7 +68,17 @@
 						{% endfor %}
 					</ul>
 				</div>
+
 				<h3><i class="mdi-action-event"></i> {{ event.datetime }}</h3>
+				
+				<div id="ratingDiv">
+					{% csrf_token %}
+					{% if user.userprofile in event.rating_users.all %}
+					<input id="rating" value="{{ event.get_rating }}" disabled="">
+					{% else %}
+					<input id="rating" value="{{ event.get_rating }}">
+					{% endif %}
+				</div>
 			</div>
 		</div>
 
@@ -135,3 +145,46 @@
 {% endif %}
 
 {% endblock page %}
+
+{% block end_script %}
+<script>
+$( function() {
+
+	$( "#rating" ).rating( {
+		min: 0,
+		max: 5,
+		step: 0.5,
+		size: "xs",
+		showClear: false,
+		showCaption: false,
+	} );
+
+	$( "#rating" ).on( "rating.change", function(event, value, caption) {
+		var url = "{% url "joinme:add-rating-event" event.pk %}";
+		$.ajax( {
+			type: "POST",
+			url: url,
+			data: {
+				"csrfmiddlewaretoken": $( "#ratingDiv > [name=csrfmiddlewaretoken]").val(),
+				"rating": value,
+			},
+			success: function( data ) {
+				console.log( data );
+				if ( data["error"] ) {
+					console.log( "Something is wrong!" );
+				} else {
+					$( "#rating" ).rating( "update", data["rating"].toString() );
+					$( "#rating" ).rating( "refresh", {
+						disabled: true,
+					} );
+				}
+			},
+			error: function( jqXHR, textStatus, errorThrown ) {
+				console.log( jqXHR, textStatus, errorThrown );
+			}
+		} );
+	} );
+
+} );
+</script>
+{% endblock end_script %}

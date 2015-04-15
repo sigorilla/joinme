@@ -29,6 +29,17 @@ $( document ).ready( function() {
 			_addHashLink();
 
 			$( "nav a[href='" + window.location.pathname + "']" ).parents( "li" ).addClass( "active" );
+
+			$( ".event-rating" ).rating( {
+				min: 0,
+				max: 5,
+				step: 0.5,
+				size: "xs",
+				showClear: false,
+				showCaption: false,
+				readonly: true,
+				disabled: true,
+			} );
 		};
 
 		var _addListener = function() {

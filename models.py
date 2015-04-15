@@ -100,6 +100,9 @@ class Event(models.Model):
     def get_leave_url(self):
         return reverse("joinme:leave-event", kwargs={"pk": self.pk})
 
+    def get_rating(self):
+        return (self.rating / self.rating_count) if self.rating_count else self.rating
+
     title = models.CharField(max_length=45)
     description = models.TextField()
     datetime = models.DateTimeField()
@@ -109,3 +112,6 @@ class Event(models.Model):
     users = models.ManyToManyField(UserProfile, blank=True)
     active = models.BooleanField(default=True)
     comments = models.ManyToManyField(Comment, blank=True)
+    rating = models.FloatField(default=0, blank=True)
+    rating_count = models.IntegerField(default=0, blank=True)
+    rating_users = models.ManyToManyField(UserProfile, blank=True, related_name="rating_users")

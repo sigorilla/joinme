@@ -237,6 +237,26 @@ def add_comment_event(request, pk):
     return JsonResponse({"error": True})
 
 
+@login_required(login_url=reverse_lazy("joinme:index"))
+def add_rating_event(request, pk):
+    if request.method == "POST":
+        if ("rating" in request.POST) and request.POST["rating"].strip():
+            event = Event.objects.get(pk=pk)
+            if not request.user.userprofile in event.rating_users.all():
+                event.rating_users.add(request.user.userprofile)
+                event.rating = event.rating + float(request.POST["rating"])
+                event.rating_count  = event.rating_count + 1
+                event.save()
+                return JsonResponse({
+                    "error": False,
+                    "rating": event.get_rating()})
+            else:
+                return JsonResponse({"error": True})
+        else:
+            return JsonResponse({"error": True})
+    return JsonResponse({"error": True})
+
+
 class MyEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
     template_name = "joinme/event_list.html"
     context_object_name = "events"

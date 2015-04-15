@@ -11,6 +11,9 @@
 					<span class="pull-right text-center date btn-{{ event.category.color|default:"primary" }}">{{ event.datetime|date:"j" }}<br>{{ event.datetime|date:"M" }}</span>
 					<p class="lead">{{ event.description|truncatewords:20 }}</p>
 					<div class="text-right">
+						<div class="pull-left">
+							<input class="event-rating" value="{{ event.get_rating }}" readonly="">
+						</div>
 						<a class="btn btn-default btn-sm btn-{{ event.category.color }}" href="{{ event.get_absolute_url }}">More details <i class="fa fa-external-link"></i></a>
 					</div>
 				</div>
