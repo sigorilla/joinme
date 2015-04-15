@@ -49,6 +49,10 @@ body [class*=mdi-] {
 	font-weight: bold;
 	line-height: 1;
 }
+.event-detail .lead {
+	margin-right: 20px;
+	margin-left: 20px;
+}
 
 /* Comments */
 .comment-head {
