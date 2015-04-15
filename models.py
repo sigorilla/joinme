@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
+
 class UserProfile(models.Model):
 
     class Meta:

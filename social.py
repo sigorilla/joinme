@@ -41,9 +41,9 @@ def vk_auth(request):
                 userprofile.vk_expires_in = data["expires_in"]
                 userprofile.vk_email = data["email"]
                 userdata = get_data_vk("users.get",
-                                     userprofile.vk_access_token,
-                                     users_ids=userprofile.vk_user_id,
-                                     fields="photo_200")
+                                       userprofile.vk_access_token,
+                                       users_ids=userprofile.vk_user_id,
+                                       fields="photo_200")
                 userprofile.vk_photo_200 = userdata["response"][0]["photo_200"]
                 userprofile.save()
                 if not request.user.first_name or not request.user.last_name:
