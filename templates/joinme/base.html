@@ -81,8 +81,8 @@
 							<i class="mdi-action-account-circle"></i>
 							{# {% endif %} #}
 					{% endwith %}
-						{% if user.userprofile.get_username != "" %}
-							{{ user.userprofile.get_username }}
+						{% if user.userprofile.get_username|trim != " " %}
+							{{ user.userprofile.get_username|trim|title }}
 						{% else %}
 							{{ user.username }} 
 						{% endif %}

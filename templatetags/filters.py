@@ -3,6 +3,7 @@ source:
 https://github.com/kmike/django-widget-tweaks
 """
 from django.template import Library
+import re
 
 register = Library()
 
@@ -111,3 +112,7 @@ def widget_type(field):
     if hasattr(field, 'field') and hasattr(field.field, 'widget') and field.field.widget:
         return field.field.widget.__class__.__name__.lower()
     return ''
+
+@register.filter(name='trim')
+def trim(value):
+    return re.sub(r'\s+', ' ', str(value))
