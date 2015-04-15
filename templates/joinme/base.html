@@ -73,12 +73,12 @@
 				<li class="dropdown">
 					{# TODO: change logo for more pretty #}
 					{% with user.userprofile.get_user_photo as photo %}
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="{{ photo|yesno:"padding: 5px 15px,"}};">
-							{% if photo %}
-							<img src="{{ photo }}" alt="" class="img-circle" width="50">
-							{% else %}
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+							{# {% if photo %} #}
+							{# <img src="{{ photo }}" alt="" class="img-circle" width="50"> #}
+							{# {% else %} #}
 							<i class="mdi-action-account-circle"></i>
-							{% endif %}
+							{# {% endif %} #}
 					{% endwith %}
 						{% if user.userprofile.get_username != "" %}
 							{{ user.userprofile.get_username }}

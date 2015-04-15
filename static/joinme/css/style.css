@@ -22,7 +22,7 @@ textarea {
 
 #iconEvent {
 	position: absolute;
-	right: -20px;
+	right: 20px;
 }
 #iconEvent > div {
 	margin: 10px;
@@ -50,7 +50,7 @@ body [class*=mdi-] {
 	line-height: 1;
 }
 .event-detail .lead {
-	margin-right: 20px;
+	margin-right: 56px;
 	margin-left: 20px;
 }
 
