@@ -56,6 +56,9 @@
 							<div class="well well-sm well-material-red-500">Check your data. Or maybe this email is already taken.</div>
 							<div class="well weel-sm">If you forget your password, you can use <a href="{% url "joinme:reset-password" %}">reset form.</a></div>
 						{% endif %}
+						{% if wrong_email %}
+							<div class="well well-sm well-material-red-500">For some reason, your email should be from <code>phystech.edu</code>. Thank you!</div>
+						{% endif %}
 						{% if empty_data %}
 							<div class="well well-sm well-material-red-500">Data should not be empty.</div>
 						{% endif %}

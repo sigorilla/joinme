@@ -50,10 +50,10 @@ def index(request):
         new_data = request.POST.copy()
         form = RegistrationForm(new_data)
         if (new_data["email"] is not "") and (new_data["password"] is not ""):
-            match = re.match(r'(?P<email>.+@.+\..+)', new_data["email"])
+            match = re.match(r'(?P<email>.+@phystech.edu', new_data["email"])
             if not (match and match.groupdict()["email"] == new_data["email"]):
                 return render(request, "joinme/index.html", 
-                              {"empty_data": True, "form": form})
+                              {"wrong_email": True, "form": form})
         else:
             return render(request, "joinme/index.html", 
                           {"empty_data": True, "form": form})
