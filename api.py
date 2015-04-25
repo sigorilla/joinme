@@ -5,14 +5,16 @@ import hashlib
 from functools import wraps
 
 from django.utils.decorators import available_attrs
+from django.core import serializers
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate
 from django.core.urlresolvers import *
 from django.http import JsonResponse
 from django.middleware.csrf import _get_new_csrf_key
+from django.template.defaultfilters import truncatewords
 
 from joinme.forms import RegistrationForm
-from joinme.models import UserProfile
+from joinme.models import UserProfile, Event
 
 
 def csrf_exempt(view_func):
@@ -151,3 +153,32 @@ def login(request):
             return JsonResponse({"error": "Invalid data."})
     else:
         return JsonResponse({"error": "It should be GET request."})
+
+
+
+# TODO: check token
+def get_event(request, pk, token='0'):
+    try:
+        event = Event.objects.get(pk=pk)
+        users_obj = list(event.users.all())
+        users = list()
+        for user in users_obj:
+            users.append({
+                "username": user.get_username(),
+                "id": user.id,
+                "photo": user.get_user_photo(),
+            })
+    except Event.DoesNotExist:
+        return JsonResponse({"error": "Event is not found."})
+    else:
+        return JsonResponse({
+            "event": {
+                "pk": event.id,
+                "title": event.title,
+                "author": event.author.get_user_email(),
+                "description": event.description,
+                "descriptiont_title": truncatewords(event.description, 20),
+                "datetime": event.datetime,
+                "members": users,
+            }
+        })
