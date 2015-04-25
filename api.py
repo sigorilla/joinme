@@ -68,7 +68,7 @@ def reg(request):
             if not (match and match.groupdict()["email"] == new_data["email"]):
                 return JsonResponse({"error": "Wrong format of email."})
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Login or password not found. Please, try again."})
 
         errors = form.is_valid_username(new_data["email"])
         if not errors:
@@ -104,7 +104,7 @@ hours:\n\nhttp://master-igor.com%s" % (
                     [new_user.email]
                 )
             except Exception, e:
-                return JsonResponse({"error": "Something happends on the server side."})
+                return JsonResponse({"error": "Something happens on the server side."})
 
             return JsonResponse({"token": activation_key})
         else:
@@ -134,7 +134,7 @@ def login(request):
                 "password": request.GET['password']
             }
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Login or password not found. Please, try again."})
 
         user = authenticate(username=new_data["email"], password=new_data["password"])
         if user is not None:
@@ -144,13 +144,13 @@ def login(request):
                 if profile:
                     return JsonResponse({"token": profile[0]["activation_key"]})
                 else:
-                    return JsonResponse({"error": "User is not found."})
+                    return JsonResponse({"error": "Login not found. Please, try to sign up."})
             else:
                 # account is disabled
-                return JsonResponse({"error": "User is disabled."})
+                return JsonResponse({"error": "Please, confirm your email."})
         else:
             # invalid login/password
-            return JsonResponse({"error": "Invalid data."})
+            return JsonResponse({"error": "Password is wrong. Please, try again or reset it."})
     else:
         return JsonResponse({"error": "It should be GET request."})
 
