@@ -155,30 +155,56 @@ def login(request):
         return JsonResponse({"error": "It should be GET request."})
 
 
+"""
+@api {get} /events/:category:token
+
+@apiParam {String} category name of Category
+@apiParam {String} token activation key of current User
+
+@apiSuccess {List} events List with Events
+
+@apiError {String} error Message about error.
+"""
+
 
 # TODO: check token
-def get_event(request, pk, token='0'):
-    try:
-        event = Event.objects.get(pk=pk)
-        users_obj = list(event.users.all())
-        users = list()
-        for user in users_obj:
-            users.append({
-                "username": user.get_username(),
-                "id": user.id,
-                "photo": user.get_user_photo(),
-            })
-    except Event.DoesNotExist:
-        return JsonResponse({"error": "Event is not found."})
-    else:
-        return JsonResponse({
-            "event": {
-                "pk": event.id,
-                "title": event.title,
-                "author": event.author.get_user_email(),
-                "description": event.description,
-                "descriptiont_title": truncatewords(event.description, 20),
-                "datetime": event.datetime,
-                "members": users,
+def get_events_by_category(request):
+    if request.GET:
+        if ('category' in request.GET) and request.GET['category'].strip() and \
+                ('token' in request.GET) and request.GET['token'].strip():
+            new_data = {
+                "category": request.GET['category'],
+                "token": request.GET['token']
             }
-        })
+        else:
+            return JsonResponse({"error": "Data is empty."})
+
+        try:
+            events_obj = list(Event.objects.filter(category__title__iexact=new_data["category"]))
+            if not events_obj:
+                return JsonResponse({"error": "Category without events."})
+            events = list()
+            for event in events_obj:
+                users_obj = list(event.users.all())
+                users = list()
+                for user in users_obj:
+                    users.append({
+                        "username": user.get_username(),
+                        "id": user.id,
+                        "photo": user.get_user_photo(),
+                    })
+                events.append({
+                    "pk": event.id,
+                    "title": event.title,
+                    "author": event.author.get_user_email(),
+                    "description": event.description,
+                    "description_title": truncatewords(event.description, 20),
+                    "datetime": event.datetime,
+                    "members": users,
+                })
+        except Event.DoesNotExist:
+            return JsonResponse({"error": "Events are not found."})
+        else:
+            return JsonResponse({"events": events})
+    else:
+        return JsonResponse({"error": "It should be GET request."})
