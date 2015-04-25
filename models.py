@@ -19,7 +19,7 @@ class UserProfile(models.Model):
 
     def get_username(self):
         if not self.user.first_name.strip() and not self.user.last_name.strip():
-            return self.user.get_user_email()
+            return self.get_user_email()
         return ("%s %s" % (self.user.first_name, self.user.last_name)).strip()
 
     def get_user_email(self):
