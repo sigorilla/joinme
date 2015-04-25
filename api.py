@@ -180,7 +180,7 @@ def get_events_by_category(request):
             return JsonResponse({"error": "Data is empty."})
 
         try:
-            events_obj = list(Event.objects.filter(category__title__iexact=new_data["category"]))
+            events_obj = list(Event.objects.filter(category__title__iexact=new_data["category"], active__exact=True))
             if not events_obj:
                 return JsonResponse({"error": "Category without events."})
             events = list()
