@@ -18,7 +18,10 @@ class UserProfile(models.Model):
         return self.user.username
 
     def get_username(self):
-        return "%s %s" % (self.user.first_name, self.user.last_name)
+        return ("%s %s" % (self.user.first_name, self.user.last_name)).strip()
+
+    def get_user_email(self):
+        return self.user.email
 
     def get_user_photo(self):
         return self.vk_photo_200
