@@ -48,7 +48,10 @@ class EditUser(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name',)
+        fields = ('first_name', 'last_name', 'email')
+        widgets = {
+            'email': forms.EmailInput(attrs={"readonly": ""})
+        }
 
 
 class EditUserProfile(forms.ModelForm):
