@@ -165,6 +165,8 @@ $( document ).ready( function() {
 							$template.find( ".comment-username" ).text( data["username"] );
 							$template.find( ".comment-date" ).text( data["comment"]["date"] );
 							$template.find( ".comment-message" ).text( message );
+							$( "#comments" ).find( ".well" ).remove();
+							$( "#comments" ).prepend( "<div class='list-group'></div>" );
 							$( "#comments .list-group" ).append( $template );
 							$( "#comments .list-group" )
 							.append( "<div class='list-group-separator'></div>" );

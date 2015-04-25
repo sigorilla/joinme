@@ -83,9 +83,7 @@
 		</div>
 
 		{# Comments #}
-		{# TODO: hide commets if user is not in event #}
-		{# TODO: paginator for comments #}
-		{# TODO: child comments #}
+		{# TODO: mention other user #}
 		<div class="comment-head text-center">
 			<h2 data-toggle="collapse" data-target="#comments"><i class="mdi-communication-forum"></i> Comments <span class="caret"></span></h2>
 		</div>
@@ -112,10 +110,13 @@
 				<div class="list-group-separator"></div>
 				{% endfor %}
 			</div>
+			{% else %}
+			<div class="well">No comments.</div>
 			{% endif %}
 
+			{% if user.userprofile.id == event.author.id or user.userprofile in event.users.all %}
 			{# Form to add Comment #}
-			<div class="">
+			<div>
 				<form class="form-horizontal" id="commentForm" action="" method="post">
 					{% csrf_token %}
 					<fieldset>
@@ -134,6 +135,7 @@
 					</fieldset>
 				</form>
 			</div>
+			{% endif %}
 		</div>
 	</div>
 </div>
