@@ -111,7 +111,10 @@
 				{% endfor %}
 			</div>
 			{% else %}
-			<div class="well">No comments.</div>
+			<div class="alert alert-warning alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				No comments
+			</div>
 			{% endif %}
 
 			{% if user.userprofile.id == event.author.id or user.userprofile in event.users.all %}
