@@ -189,14 +189,17 @@ def get_events_by_category(request):
                 users = list()
                 for user in users_obj:
                     users.append({
-                        "username": user.get_username(),
+                        "username": user.get_user_email(),
                         "id": user.id,
-                        "photo": user.get_user_photo(),
                     })
                 events.append({
                     "pk": event.id,
                     "title": event.title,
-                    "author": event.author.get_user_email(),
+                    "author": {
+                        "username": event.author.get_user_email(),
+                        "photo": event.author.get_user_photo(),
+                        "id": event.author.id,
+                    },
                     "description": event.description,
                     "description_title": truncatewords(event.description, 20),
                     "datetime": event.datetime,
