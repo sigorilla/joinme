@@ -258,3 +258,87 @@ def get_next_events(request):
             }})
     else:
         return JsonResponse({"error": "It should be GET request."})
+
+
+"""
+@api {get} /event/join/:token:id
+
+@apiParam {Int} id ID of event
+@apiParam {String} token activation key of current User
+
+@apiSuccess {String} success Message about success
+
+@apiError {String} error Message about error.
+"""
+
+
+def join_event(request):
+    if request.GET:
+        if ('id' in request.GET) and request.GET['id'].strip() and \
+                ('token' in request.GET) and request.GET['token'].strip():
+            new_data = {
+                "pk": request.GET["id"],
+                "token": request.GET['token']
+            }
+        else:
+            return JsonResponse({"error": "Data is empty."})
+        try:
+            userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
+        except UserProfile.DoesNotExist:
+            return JsonResponse({"error": "Token is not found."})
+
+        try:
+            event = Event.objects.get(pk=new_data["pk"])
+            if event.author.id != userprofile.id:
+                event.users.add(userprofile)
+                return JsonResponse({"success": "You join this event."})
+            else:
+                return JsonResponse({"error": "You are author of this event."})
+        except Event.DoesNotExist:
+            return JsonResponse({"error": "Events are not found."})
+        except Exception:
+            return JsonResponse({"error": "Something happens wrong on the server side."})
+    else:
+        return JsonResponse({"error": "It should be GET request."})
+
+
+"""
+@api {get} /event/leave/:token:id
+
+@apiParam {Int} id ID of event
+@apiParam {String} token activation key of current User
+
+@apiSuccess {String} success Message about success
+
+@apiError {String} error Message about error.
+"""
+
+
+def leave_event(request):
+    if request.GET:
+        if ('id' in request.GET) and request.GET['id'].strip() and \
+                ('token' in request.GET) and request.GET['token'].strip():
+            new_data = {
+                "pk": request.GET["id"],
+                "token": request.GET['token']
+            }
+        else:
+            return JsonResponse({"error": "Data is empty."})
+        try:
+            userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
+        except UserProfile.DoesNotExist:
+            return JsonResponse({"error": "Token is not found."})
+
+        try:
+            event = Event.objects.get(pk=new_data["pk"])
+            if event.author.id != userprofile.id:
+                event.users.remove(userprofile)
+                return JsonResponse({"success": "You leave this event."})
+            else:
+                return JsonResponse({"error": "You are author of this event."})
+        except Event.DoesNotExist:
+            return JsonResponse({"error": "Events are not found."})
+        except Exception:
+            return JsonResponse({"error": "Something happens wrong on the server side."})
+    else:
+        return JsonResponse({"error": "It should be GET request."})
