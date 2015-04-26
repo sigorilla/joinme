@@ -233,16 +233,17 @@ def get_next_events(request):
         else:
             return JsonResponse({"error": "Data is empty."})
         try:
-            userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
+            userprofile = UserProfile.objects.filter(activation_key__exact=new_data["token"])
         except UserProfile.DoesNotExist:
             return JsonResponse({"error": "Token is not found."})
 
         try:
             week = datetime.datetime.now() + datetime.timedelta(days=7)
-            events_obj = Event.objects.filter(author__id=userprofile.id, active__exact=True, datetime__lte=week)
+            events_obj = Event.objects.filter(users__in=userprofile, active__exact=True, datetime__lte=week)
+            events_author = Event.objects.filter(author__id=userprofile[0].id, active__exact=True, datetime__lte=week)
 
             categories = list()
-            for event in list(events_obj):
+            for event in (list(events_obj) + list(events_author)):
                 category = event.category.title
                 if category not in categories:
                     categories.append(event.category.title)
@@ -252,6 +253,7 @@ def get_next_events(request):
         else:
             return JsonResponse({"response": {
                 "count": events_obj.count(),
+                "count_author": events_author.count(),
                 "categories": categories
             }})
     else:
