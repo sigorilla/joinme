@@ -1,4 +1,5 @@
 import random
+from datetime import datetime as dt
 
 from django import forms
 from django.core import validators
@@ -134,6 +135,13 @@ class CreateEventForm(forms.ModelForm):
             'category': forms.RadioSelect(),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
+
+    def is_valid_datetime(self, field_data):
+        if dt.strptime(field_data, "%Y-%m-%d %H:%M") > datetime.now():
+            return True
+        else:
+            self.add_error("datetime", "Datetime should be in future.")
+            return False
 
 
 class EditEventForm(forms.ModelForm):

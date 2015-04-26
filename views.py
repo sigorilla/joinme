@@ -380,6 +380,15 @@ class CreateEventView(LoginRequiredMixin, generic.CreateView):
         form.instance.author = self.request.user.userprofile
         return super(CreateEventView, self).form_valid(form)
 
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        datetime = request.POST["datetime"]
+        if form.is_valid() and form.is_valid_datetime(datetime):
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
 
 class EditEventView(LoginRequiredMixin, generic.UpdateView):
     model = Event
