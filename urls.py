@@ -46,6 +46,7 @@ urlpatterns = patterns(
     url(r"^api/events/next/$", api.get_next_events, name="api-next-events"),
     url(r"^api/event/join/$", api.join_event, name="api-join-event"),
     url(r"^api/event/leave/$", api.leave_event, name="api-leave-event"),
+    url(r"^api/event/delete/$", api.delete_event, name="api-delete-event"),
 
     # Social
     url(r"^vk_auth/$", social.vk_auth, name="vk-auth"),
