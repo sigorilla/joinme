@@ -184,7 +184,10 @@ def get_events_by_category(request):
             return JsonResponse({"error": "Token is not found."})
 
         try:
-            events_obj = list(Event.objects.filter(category__title__iexact=new_data["category"], active__exact=True))
+            events_obj = list(Event.objects.filter(
+                category__title__iexact=new_data["category"],
+                active__exact=True
+            ).order_by("-datetime", "title"))
             if not events_obj:
                 return JsonResponse({"error": "Category without events."})
             events = list()
