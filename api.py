@@ -193,7 +193,7 @@ def get_events_by_category(request):
                         "id": user.id,
                     })
                 events.append({
-                    "pk": event.id,
+                    "id": event.id,
                     "title": event.title,
                     "author": {
                         "username": event.author.get_user_email(),
