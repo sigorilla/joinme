@@ -211,3 +211,48 @@ def get_events_by_category(request):
             return JsonResponse({"events": events})
     else:
         return JsonResponse({"error": "It should be GET request."})
+
+
+"""
+@api {get} /events/next/:token
+
+@apiParam {String} token activation key of current User
+
+@apiSuccess {Object} response Objects with fields 'count' and 'categories'
+
+@apiError {String} error Message about error.
+"""
+
+
+def get_next_events(request):
+    if request.GET:
+        if ('token' in request.GET) and request.GET['token'].strip():
+            new_data = {
+                "token": request.GET['token']
+            }
+        else:
+            return JsonResponse({"error": "Data is empty."})
+        try:
+            userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
+        except UserProfile.DoesNotExist:
+            return JsonResponse({"error": "Token is not found."})
+
+        try:
+            week = datetime.datetime.now() + datetime.timedelta(days=7)
+            events_obj = Event.objects.filter(author__id=userprofile.id, active__exact=True, datetime__lte=week)
+
+            categories = list()
+            for event in list(events_obj):
+                category = event.category.title
+                if category not in categories:
+                    categories.append(event.category.title)
+
+        except Event.DoesNotExist:
+            return JsonResponse({"error": "Events are not found."})
+        else:
+            return JsonResponse({"response": {
+                "count": events_obj.count(),
+                "categories": categories
+            }})
+    else:
+        return JsonResponse({"error": "It should be GET request."})

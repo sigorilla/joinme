@@ -42,7 +42,8 @@ urlpatterns = patterns(
     url(r"^api/csrf/$", api.csrf, name="android-csrf"),
     url(r"^api/reg/$", api.reg, name="api-reg"),
     url(r"^api/login/$", api.login, name="api-login"),
-    url(r"^api/events/$", api.get_events_by_category, name="api-event"),
+    url(r"^api/events/$", api.get_events_by_category, name="api-events"),
+    url(r"^api/events/next/$", api.get_next_events, name="api-next-events"),
 
     # Social
     url(r"^vk_auth/$", social.vk_auth, name="vk-auth"),
