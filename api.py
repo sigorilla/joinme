@@ -167,7 +167,7 @@ def login(request):
 """
 
 
-# TODO: check token
+# TODO: slice list of events
 def get_events_by_category(request):
     if request.GET:
         if ('category' in request.GET) and request.GET['category'].strip() and \
@@ -178,6 +178,10 @@ def get_events_by_category(request):
             }
         else:
             return JsonResponse({"error": "Data is empty."})
+        try:
+            userprofile = UserProfile.objects.filter(activation_key__exact=new_data["token"])
+        except UserProfile.DoesNotExist:
+            return JsonResponse({"error": "Token is not found."})
 
         try:
             events_obj = list(Event.objects.filter(category__title__iexact=new_data["category"], active__exact=True))
