@@ -35,7 +35,6 @@ class UserProfile(models.Model):
     vk_access_token = models.CharField(max_length=254, default="", blank=True)
     vk_expires_in = models.CharField(max_length=254, default="", blank=True)
     vk_email = models.CharField(max_length=60, blank=True)
-    # TODO: set default photo
     vk_photo_200 = models.CharField(max_length=255, blank=True)
 
 

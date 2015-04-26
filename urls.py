@@ -26,7 +26,6 @@ urlpatterns = patterns(
     url(r"^event/(?P<pk>\d+)/$", views.EventView.as_view(), name="event"),
     url(r"^event/(?P<pk>\d+)/join/$", views.join_event, name="join-event"),
     url(r"^event/(?P<pk>\d+)/leave/$", views.leave_event, name="leave-event"),
-    # TODO: thinking about removing event
     url(r"^event/(?P<pk>\d+)/delete/$", views.DeleteEventView.as_view(), name="delete-event"),
     url(r"^event/(?P<pk>\d+)/edit/$", views.EditEventView.as_view(), name="edit-event"),
     url(r"^event/(?P<pk>\d+)/comment/$", views.add_comment_event, name="add-comment-event"),
