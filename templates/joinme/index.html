@@ -32,8 +32,30 @@
 	<div class="col-md-10 col-md-offset-1">
 		<div class="panel panel-default">
 			<div class="panel-body">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-horizontal controls">
+							<fieldset class="input-group">
+								<div class="form-group">
+									<label for="inputFile" class="col-lg-2 control-label">Barcode</label>
+									<div class="col-lg-10">
+										<input type="text" readonly="" class="form-control floating-label" placeholder="Browse...">
+										<input type="file" id="inputFile" multiple="" capture>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-lg-2 col-lg-offset-2">
+										<button class="btn btn-primary">Rerun</button>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div id="interactive" class="viewport text-center"></div>
+					</div>
+				</div>
 				<div id="result_code" class="row"></div>
-				<div id="interactive" class="viewport text-center"></div>
 			</div>
 		</div>
 	</div>
@@ -114,11 +136,11 @@
 {% block end_script %}
 <style>
 #interactive.viewport canvas.drawingBuffer, video.drawingBuffer {
-	margin-top: -480px;
+	margin-top: -28%;
 }
 #interactive.viewport canvas, video {
 	/*float: left;*/
-	width: 640px;
+	width: 50%;
 	margin: 0 auto;
 }
 </style>
@@ -126,20 +148,111 @@
 <script>
 $(function() {
 	var App = {
-		init : function() {
-			Quagga.init({
-				inputStream : {
-					name : "Live",
-					type : "LiveStream"
-				},
-				decoder : {
-					readers : ["code_128_reader"]
+		init: function() {
+			App.attachListeners();
+		},
+		config: {
+			reader: "code_128",
+			length: 10
+		},
+		attachListeners: function() {
+			var self = this;
+
+			$(".controls input[type=file]").on("change", function(e) {
+				if (e.target.files && e.target.files.length) {
+					App.decode(URL.createObjectURL(e.target.files[0]));
 				}
-			}, function() {
-				Quagga.start();
+			});
+
+			$(".controls button").on("click", function(e) {
+				var input = document.querySelector(".controls input[type=file]");
+				if (input.files && input.files.length) {
+					App.decode(URL.createObjectURL(input.files[0]));
+				}
+			});
+
+			$(".controls .reader-config-group").on("change", "input, select", function(e) {
+				e.preventDefault();
+				var $target = $(e.target),
+					value = $target.attr("type") === "checkbox" ? $target.prop("checked") : $target.val(),
+					name = $target.attr("name"),
+					state = self._convertNameToState(name);
+
+				console.log("Value of "+ state + " changed to " + value);
+				self.setState(state, value);
 			});
 		},
-		lastResult : null
+		_accessByPath: function(obj, path, val) {
+			var parts = path.split('.'),
+				depth = parts.length,
+				setter = (typeof val !== "undefined") ? true : false;
+
+			return parts.reduce(function(o, key, i) {
+				if (setter && (i + 1) === depth) {
+					o[key] = val;
+				}
+				return key in o ? o[key] : {};
+			}, obj);
+		},
+		_convertNameToState: function(name) {
+			return name.replace("_", ".").split("-").reduce(function(result, value) {
+				return result + value.charAt(0).toUpperCase() + value.substring(1);
+			});
+		},
+		detachListeners: function() {
+			$(".controls input[type=file]").off("change");
+			$(".controls .reader-config-group").off("change", "input, select");
+			$(".controls button").off("click");
+		},
+		decode: function(src) {
+			var self = this,
+				config = $.extend({}, self.state, {src: src});
+
+			Quagga.decodeSingle(config, function(result) {});
+		},
+		setState: function(path, value) {
+			var self = this;
+
+			if (typeof self._accessByPath(self.inputMapper, path) === "function") {
+				value = self._accessByPath(self.inputMapper, path)(value);
+			}
+
+			self._accessByPath(self.state, path, value);
+
+			console.log(JSON.stringify(self.state));
+			App.detachListeners();
+			App.init();
+		},
+		inputMapper: {
+			inputStream: {
+				size: function(value){
+					return parseInt(value);
+				}
+			},
+			numOfWorkers: function(value) {
+				return parseInt(value);
+			},
+			decoder: {
+				readers: function(value) {
+					return [value + "_reader"];
+				}
+			}
+		},
+		state: {
+			inputStream: {
+				size: 800
+			},
+			locator: {
+				patchSize: "medium",
+				halfSample: false
+			},
+			numOfWorkers: 1,
+			decoder: {
+				readers: ["code_128_reader"]
+			},
+			locate: true,
+			src: null
+		}
 	};
 
 	App.init();
@@ -169,17 +282,14 @@ $(function() {
 	});
 
 	Quagga.onDetected(function(result) {
-		var code = result.codeResult.code;
+		var code = result.codeResult.code,
+			$node,
+			canvas = Quagga.canvas.dom.image;
 
-		if (App.lastResult !== code) {
-			App.lastResult = code;
-			var $node = null, canvas = Quagga.canvas.dom.image;
-
-			$node = $( "<div class='col-sm-6 col-md-4'><div class='thumbnail'><img /><div class='caption'><h3 class='code'></h3></div></div></div>" );
-			$node.find("img").attr("src", canvas.toDataURL());
-			$node.find(".code").html(code);
-			$("#result_code").prepend($node);
-		}
+		$node = $( "<div class='col-sm-6 col-md-4'><div class='thumbnail'><img /><div class='caption'><h3 class='code'></h3></div></div></div>" );
+		$node.find("img").attr("src", canvas.toDataURL());
+		$node.find(".code").html(code);
+		$("#result_code").prepend($node);
 	});
 });
 </script>
