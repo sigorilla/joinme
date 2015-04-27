@@ -1,5 +1,6 @@
 {% extends "joinme/base.html" %}
 {% load filters %}
+{% load static %}
 
 {% block page %}
 {% if has_account %}
@@ -27,6 +28,16 @@
 
 {% else %}
 <div class="row">
+
+	<div class="col-md-10 col-md-offset-1">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div id="result_code" class="row"></div>
+				<div id="interactive" class="viewport text-center"></div>
+			</div>
+		</div>
+	</div>
+
 	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-success">
 			<div class="panel-heading">
@@ -99,3 +110,77 @@
 {% endif %}
 
 {% endblock page %}
+
+{% block end_script %}
+<style>
+#interactive.viewport canvas.drawingBuffer, video.drawingBuffer {
+	margin-top: -480px;
+}
+#interactive.viewport canvas, video {
+	/*float: left;*/
+	width: 640px;
+	margin: 0 auto;
+}
+</style>
+<script src="{% static "joinme/js/quagga.min.js" %}"></script>
+<script>
+$(function() {
+	var App = {
+		init : function() {
+			Quagga.init({
+				inputStream : {
+					name : "Live",
+					type : "LiveStream"
+				},
+				decoder : {
+					readers : ["code_128_reader"]
+				}
+			}, function() {
+				Quagga.start();
+			});
+		},
+		lastResult : null
+	};
+
+	App.init();
+
+	Quagga.onProcessed(function(result) {
+		var drawingCtx = Quagga.canvas.ctx.overlay,
+			drawingCanvas = Quagga.canvas.dom.overlay;
+
+		if (result) {
+			if (result.boxes) {
+				drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+				result.boxes.filter(function (box) {
+					return box !== result.box;
+				}).forEach(function (box) {
+					Quagga.ImageDebug.drawPath(box, {x: 0, y: 1}, drawingCtx, {color: "green", lineWidth: 2});
+				});
+			}
+
+			if (result.box) {
+				Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
+			}
+
+			if (result.codeResult && result.codeResult.code) {
+				Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
+			}
+		}
+	});
+
+	Quagga.onDetected(function(result) {
+		var code = result.codeResult.code;
+
+		if (App.lastResult !== code) {
+			App.lastResult = code;
+			var $node = null, canvas = Quagga.canvas.dom.image;
+
+			$node = $( "<div class='col-sm-6 col-md-4'><div class='thumbnail'><img /><div class='caption'><h3 class='code'></h3></div></div></div>" );
+			$node.find("img").attr("src", canvas.toDataURL());
+			$node.find(".code").html(code);
+			$("#result_code").prepend($node);
+		}
+	});
+});
+</script>
+{% endblock end_script %}
