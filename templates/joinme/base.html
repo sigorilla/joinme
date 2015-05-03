@@ -4,135 +4,135 @@
 <html lang="ru" prefix="og: http://ogp.me/ns#">
 {% block head %}
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{{ title|default:"Главная страница" }} | JoinMe{% endblock title %}</title>
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}{{ title|default:"Главная страница" }} | JoinMe{% endblock title %}</title>
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
 
-    <meta name="title" content="{{ page_title|default:"JoinMe" }}">
-    <meta name="author" content="Igor Stepanov">
-    <meta name="description" content="Homepage">
-    <meta property="og:title" content="{{ page_title|default:"JoinMe" }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ current_uri }}">
+	<meta name="title" content="{{ page_title|default:"JoinMe" }}">
+	<meta name="author" content="Igor Stepanov">
+	<meta name="description" content="Homepage">
+	<meta property="og:title" content="{{ page_title|default:"JoinMe" }}">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{{ current_uri }}">
 
-    <link rel="icon" type="image/x-icon" href="{% static "images/favicon.png" %}">
+	<link rel="icon" type="image/x-icon" href="{% static "images/favicon.png" %}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
-    <link rel="stylesheet" href="{% static "joinme/css/star-rating.min.css" %}">
-    <link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.9">
-    {% block head_script %}{% endblock head_script %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/roboto.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/ripples.min.css">
+	<link rel="stylesheet" href="{% static "joinme/css/star-rating.min.css" %}">
+	<link rel="stylesheet" href="{% static "joinme/css/style.css" %}?v=0.0.9">
+	{% block head_script %}{% endblock head_script %}
 </head>
 {% endblock head %}
 <body>
 
 <nav class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Переключатель меню</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url "joinme:index" %}">JoinMe</a>
-        </div>
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Переключатель меню</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{% url "joinme:index" %}">JoinMe</a>
+		</div>
 
-        <div class="navbar-collapse collapse navbar-responsive-collapse" id="bs-example-navbar-collapse-1">
-        {% block navigation %}
-        {% endblock navigation %}
-        {% if user.is_authenticated %}
-            <ul class="nav navbar-nav">
-                <li><a href="{% url "joinme:categories" %}">Категории</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">События <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="{% url "joinme:all-events" %}">Все События</a></li>
-                        <li><a href="{% url "joinme:my-events" %}">Мои События</a></li>
-                        <li><a href="{% url "joinme:created-events" %}">Созданные</a></li>
-                    </ul>
-                </li>
-                <li><a href="{% url "joinme:create-event" %}">Создать событие</a></li>
-            </ul>
-            <form class="navbar-form navbar-left" role="search" method="get" action="{% url "joinme:search" %}">
-                <div class="input-group">
-                    <input type="text" class="form-control col-lg-8" name="q" placeholder="Поиск" value="{{ query }}">
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    {# TODO: change logo for more pretty #}
-                    {% with user.userprofile.get_user_photo as photo %}
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {# {% if photo %} #}
-                            {# <img src="{{ photo }}" alt="" class="img-circle" width="50"> #}
-                            {# {% else %} #}
-                            <i class="mdi-action-account-circle"></i>
-                            {# {% endif %} #}
-                    {% endwith %}
-                        {% if user.userprofile.get_username|trim != " " %}
-                            {{ user.userprofile.get_username|trim|title }}
-                        {% else %}
-                            {{ user.username }} 
-                        {% endif %}
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="{% url "joinme:settings" %}"><i class="fa fa-cogs"></i> Настройки</a></li>
-                        <li class="divider"></li>
-                        <li><a href="{% url "joinme:logout" %}"><i class="fa fa-sign-out"></i> Выйти</a></li>
-                    </ul>
-                </li>
-            </ul>
-        {% else %}
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="{% url "joinme:index" %}"><i class="fa fa-sign-in"></i> Войти</a>
-                </li>
-            </ul>
-        {% endif %}
-        </div>
-    </div>
+		<div class="navbar-collapse collapse navbar-responsive-collapse" id="bs-example-navbar-collapse-1">
+		{% block navigation %}
+		{% endblock navigation %}
+		{% if user.is_authenticated %}
+			<ul class="nav navbar-nav">
+				<li><a href="{% url "joinme:categories" %}">Категории</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">События <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="{% url "joinme:all-events" %}">Все События</a></li>
+						<li><a href="{% url "joinme:my-events" %}">Мои События</a></li>
+						<li><a href="{% url "joinme:created-events" %}">Созданные</a></li>
+					</ul>
+				</li>
+				<li><a href="{% url "joinme:create-event" %}">Создать событие</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search" method="get" action="{% url "joinme:search" %}">
+				<div class="input-group">
+					<input type="text" class="form-control col-lg-8" name="q" placeholder="Поиск" value="{{ query }}">
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
+					</span>
+				</div>
+			</form>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					{# TODO: change logo for more pretty #}
+					{% with user.userprofile.get_user_photo as photo %}
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+							{# {% if photo %} #}
+							{# <img src="{{ photo }}" alt="" class="img-circle" width="50"> #}
+							{# {% else %} #}
+							<i class="mdi-action-account-circle"></i>
+							{# {% endif %} #}
+					{% endwith %}
+						{% if user.userprofile.get_username|trim != " " %}
+							{{ user.userprofile.get_username|trim|title }}
+						{% else %}
+							{{ user.username }} 
+						{% endif %}
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="{% url "joinme:settings" %}"><i class="fa fa-cogs"></i> Настройки</a></li>
+						<li class="divider"></li>
+						<li><a href="{% url "joinme:logout" %}"><i class="fa fa-sign-out"></i> Выйти</a></li>
+					</ul>
+				</li>
+			</ul>
+		{% else %}
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="{% url "joinme:index" %}"><i class="fa fa-sign-in"></i> Войти</a>
+				</li>
+			</ul>
+		{% endif %}
+		</div>
+	</div>
 </nav>
 
 {% comment %}
-    {% block header %}
-    <header id="header" class="hidden">
-        <div class="container">
-            <h1>{% block page_title %} <i class="fa fa-{{ fa|default:'coffee' }}"></i> {{ page_title|default:"Testing" }} {% endblock page_title %}</h1>
-        </div>
-    </header>
-    {% endblock header %}
+	{% block header %}
+	<header id="header" class="hidden">
+		<div class="container">
+			<h1>{% block page_title %} <i class="fa fa-{{ fa|default:'coffee' }}"></i> {{ page_title|default:"Testing" }} {% endblock page_title %}</h1>
+		</div>
+	</header>
+	{% endblock header %}
 {% endcomment %}
 
 
 <div id="main">
-    <div class="container">
-    {% block page %}
-        <div class="page-header">
-            <h1 class="text-center">MIPT Events <small>base page</small></h1>
-        </div>
-    {% endblock page %}
-    </div>
+	<div class="container">
+	{% block page %}
+		<div class="page-header">
+			<h1 class="text-center">MIPT Events <small>base page</small></h1>
+		</div>
+	{% endblock page %}
+	</div>
 </div>
 
 <footer id="footer">
-    <div class="container">
-    {% block footer %}
-        <div class="text-center"><a href="https://vk.com/sigorilla/">Join</a><a href="http://vk.com/decision_man/">Me</a> <a href="http://vk.com/yefimka/">Team</a> &copy; {% now "Y" %}</div>
-    {% endblock footer %}
-    </div>
+	<div class="container">
+	{% block footer %}
+		<div class="text-center"><a href="https://vk.com/sigorilla/">Join</a><a href="http://vk.com/decision_man/">Me</a> <a href="http://vk.com/yefimka/">Team</a> &copy; {% now "Y" %}</div>
+	{% endblock footer %}
+	</div>
 </footer>
 
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -144,37 +144,37 @@
 <script src="{% static "joinme/js/main.js" %}?v=0.0.12"></script>
 <script>
 $( function() {
-    $.material.init();
+	$.material.init();
 
-    $( ".js-masonry" ).masonry( {
-        itemSelector: ".item",
-        containerStyle: { position: 'relative' }
-    } );
+	$( ".js-masonry" ).masonry( {
+		itemSelector: ".item",
+		containerStyle: { position: 'relative' }
+	} );
 } );
 </script>
 {% block end_script %}{% endblock end_script %}
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function (d, w, c) {
-    (w[c] = w[c] || []).push(function() {
-        try {
-            w.yaCounter29668465 = new Ya.Metrika({id:29668465,
-                    webvisor:true,
-                    clickmap:true,
-                    trackLinks:true});
-        } catch(e) { }
-    });
+	(w[c] = w[c] || []).push(function() {
+		try {
+			w.yaCounter29668465 = new Ya.Metrika({id:29668465,
+					webvisor:true,
+					clickmap:true,
+					trackLinks:true});
+		} catch(e) { }
+	});
 
-    var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"),
-        f = function () { n.parentNode.insertBefore(s, n); };
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+	var n = d.getElementsByTagName("script")[0],
+		s = d.createElement("script"),
+		f = function () { n.parentNode.insertBefore(s, n); };
+	s.type = "text/javascript";
+	s.async = true;
+	s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
 
-    if (w.opera == "[object Opera]") {
-        d.addEventListener("DOMContentLoaded", f, false);
-    } else { f(); }
+	if (w.opera == "[object Opera]") {
+		d.addEventListener("DOMContentLoaded", f, false);
+	} else { f(); }
 })(document, window, "yandex_metrika_callbacks");
 </script>
 <noscript><div><img src="//mc.yandex.ru/watch/29668465" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
