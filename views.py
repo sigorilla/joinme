@@ -73,10 +73,10 @@ def index(request):
             )
             new_profile.save()
 
-            email_subject = "Your new master-igor.com account confirmation"
+            email_subject = "Your new joinmipt.com account confirmation"
             email_body = "Hello, %s, and thanks for signing up for an \
 master-igor.com account!\n\nTo activate your account, click this link within 48 \
-hours:\n\nhttp://master-igor.com%s" % (
+hours:\n\nhttps://joinmipt.com%s" % (
                 new_user.username,
                 reverse_lazy(
                     "joinme:confirm-key", 
@@ -88,7 +88,7 @@ hours:\n\nhttp://master-igor.com%s" % (
                 send_mail(
                     email_subject,
                     email_body,
-                    "noreply@master-igor.com",
+                    'noreply@joinmipt.com',
                     [new_user.email]
                 )
             except Exception, e:

@@ -105,7 +105,7 @@ class PasswordResetForm(forms.Form):
         email_body = "Hello, %s, and you reset password for an \
 master-igor.com account!\n\nYour new password: %s \n\n\
 After sign in, please, change you password in Settings page of your account:\n\
-\thttp://master-igor.com/%s" % (
+\thttps://joinmipt.com/%s" % (
             curr_user.username,
             new_pass,
             reverse("joinme:settings")
@@ -113,7 +113,7 @@ After sign in, please, change you password in Settings page of your account:\n\
         return send_mail(
             email_subject,
             email_body,
-            "noreply@master-igor.com",
+            "noreply@joinmipt.com",
             [curr_user.email]
             )
 
