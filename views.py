@@ -74,8 +74,9 @@ def index(request):
             new_profile.save()
 
             email_subject = "Подтверждение нового аккаунта на сайте JoinMipt.com"
-            email_body = "Привет, %s! Спасибо за регистрацию на нашем сайте!\n\n \
-Для активации аккаунты пройди по ссылке в течении 48 часов:\n\nhttps://joinmipt.com%s" % (
+            email_body = ("Привет, %s! Спасибо за регистрацию на нашем сайте!\n\n \
+Для активации аккаунты пройди по ссылке в течении 48 часов:\n\n\
+https://joinmipt.com%s").decode("utf-8", "replace") % (
                 new_user.username,
                 reverse_lazy(
                     "joinme:confirm-key", 

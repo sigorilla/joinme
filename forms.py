@@ -103,10 +103,10 @@ class PasswordResetForm(forms.Form):
         curr_user.set_password(new_pass)
         curr_user.save()
         email_subject = "Сброс пароля на сайте JoinMipt.com"
-        email_body = "Привет, %s! Вы сбросили пароль.\n\n\
+        email_body = ("Привет, %s! Вы сбросили пароль.\n\n\
 Ваш новый пароль: %s\n\n\
 После входа измените пароль в Настройках:\n\
-\thttps://joinmipt.com/%s" % (
+\thttps://joinmipt.com/%s").decode("utf-8", "replace") % (
             curr_user.username,
             new_pass,
             reverse("joinme:settings")
