@@ -46,7 +46,6 @@ def index(request):
     if request.GET:
         next = request.GET["next"]
 
-    # TODO: check 48 hours
     if request.POST:
         new_data = request.POST.copy()
         form = RegistrationForm(new_data)

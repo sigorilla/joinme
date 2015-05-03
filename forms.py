@@ -28,7 +28,12 @@ class RegistrationForm(forms.Form):
     @staticmethod
     def is_valid_username(field_data):
         try:
-            User.objects.get(username=field_data)
+            user = User.objects.get(username=field_data)
+            if user.userprofile.key_expires < dt.today() and not user.is_active:
+                user.userprofile.delete()
+                user.delete()
+                return
+            return user
         except User.DoesNotExist:
             return
         return validators.ValidationError("The username '%s' is already taken." % field_data)
@@ -75,9 +80,10 @@ class PasswordResetForm(forms.Form):
 
     def is_valid_email(self, data):
         try:
-            return User.objects.get(username=data)
+            return User.objects.get(username=data, is_active=True)
         except User.DoesNotExist:
-            self.add_error("email", "User with email %s does not exist. " % data)
+            self.add_error("email", 
+                ("Электронного адреса %s нет в базе. Или пользователь не активен.").decode("utf-8", "replace") % data)
             return None
 
     @staticmethod
