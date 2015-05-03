@@ -46,6 +46,7 @@ def index(request):
     if request.GET:
         next = request.GET["next"]
 
+    # TODO: check 48 hours
     if request.POST:
         new_data = request.POST.copy()
         form = RegistrationForm(new_data)
@@ -74,8 +75,8 @@ def index(request):
             new_profile.save()
 
             email_subject = "Подтверждение нового аккаунта на сайте JoinMipt.com"
-            email_body = ("Привет, %s! Спасибо за регистрацию на нашем сайте!\n\n \
-Для активации аккаунты пройди по ссылке в течении 48 часов:\n\n\
+            email_body = ("Привет, %s! Спасибо за регистрацию на нашем сайте!\n\n\
+Для активации аккаунта пройдите, пожалуйста, по ссылке в течении 48 часов:\n\n\
 https://joinmipt.com%s").decode("utf-8", "replace") % (
                 new_user.username,
                 reverse_lazy(
