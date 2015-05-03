@@ -18,18 +18,18 @@
 				{% if event.author.id == user.userprofile.id %}
 					{% if not event.active %}
 					<div>
-						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Inactive">
+						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Неактивное">
 							<i class="fa fa-exclamation"></i>
 						</a>
 					</div>
 					{% endif %}
 					<div>
-						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-primary" data-toggle="tooltip" data-placement="left" title="Edit Event">
+						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-primary" data-toggle="tooltip" data-placement="left" title="Изменить Событие">
 							<i class="mdi-content-create"></i>
 						</a>
 					</div>
 					<div>
-						<a href="{{ event.get_delete_url }}" class="btn btn-fab btn-raised btn-warning" data-toggle="tooltip" data-placement="left" title="Delete Event">
+						<a href="{{ event.get_delete_url }}" class="btn btn-fab btn-raised btn-warning" data-toggle="tooltip" data-placement="left" title="Удалить Событие">
 							<i class="fa fa-trash-o"></i>
 						</a>
 					</div>
@@ -37,11 +37,11 @@
 				{% if event.author.id != user.userprofile.id %}
 				<div>
 					{% if user.userprofile in event.users.all %}
-						<a href="{{ event.get_leave_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Leave Event">
+						<a href="{{ event.get_leave_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Выйти из События">
 							<i class="mdi-image-exposure-minus-1"></i>
 						</a>
 					{% else %}
-						<a href="{{ event.get_join_url }}" class="btn btn-fab btn-raised btn-success" data-toggle="tooltip" data-placement="left" title="Join Event">
+						<a href="{{ event.get_join_url }}" class="btn btn-fab btn-raised btn-success" data-toggle="tooltip" data-placement="left" title="Присоединиться">
 							<i class="mdi-image-exposure-plus-1"></i>
 						</a>
 					{% endif %}
@@ -49,14 +49,14 @@
 				{% endif %}
 				</div>
 
-				<h3>Description</h3>
+				<h3>Описание</h3>
 				<div class="lead">{{ event.description|linebreaksbr }}</div>
-				<h3>Members</h3>
+				<h3>Идут</h3>
 				<div>
 					<ul class="list-group">
 						<li class="list-group-item">
 							<h4 class="list-group-item-heading">
-								<i class="mdi-social-person"></i> {{ event.author }} (creator)
+								<i class="mdi-social-person"></i> {{ event.author }} (автор)
 							</h4>
 						</li>
 						{% for user in event.users.all %}
@@ -85,7 +85,7 @@
 		{# Comments #}
 		{# TODO: mention other user #}
 		<div class="comment-head text-center">
-			<h2 data-toggle="collapse" data-target="#comments"><i class="mdi-communication-forum"></i> Comments <span class="caret"></span></h2>
+			<h2 data-toggle="collapse" data-target="#comments"><i class="mdi-communication-forum"></i> Комментарии <span class="caret"></span></h2>
 		</div>
 		<div id="comments" class="collapse">
 			{% if event.comments.count %}
@@ -113,7 +113,7 @@
 			{% else %}
 			<div class="alert alert-warning alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				No comments
+				Нет комментариев
 			</div>
 			{% endif %}
 
@@ -123,16 +123,16 @@
 				<form class="form-horizontal" id="commentForm" action="" method="post">
 					{% csrf_token %}
 					<fieldset>
-						<legend>Add comment</legend>
+						<legend>Добавить комментарий</legend>
 						<div class="form-group">
-							<label for="commentMessage" class="control-label col-lg-2">Message</label>
+							<label for="commentMessage" class="control-label col-lg-2">Сообщение</label>
 							<div class="col-lg-10">
-								<textarea name="message" id="commentMessage" rows="4" class="form-control floating-label" data-hint="Don't use any HTML tags" placeholder="Enter your comment here"></textarea>
+								<textarea name="message" id="commentMessage" rows="4" class="form-control floating-label" data-hint="Не используйте, пожалуйста, HTML тэги" placeholder="Введите ваше сообщение здесь"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-lg-10 col-lg-offset-2">
-								<button data-type="submit" class="btn btn-primary"><i class="mdi-content-save"></i> Save</button>
+								<button data-type="submit" class="btn btn-primary"><i class="mdi-content-save"></i> Отправить</button>
 							</div>
 						</div>
 					</fieldset>

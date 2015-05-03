@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -41,8 +42,8 @@ class UserProfile(models.Model):
 class Category(models.Model):
 
     class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
 
     def __str__(self):
         return self.title
@@ -63,8 +64,8 @@ class Category(models.Model):
 class Comment(models.Model):
 
     class Meta:
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
 
     def __str__(self):
         return self.message
@@ -80,8 +81,8 @@ class Comment(models.Model):
 class Event(models.Model):
 
     class Meta:
-        verbose_name = "Event"
-        verbose_name_plural = "Events"
+        verbose_name = "Событие"
+        verbose_name_plural = "События"
 
     def __str__(self):
         return self.title

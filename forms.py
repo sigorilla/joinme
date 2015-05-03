@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 from datetime import datetime as dt
 
@@ -101,10 +102,10 @@ class PasswordResetForm(forms.Form):
         curr_user = User.objects.get(username__exact=data)
         curr_user.set_password(new_pass)
         curr_user.save()
-        email_subject = "Reset password"
-        email_body = "Hello, %s, and you reset password for an \
-master-igor.com account!\n\nYour new password: %s \n\n\
-After sign in, please, change you password in Settings page of your account:\n\
+        email_subject = "Сброс пароля на сайте JoinMipt.com"
+        email_body = "Привет, %s! Вы сбросили пароль.\n\n\
+Ваш новый пароль: %s\n\n\
+После входа измените пароль в Настройках:\n\
 \thttps://joinmipt.com/%s" % (
             curr_user.username,
             new_pass,
@@ -124,8 +125,11 @@ class CreateEventForm(forms.ModelForm):
         model = Event
         fields = ('title', 'description', 'category', 'datetime', 'active')
         labels = {
-            'datetime': 'Date of Event',
-            'active': 'Publish an Event? (After publish you cannot change this field)',
+            'title': 'Название',
+            'description': 'Описание',
+            'category': 'Категория',
+            'datetime': 'Дата события',
+            'active': 'Публиковать Событие? (После публикации Вы не сможете изменить это поле)',
         }
         help_text = {
         }
@@ -140,7 +144,7 @@ class CreateEventForm(forms.ModelForm):
         if dt.strptime(field_data, "%Y-%m-%d %H:%M") > datetime.now():
             return True
         else:
-            self.add_error("datetime", "Datetime should be in future.")
+            self.add_error("datetime", "Дата должна быть в будущем.")
             return False
 
 
@@ -150,8 +154,11 @@ class EditEventForm(forms.ModelForm):
         model = Event
         fields = ('title', 'description', 'category', 'datetime', 'active')
         labels = {
-            'datetime': 'Date of Event',
-            'active': 'Publish an Event? (After publish you cannot change this field)',
+            'title': 'Название',
+            'description': 'Описание',
+            'category': 'Категория',
+            'datetime': 'Дата события',
+            'active': 'Публиковать Событие? (После публикации Вы не сможете изменить это поле)',
         }
         widgets = {
             'category': forms.RadioSelect(),

@@ -6,7 +6,7 @@
 	<div class="col-md-6 col-md-offset-3">
 		<div class="panel panel-{{ object.category.color|default:"primary" }}">
 			<div class="panel-heading">
-				<h3><i class="fa fa-trash-o"></i> Delete Event</h3>
+				<h3><i class="fa fa-trash-o"></i> Удалить Событие</h3>
 			</div>
 			<div class="panel-body">
 			{% if object and object.author.id != user.userprofile.id %}
@@ -14,11 +14,11 @@
 			{% else %}
 				<form method="post" id="removeEventForm" action="">
 					{% csrf_token %}
-					<div class="lead">Are you sure you want to delete "{{ object }}"?</div>
+					<div class="lead">Вы уверены, что хотите удалить событие "{{ object }}"?</div>
 					<div>
-						<button data-type="submit" class="btn btn-danger">Confirm</button>
+						<button data-type="submit" class="btn btn-danger">Да, уверен!</button>
 						{% if object %}
-						<a class="btn btn-default" href="{{ object.get_absolute_url }}">Cancel</a>
+						<a class="btn btn-default" href="{{ object.get_absolute_url }}">Нет, отменить</a>
 						{% endif %}
 					</div>
 				</form>

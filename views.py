@@ -73,10 +73,9 @@ def index(request):
             )
             new_profile.save()
 
-            email_subject = "Your new joinmipt.com account confirmation"
-            email_body = "Hello, %s, and thanks for signing up for an \
-master-igor.com account!\n\nTo activate your account, click this link within 48 \
-hours:\n\nhttps://joinmipt.com%s" % (
+            email_subject = "Подтверждение нового аккаунта на сайте JoinMipt.com"
+            email_body = "Привет, %s! Спасибо за регистрацию на нашем сайте!\n\n \
+Для активации аккаунты пройди по ссылке в течении 48 часов:\n\nhttps://joinmipt.com%s" % (
                 new_user.username,
                 reverse_lazy(
                     "joinme:confirm-key", 
@@ -148,7 +147,7 @@ class SettingsView(NeverCacheMixin, LoginRequiredMixin, generic.View):
         return render(request, "joinme/settings.html", {
             "reset_form": reset_form,
             "user_form": user_form,
-            "title": "Settings",
+            "title": "Настройки",
             "VK_API_ID": glob_setting.VK_API_ID,
             "host": request.get_host()
         })
@@ -174,7 +173,7 @@ class SettingsView(NeverCacheMixin, LoginRequiredMixin, generic.View):
             "user_form": user_form,
             "reset_success": reset_success,
             "user_success": user_success,
-            "title": "Settings",
+            "title": "Настройки",
             "VK_API_ID": glob_setting.VK_API_ID,
             "host": request.get_host(),
         }
@@ -269,7 +268,7 @@ class MyEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MyEventsList, self).get_context_data(**kwargs)
-        context["title"] = "My Events"
+        context["title"] = "Мои События"
         return context
 
 
@@ -284,7 +283,7 @@ class CreatedEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CreatedEventsList, self).get_context_data(**kwargs)
-        context["title"] = "My created Events"
+        context["title"] = "Созданные События"
         return context
 
 
@@ -298,7 +297,7 @@ class AllEventsList(NeverCacheMixin, LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AllEventsList, self).get_context_data(**kwargs)
-        context["title"] = "All Events"
+        context["title"] = "Все События"
         return context
 
 

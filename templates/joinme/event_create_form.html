@@ -54,7 +54,7 @@ $( function() {
 	<div class="col-lg-10 col-lg-offset-1">
 		<div class="panel panel-{{ object.category.color|default:"primary" }}">
 			<div class="panel-heading">
-				<h3><i class="mdi-editor-mode-edit"></i> {{ object.pk|yesno:"Edit,Create" }} Event</h3>
+				<h3><i class="mdi-editor-mode-edit"></i> {{ object.pk|yesno:"Редактировать,Создать" }} Событие</h3>
 			</div>
 			<div class="panel-body">
 			{% if object and object.author.id != user.userprofile.id %}
@@ -67,7 +67,7 @@ $( function() {
 						<label class="control-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
 						{% with placeholder="placeholder:"|add:form.title.label %}
 							{# |add_class:"floating-label" #}
-							{{ form.title|add_class:"form-control"|append_attr:"data-hint:Maximum - 45 letters"|append_attr:placeholder }}
+							{{ form.title|add_class:"form-control"|append_attr:"data-hint:Максимум 45 символов"|append_attr:placeholder }}
 						{% endwith %}
 						{% for error in form.title.errors %}
 							<p class="help-block">{{ error }}</p>
@@ -94,7 +94,7 @@ $( function() {
 						<div class="col-xs-6">
 							<div class="form-group {{ form.datetime.errors|yesno:"has-error," }}">
 								<label class="control-label" for="{{ form.datetime.id_for_label }}">{{ form.datetime.label }}</label>
-								{% with placeholder="placeholder:Format YYYY-MM-DD HH:mm" %}
+								{% with placeholder="placeholder:Формат YYYY-MM-DD HH:mm" %}
 									{{ form.datetime|append_attr:placeholder|add_class:"form-control floating-label" }}
 								{% endwith %}
 								{% for error in form.datetime.errors %}
@@ -137,11 +137,11 @@ $( function() {
 					</div>
 
 					<div class="">
-						<button data-type="submit" class="btn btn-success"><i class="mdi-content-save"></i> {{ object.pk|yesno:"Edit,Create" }}</button>
+						<button data-type="submit" class="btn btn-success"><i class="mdi-content-save"></i> {{ object.pk|yesno:"Изменить,Создать" }}</button>
 						{% if object %}
-						<a href="{{ object.get_absolute_url }}" class="btn btn-default">Cancel</a>
+						<a href="{{ object.get_absolute_url }}" class="btn btn-default">Отменить</a>
 						{% else %}
-						<a href="{% url "joinme:index" %}" class="btn btn-default">Cancel</a>
+						<a href="{% url "joinme:index" %}" class="btn btn-default">Отменить</a>
 						{% endif %}
 					</div>
 				</form>

@@ -52,3 +52,4 @@ urlpatterns = patterns(
     url(r"^vk_auth/delete/$", social.vk_auth_delete, name="vk-auth-delete"),
 
 )
+# TODO: add 404 and other errors
