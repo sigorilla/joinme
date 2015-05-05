@@ -34,19 +34,6 @@
 						</a>
 					</div>
 				{% endif %}
-				{% if event.author.id != user.userprofile.id %}
-				<div>
-					{% if user.userprofile in event.users.all %}
-						<a href="{{ event.get_leave_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Выйти из События">
-							<i class="mdi-image-exposure-minus-1"></i>
-						</a>
-					{% else %}
-						<a href="{{ event.get_join_url }}" class="btn btn-fab btn-raised btn-success" data-toggle="tooltip" data-placement="left" title="Присоединиться">
-							<i class="mdi-image-exposure-plus-1"></i>
-						</a>
-					{% endif %}
-				</div>
-				{% endif %}
 				</div>
 
 				<h3>Описание</h3>
@@ -70,15 +57,31 @@
 				</div>
 
 				<h3><i class="mdi-action-event"></i> {{ event.datetime }}</h3>
-				
-				<div id="ratingDiv">
-					{% csrf_token %}
-					{% if user.userprofile in event.rating_users.all %}
-					<input id="rating" value="{{ event.get_rating }}" disabled="">
-					{% else %}
-					<input id="rating" value="{{ event.get_rating }}">
-					{% endif %}
+
+				<div class="row">
+					<div class="col-lg-6" id="ratingDiv">
+					{# <div> #}
+						{% csrf_token %}
+						{% if user.userprofile in event.rating_users.all %}
+						<input id="rating" value="{{ event.get_rating }}" disabled="">
+						{% else %}
+						<input id="rating" value="{{ event.get_rating }}">
+						{% endif %}
+					{# </div> #}
+					</div>
+					<div class="col-lg-6">
+						{% if event.author.id != user.userprofile.id %}
+						<div class="text-right">
+							{% if user.userprofile in event.users.all %}
+								<a href="{{ event.get_leave_url }}" class="btn btn-warning">Выйти из События</a>
+							{% else %}
+								<a href="{{ event.get_join_url }}" class="btn btn-success">Присоединиться</a>
+							{% endif %}
+						</div>
+						{% endif %}
+					</div>
 				</div>
+
 			</div>
 		</div>
 
@@ -159,7 +162,7 @@ $( function() {
 		min: 0,
 		max: 5,
 		step: 0.5,
-		size: "xs",
+		size: "sm",
 		showClear: false,
 		showCaption: false,
 	} );
