@@ -59,6 +59,9 @@ body [class*=mdi-] {
 .event-detail .star-rating:not(.rating-disabled) .rating-stars:before {
 	cursor: pointer;
 }
+.event-detail .rating-container .rating-stars {
+	color: #ffeb3b;
+}
 
 /* Comments */
 .comment-head {

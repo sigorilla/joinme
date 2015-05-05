@@ -12,7 +12,9 @@
 					<p class="lead">{{ event.description|truncatewords:20 }}</p>
 					<div class="text-right">
 						<div class="pull-left">
-							<input class="event-rating" value="{{ event.get_rating }}" readonly="">
+							{# <input class="event-rating" value="{{ event.get_rating }}" readonly=""> #}
+							<p><i class="mdi-action-grade mdi-material-yellow"></i> {{ event.get_rating }} из 5.0 <br>
+							Участников: {{ event.users.count|add:"1" }}</p>
 						</div>
 						<a class="btn btn-default btn-sm btn-{{ event.category.color }}" href="{{ event.get_absolute_url }}">Подробнее <i class="fa fa-external-link"></i></a>
 					</div>
