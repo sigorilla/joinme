@@ -12,54 +12,53 @@
 					<i class="{{ event.category.icon }}"></i> {{ event.category.title }}
 			</div>
 			<div class="panel-body">
-				<h1>{{ event.title|title }}</h1>
-
-				<div id="iconEvent" role="group">
-				{% if event.author.id == user.userprofile.id %}
-					{% if not event.active %}
-					<div>
-						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-danger" data-toggle="tooltip" data-placement="left" title="Неактивное">
-							<i class="fa fa-exclamation"></i>
-						</a>
+				<div class="row">
+					<div class="col-lg-6">
+						<h1>{{ event.title|title }}</h1>
+						<h3>Описание</h3>
+						<div class="lead">{{ event.description|linebreaksbr }}</div>
+						<h3><i class="mdi-action-event"></i> {{ event.datetime }}</h3>
 					</div>
-					{% endif %}
-					<div>
-						<a href="{{ event.get_edit_url }}" class="btn btn-fab btn-raised btn-primary" data-toggle="tooltip" data-placement="left" title="Изменить Событие">
-							<i class="mdi-content-create"></i>
-						</a>
-					</div>
-					<div>
-						<a href="{{ event.get_delete_url }}" class="btn btn-fab btn-raised btn-warning" data-toggle="tooltip" data-placement="left" title="Удалить Событие">
-							<i class="fa fa-trash-o"></i>
-						</a>
-					</div>
-				{% endif %}
-				</div>
-
-				<h3>Описание</h3>
-				<div class="lead">{{ event.description|linebreaksbr }}</div>
-				<h3>Идут</h3>
-				<div>
-					<ul class="list-group">
-						<li class="list-group-item">
-							<h4 class="list-group-item-heading">
-								<i class="mdi-social-person"></i> {{ event.author }} (автор)
-							</h4>
-						</li>
-						{% for user in event.users.all %}
+					<div class="col-lg-6 list-members">
+						<ul class="list-group">
 							<li class="list-group-item">
-								<h4 class="list-group-item-heading">
-									<i class="mdi-social-person"></i> {{ user }}
-								</h4>
+								<div class="row-picture">
+									{% with event.author.get_user_photo as photo %}
+										{% if photo %}
+										<img class="circle" src="{{ photo }}" alt="icon">
+										{% else %}
+										<i class="mdi-social-person"></i>
+										{% endif %}
+									{% endwith %}
+								</div>
+								<div class="row-content">
+									<h4 class="list-group-item-heading">{{ event.author }}</h4>
+									<div class="list-group-item-text">автор</div>
+								</div>
 							</li>
-						{% endfor %}
-					</ul>
+							{% for user in event.users.all %}
+							<li class="list-group-item">
+								<div class="row-picture">
+									{% with user.get_user_photo as photo %}
+										{% if photo %}
+										<img class="circle" src="{{ photo }}" alt="icon">
+										{% else %}
+										<i class="mdi-social-person"></i>
+										{% endif %}
+									{% endwith %}
+								</div>
+								<div class="row-content">
+									<h4 class="list-group-item-heading">{{ user }}</h4>
+									<div class="list-group-item-text">участник</div>
+								</div>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
 				</div>
-
-				<h3><i class="mdi-action-event"></i> {{ event.datetime }}</h3>
 
 				<div class="row">
-					<div class="col-lg-6" id="ratingDiv">
+					<div class="col-lg-4" id="ratingDiv">
 					{# <div> #}
 						{% csrf_token %}
 						{% if user.userprofile in event.rating_users.all %}
@@ -69,14 +68,31 @@
 						{% endif %}
 					{# </div> #}
 					</div>
-					<div class="col-lg-6">
+					<div class="col-lg-8 text-right">
 						{% if event.author.id != user.userprofile.id %}
-						<div class="text-right">
 							{% if user.userprofile in event.users.all %}
 								<a href="{{ event.get_leave_url }}" class="btn btn-warning">Выйти из События</a>
 							{% else %}
-								<a href="{{ event.get_join_url }}" class="btn btn-success">Присоединиться</a>
+								<a href="{{ event.get_join_url }}" class="btn btn-{{ event.category.color|default:"success" }}">Присоединиться</a>
 							{% endif %}
+						{% endif %}
+						{% if event.author.id == user.userprofile.id %}
+						<div class="btn-toolbar text-right" role="toolbar">
+							{% if not event.active %}
+							<div class="btn-group pull-right" role="group">
+								<a href="{{ event.get_edit_url }}" class="btn btn-danger">
+									<i class="fa fa-exclamation"></i> Неактивное
+								</a>
+							</div>
+							{% endif %}
+							<div class="btn-group pull-right" role="group">
+								<a href="{{ event.get_edit_url }}" class="btn btn-default">
+									<i class="mdi-content-create"></i> Изменить
+								</a>
+								<a href="{{ event.get_delete_url }}" class="btn btn-default">
+									<i class="fa fa-trash-o"></i> Удалить
+								</a>
+							</div>
 						</div>
 						{% endif %}
 					</div>
@@ -106,7 +122,7 @@
 					</div>
 					<div class="row-content">
 						<div class="least-content comment-date">{{ comment.pub_date|date:"d E Y H:i" }}</div>
-						<h4 class="list-group-item-heading comment-username">{{ comment.user.get_username }}</h4>
+						<h4 class="list-group-item-heading comment-username">{{ comment.user }}</h4>
 						<p class="list-group-item-text comment-message">{{ comment.message }}</p>
 					</div>
 				</div>
