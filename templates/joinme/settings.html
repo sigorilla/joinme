@@ -37,7 +37,8 @@
 					<h4>Социальные сети</h4>
 					{% if user.userprofile.vk_user_id == 0 %}
 					<div>
-						<a href="https://oauth.vk.com/authorize?client_id={{ VK_API_ID }}&scope=friends,groups,email,offline&redirect_uri=http://{{ host }}{% url "joinme:vk-auth" %}&response_type=code&v=5.29&state=test" class="btn btn-primary" title="VK"><i class="fa fa-vk"></i> Войти в VK</a>
+						{# TODO: add ru lang to VK #}
+						<a href="https://oauth.vk.com/authorize?client_id={{ VK_API_ID }}&lang=ru&https=1&scope=friends,groups,email,offline&redirect_uri=http://{{ host }}{% url "joinme:vk-auth" %}&response_type=code&v=5.29&state=test" class="btn btn-primary" title="VK"><i class="fa fa-vk"></i> Войти в VK</a>
 					</div>
 					{% else %}
 					<div>

@@ -15,7 +15,7 @@ VK_API_AUTH = "https://oauth.vk.com/access_token"
 
 
 def get_access_token(code, host="127.0.0.1:8000"):
-    url = "%s?client_id=%s&client_secret=%s&code=%s&redirect_uri=http://%s%s" % (
+    url = "%s?&lang=ru&https=1&client_id=%s&client_secret=%s&code=%s&redirect_uri=http://%s%s" % (
         VK_API_AUTH,
         glob_setting.VK_API_ID,
         glob_setting.VK_API_SECRET,
