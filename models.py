@@ -121,3 +121,4 @@ class Event(models.Model):
     rating = models.FloatField(default=0, blank=True)
     rating_count = models.IntegerField(default=0, blank=True)
     rating_users = models.ManyToManyField(UserProfile, blank=True, related_name="rating_users")
+    coord = models.CharField(max_length=255, default="55.75222,37.61556")

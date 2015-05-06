@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{% static "joinme/css/bootstrap-material-datepicker.css" %}?v=0.0.1">
 {% endblock head_script %}
 {% block end_script %}
+<script src="https://maps.googleapis.com/maps/api/js?v=3.9&language=ru"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
 <script src="{% static "joinme/js/bootstrap-material-datepicker.js" %}?v=0.0.1"></script>
 <script>
@@ -23,8 +24,41 @@ $( function() {
 			$( "#selectCategory" ).modal( "hide" );
 		}
 	} );
+	var map;
+	function initialize() {
+		coord = $( "input[name=coord]" ).val().split(",");
+		var myLatLng;
+		try {
+			myLatLng = new google.maps.LatLng( parseFloat(coord[0]), parseFloat(coord[1]) );
+		} catch (err) {
+			myLatLng = new google.maps.LatLng( 55.75222, 37.61556 );
+		}
+		var mapOptions = {
+			zoom: 11,
+			center: myLatLng
+		};
+		map = new google.maps.Map( document.getElementById( "mapCanvas" ), mapOptions );
+		var marker = new google.maps.Marker( {
+			position: myLatLng,
+			map: map
+		} );
+
+		google.maps.event.addListener( map, "click", function( event ) {
+			$( "input[name=coord]" ).val( event.latLng.toUrlValue() );
+			marker.setPosition( event.latLng );
+		} );
+	}
+
+	google.maps.event.addDomListener( window, "load", initialize );
 } );
 </script>
+<style>
+#mapCanvas {
+	height: 300px;
+	margin: 0;
+	padding: 0;
+}
+</style>
 {% endblock end_script %}
 
 {% block page %}
@@ -63,35 +97,34 @@ $( function() {
 				<form method="post" id="createEventForm" action="">
 					{% csrf_token %}
 
-					<div class="form-group {{ form.title.errors|yesno:"has-error," }}">
-						<label class="control-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
-						{% with placeholder="placeholder:"|add:form.title.label %}
-							{# |add_class:"floating-label" #}
-							{{ form.title|add_class:"form-control"|append_attr:"data-hint:Максимум 45 символов"|append_attr:placeholder }}
-						{% endwith %}
-						{% for error in form.title.errors %}
-							<p class="help-block">{{ error }}</p>
-						{% endfor %}
-						{% if form.title.help_text %}
-							<p class="help-text">{{ form.title.help_text }}</p>
-						{% endif %}
-					</div>
-					<div class="form-group {{ form.description.errors|yesno:"has-error," }}">
-						<label class="control-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
-						{% with placeholder="placeholder:"|add:form.description.label %}
-							{# |add_class:"floating-label" #}
-							{{ form.description|add_class:"form-control"|append_attr:placeholder }}
-						{% endwith %}
-						{% for error in form.description.errors %}
-							<p class="help-block">{{ error }}</p>
-						{% endfor %}
-						{% if form.description.help_text %}
-							<p class="help-text">{{ form.description.help_text }}</p>
-						{% endif %}
-					</div>
-
 					<div class="row">
-						<div class="col-xs-6">
+						<div class="col-lg-6">
+							<div class="form-group {{ form.title.errors|yesno:"has-error," }}">
+								<label class="control-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+								{% with placeholder="placeholder:"|add:form.title.label %}
+									{# |add_class:"floating-label" #}
+									{{ form.title|add_class:"form-control"|append_attr:"data-hint:Максимум 45 символов"|append_attr:placeholder }}
+								{% endwith %}
+								{% for error in form.title.errors %}
+									<p class="help-block">{{ error }}</p>
+								{% endfor %}
+								{% if form.title.help_text %}
+									<p class="help-text">{{ form.title.help_text }}</p>
+								{% endif %}
+							</div>
+							<div class="form-group {{ form.description.errors|yesno:"has-error," }}">
+								<label class="control-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+								{% with placeholder="placeholder:"|add:form.description.label %}
+									{# |add_class:"floating-label" #}
+									{{ form.description|add_class:"form-control"|append_attr:placeholder }}
+								{% endwith %}
+								{% for error in form.description.errors %}
+									<p class="help-block">{{ error }}</p>
+								{% endfor %}
+								{% if form.description.help_text %}
+									<p class="help-text">{{ form.description.help_text }}</p>
+								{% endif %}
+							</div>
 							<div class="form-group {{ form.datetime.errors|yesno:"has-error," }}">
 								<label class="control-label" for="{{ form.datetime.id_for_label }}">{{ form.datetime.label }}</label>
 								{% with placeholder="placeholder:Формат YYYY-MM-DD HH:mm" %}
@@ -104,37 +137,42 @@ $( function() {
 									<p class="help-text">{{ form.datetime.help_text }}</p>
 								{% endif %}
 							</div>
-						</div>
-						<div class="col-xs-6">
 							<div class="form-group {{ form.category.errors|yesno:"has-error," }}">
-								<div class="form-group {{ form.category.errors|yesno:"has-error," }}">
-									<label class="control-label">{{ form.category.label }}</label>
-										<input type="hidden" id="inputCategory" name="{{ form.category.name }}" value="{{ form.category.value }}">
-										<button type="button" style="margin: 0;" class="btn btn-default btn-sm btn-block {{ form.category.errors|yesno:"btn-danger," }}" data-toggle="modal" data-target="#selectCategory">
-										{{ cat_current|default:form.category.0.choice_label }}
-										</button>
-									{% for error in form.category.errors %}
-										<p class="help-block">{{ error }}</p>
-									{% endfor %}
-									{% if form.category.help_text %}
-										<p class="help-text">{{ form.category.help_text }}</p>
-									{% endif %}
+								<label class="control-label">{{ form.category.label }}</label>
+									<input type="hidden" id="inputCategory" name="{{ form.category.name }}" value="{{ form.category.value }}">
+									<button type="button" style="margin: 0;" class="btn btn-default btn-sm btn-block {{ form.category.errors|yesno:"btn-danger," }}" data-toggle="modal" data-target="#selectCategory">
+									{{ cat_current|default:form.category.0.choice_label }}
+									</button>
+								{% for error in form.category.errors %}
+									<p class="help-block">{{ error }}</p>
+								{% endfor %}
+								{% if form.category.help_text %}
+									<p class="help-text">{{ form.category.help_text }}</p>
+								{% endif %}
+							</div>
+							<div class="form-group {{ form.active.errors|yesno:"has-error," }}">
+								<div class="togglebutton">
+									<label class="control-label" for="{{ form.active.id_for_label }}">
+										{{ form.active }} 
+										{% if object.active %}
+										<i class="mdi-action-lock"></i>
+										{% endif %} 
+										{{ form.active.label }}
+									</label>
 								</div>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div id="mapCanvas"></div>
+							<div class="form-group {{ form.coord.errors|yesno:"has-error," }}">
+							{{ form.coord|add_class:"form-control" }}
+							{% for error in form.coord.errors %}
+								<p class="help-block">{{ error }}</p>
+							{% endfor %}
 							</div>
 						</div>
 					</div>
 
-					<div class="form-group {{ form.active.errors|yesno:"has-error," }}">
-						<div class="togglebutton">
-							<label class="control-label" for="{{ form.active.id_for_label }}">
-								{{ form.active }} 
-								{% if object.active %}
-								<i class="mdi-action-lock"></i>
-								{% endif %} 
-								{{ form.active.label }}
-							</label>
-						</div>
-					</div>
 
 					<div class="">
 						<button data-type="submit" class="btn btn-success"><i class="mdi-content-save"></i> {{ object.pk|yesno:"Изменить,Создать" }}</button>

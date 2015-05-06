@@ -129,21 +129,23 @@ class CreateEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('title', 'description', 'category', 'datetime', 'active')
+        fields = ('title', 'description', 'category', 'datetime', 'active', 'coord')
         labels = {
             'title': 'Название',
             'description': 'Описание',
             'category': 'Категория',
             'datetime': 'Дата события',
-            'active': 'Публиковать Событие? (После публикации Вы не сможете изменить это поле)',
+            'active': 'Публиковать Событие?',
         }
         help_text = {
         }
         error_message = {
         }
+        # TODO: validation of coordinates
         widgets = {
             'category': forms.RadioSelect(),
             'description': forms.Textarea(attrs={'rows': 4}),
+            'coord': forms.HiddenInput()
         }
 
     def is_valid_datetime(self, field_data):
@@ -158,17 +160,18 @@ class EditEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('title', 'description', 'category', 'datetime', 'active')
+        fields = ('title', 'description', 'category', 'datetime', 'active', 'coord')
         labels = {
             'title': 'Название',
             'description': 'Описание',
             'category': 'Категория',
             'datetime': 'Дата события',
-            'active': 'Публиковать Событие? (После публикации Вы не сможете изменить это поле)',
+            'active': 'Публиковать Событие?',
         }
         widgets = {
             'category': forms.RadioSelect(),
             'description': forms.Textarea(attrs={'rows': 4}),
+            'coord': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):

@@ -3,11 +3,29 @@
 
 {% block page %}
 {% if event.active or event.author.id == user.userprofile.id %}
+
+<div class="modal fade" id="eventMap" tabindex="-1" role="dialog" aria-labelledby="eventMapLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="eventMapLabel"><i class="mdi-maps-pin-drop"></i> Карта События</h4>
+			</div>
+			<div class="modal-body">
+				<div id="mapCanvas"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="page-header">
 </div>
 <div class="row">
 	<div class="col-lg-10 col-lg-offset-1">
-		<div class="panel panel-{{ event.category.color|default:"primary" }} event-detail" id="event-{{ event.id }}">
+		<div class="panel panel-{{ event.category.color|default:"primary" }} event-detail" id="event-{{ event.id }}" data-coord="{{ event.coord }}">
 			<div class="panel-heading">
 					<i class="{{ event.category.icon }}"></i> {{ event.category.title }}
 			</div>
@@ -70,11 +88,16 @@
 					</div>
 					<div class="col-lg-8 text-right">
 						{% if event.author.id != user.userprofile.id %}
+							<div class="btn-group pull-right" role="group">
+								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventMap">
+									<i class="mdi-maps-pin-drop"></i> Карта
+								</button>
 							{% if user.userprofile in event.users.all %}
 								<a href="{{ event.get_leave_url }}" class="btn btn-warning">Выйти из События</a>
 							{% else %}
 								<a href="{{ event.get_join_url }}" class="btn btn-{{ event.category.color|default:"success" }}">Присоединиться</a>
 							{% endif %}
+							</div>
 						{% endif %}
 						{% if event.author.id == user.userprofile.id %}
 						<div class="btn-toolbar text-right" role="toolbar">
@@ -86,6 +109,9 @@
 							</div>
 							{% endif %}
 							<div class="btn-group pull-right" role="group">
+								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventMap">
+									<i class="mdi-maps-pin-drop"></i> Карта
+								</button>
 								<a href="{{ event.get_edit_url }}" class="btn btn-default">
 									<i class="mdi-content-create"></i> Изменить
 								</a>
@@ -171,6 +197,7 @@
 {% endblock page %}
 
 {% block end_script %}
+<script src="https://maps.googleapis.com/maps/api/js?v=3.9&language=ru"></script>
 <script>
 $( function() {
 
@@ -209,6 +236,37 @@ $( function() {
 		} );
 	} );
 
+	var map;
+	function initialize() {
+		coord = $( ".event-detail" ).data( "coord" ).split(",");
+		var myLatLng;
+		try {
+			myLatLng = new google.maps.LatLng( parseFloat(coord[0]), parseFloat(coord[1]) );
+		} catch (err) {
+			myLatLng = new google.maps.LatLng( 55.75222, 37.61556 );
+		}
+		var mapOptions = {
+			zoom: 11,
+			center: myLatLng
+		};
+		map = new google.maps.Map( document.getElementById( "mapCanvas" ), mapOptions );
+		var marker = new google.maps.Marker( {
+			position: myLatLng,
+			map: map
+		} );
+	}
+
+	$( "#eventMap" ).on( "shown.bs.modal", initialize );
+
+	// google.maps.event.addDomListener( window, "load", initialize );
+
 } );
 </script>
+<style>
+#mapCanvas {
+	height: 400px;
+	margin: 0;
+	padding: 0;
+}
+</style>
 {% endblock end_script %}
