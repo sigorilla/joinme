@@ -10,19 +10,19 @@
 				</div>
 				<div class="panel-body">
 					{% if has_account %}
-						<div class="well well-sm well-material-deep-orange-500">Выйдите из текущего аккаунта.</div>
+						<div class="alert alert-material-deep-orange-500">Выйдите из текущего аккаунта.</div>
 						<div class="text-center">
 							<a href="{% url "joinme:logout" %}" class="btn btn-info">Выйти</a>
 						</div>
 					{% endif %}
 					{% if expired %}
-						<div class="well well-sm well-material-red-500">Время вышло, попробуйте снова.</div>
+						<div class="alert alert-material-red-500">Время вышло, попробуйте снова.</div>
 					{% endif %}
 					{% if is_active %}
-						<div class="well well-sm well-material-light-blue-500">Вы уже активировали аккаунт.</div>
+						<div class="alert alert-material-light-blue-500">Вы уже активировали аккаунт.</div>
 					{% endif %}
 					{% if confirm %}
-						<div class="well well-sm well-material-teal">Спасибо!</div>
+						<div class="alert alert-material-teal">Спасибо!</div>
 					{% endif %}
 					{% if confirm or is_active %}
 						<form method="post" id="loginForm" action="{% url 'joinme:index' %}">

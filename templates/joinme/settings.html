@@ -11,7 +11,7 @@
 				<div class="panel-body">
 					<h4>Основная информация</h4>
 					{% if user_success %}
-						<div class="well well-sm text-success">Данные были сохранены.</div>
+						<div class="alert alert-success">Данные были сохранены.</div>
 					{% endif %}
 					<form method="post" action="" class="form-horizontal">
 						{% csrf_token %}
@@ -57,7 +57,7 @@
 				</div>
 				<div class="panel-body">
 					{% if reset_success %}
-						<div class="well well-sm text-success">Новый пароль был сохранен.</div>
+						<div class="alert alert-success">Новый пароль был сохранен.</div>
 					{% endif %}
 					<form method="post" action="">
 						{% csrf_token %}

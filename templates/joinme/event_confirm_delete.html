@@ -10,7 +10,7 @@
 			</div>
 			<div class="panel-body">
 			{% if object and object.author.id != user.userprofile.id %}
-				<div class="well">Permission denied.</div>
+				<div class="alert alert-warning">Доступ запрещен.</div>
 			{% else %}
 				<form method="post" id="removeEventForm" action="">
 					{% csrf_token %}

@@ -41,26 +41,26 @@
 					{% csrf_token %}
 					<input type="hidden" name="type_form" value="login">
 					{% if next %}
-						<div class="well well-sm well-material-light-blue-500">Для данного действия вы должны быть авторизованы.</div>
+						<div class="alert alert-material-light-blue-500">Для данного действия вы должны быть авторизованы.</div>
 					{% endif %}
 					{% if created %}
-						<div class="well well-sm well-material-light-blue-500">Ссылка на подтверждение была выслана на ваш email.</div>
+						<div class="alert alert-material-light-blue-500">Ссылка на подтверждение была выслана на ваш email.</div>
 					{% else %}
 						{% if server_fail %}
 							<div class="well well-sm">Server is failed. Try again later, please.</div>
 						{% endif %}
 						{% if is_inactive %}
-							<div class="well well-sm well-material-deep-orange-500">Подтвердите ссылку в вашем почтовом ящике.</div>
+							<div class="alert alert-material-deep-orange-500">Подтвердите ссылку в вашем почтовом ящике.</div>
 						{% endif %}
 						{% if wrong_data %}
-							<div class="well well-sm well-material-red-500">Проверьте данные. Возможно такой email уже занят.</div>
+							<div class="alert alert-material-red-500">Проверьте данные. Возможно такой email уже занят.</div>
 							<div class="well weel-sm">Если вы забыли пароль, то воспользуйтесь <a href="{% url "joinme:reset-password" %}">формой сброса пароля</a>.</div>
 						{% endif %}
 						{% if wrong_email %}
-							<div class="well well-sm well-material-red-500">Сейчас твой электронный адрес должен быть в домене <code>phystech.edu</code>. Спасибо!</div>
+							<div class="alert alert-material-red-500">Сейчас твой электронный адрес должен быть в домене <code>phystech.edu</code>. Спасибо!</div>
 						{% endif %}
 						{% if empty_data %}
-							<div class="well well-sm well-material-red-500">Введите, пожалуйста, все данные.</div>
+							<div class="alert alert-material-red-500">Введите, пожалуйста, все данные.</div>
 						{% endif %}
 
 						<div class="form-group">
