@@ -92,7 +92,7 @@ $( function() {
 			</div>
 			<div class="panel-body">
 			{% if object and object.author.id != user.userprofile.id %}
-				<div class="alert alert-warning">Доступ запрещен.</div>
+				<div class="alert alert-warning">Доступ запрещен. <a href="{{ object.get_absolute_url }}" class="alert-link">Обратно к событию</a></div>
 			{% else %}
 				<form method="post" id="createEventForm" action="">
 					{% csrf_token %}
