@@ -162,7 +162,7 @@
 			</div>
 			{% endif %}
 
-			{% if user.userprofile.id == event.author.id or user.userprofile in event.users.all %}
+			{# {% if user.userprofile.id == event.author.id or user.userprofile in event.users.all %} #}
 			{# Form to add Comment #}
 			<div>
 				<form class="form-horizontal" id="commentForm" action="" method="post">
@@ -183,7 +183,7 @@
 					</fieldset>
 				</form>
 			</div>
-			{% endif %}
+			{# {% endif %} #}
 		</div>
 	</div>
 </div>
