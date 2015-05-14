@@ -107,7 +107,7 @@ $( document ).ready( function() {
 				return "<a href='" + search + "?q=" + query + "'>" + str + "</a>";
 			}
 
-			$( "[class^=event]" ).each( function( index, element ) {
+			$( ".event, .event-detail" ).each( function( index, element ) {
 				var $text = $( element ).find( ".panel-body > .lead" );
 				var text = $text.text();
 				var regexp = /(\#\w+)/g;
