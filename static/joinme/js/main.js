@@ -108,7 +108,7 @@ $( document ).ready( function() {
 			}
 
 			$( ".event, .event-detail" ).each( function( index, element ) {
-				var $text = $( element ).find( ".panel-body > .lead" );
+				var $text = $( element ).find( ".panel-body .lead" );
 				var text = $text.text();
 				var regexp = /(\#\w+)/g;
 				var new_string = text.replace( regexp, hasher );
