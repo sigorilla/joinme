@@ -100,7 +100,7 @@ hours:\n\nhttp://master-igor.com%s" % (
                 send_mail(
                     email_subject,
                     email_body,
-                    "noreply@master-igor.com",
+                    "noreply@joinmipt.com",
                     [new_user.email]
                 )
             except Exception, e:
