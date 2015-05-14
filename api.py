@@ -85,13 +85,13 @@ def reg(request):
             )
             new_profile.save()
 
-            email_subject = "Your new master-igor.com account confirmation"
-            email_body = "Hello, %s, and thanks for signing up for an \
-master-igor.com account!\n\nTo activate your account, click this link within 48 \
-hours:\n\nhttp://master-igor.com%s" % (
+            email_subject = "Подтверждение нового аккаунта на сайте JoinMipt.com"
+            email_body = ("Привет, %s! Спасибо за регистрацию на нашем сайте!\n\n\
+Для активации аккаунта пройдите, пожалуйста, по ссылке в течении 48 часов:\n\n\
+https://joinmipt.com%s").decode("utf-8", "replace") % (
                 new_user.username,
                 reverse_lazy(
-                    "joinme:confirm-key",
+                    "joinme:confirm-key", 
                     kwargs={"activation_key": new_profile.activation_key}
                 )
             )
