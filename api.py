@@ -66,9 +66,9 @@ def reg(request):
         if (new_data["email"] is not "") and (new_data["password"] is not ""):
             match = re.match(r'(?P<email>.+@phystech.edu)', new_data["email"])
             if not (match and match.groupdict()["email"] == new_data["email"]):
-                return JsonResponse({"error": "Wrong format of email."})
+                return JsonResponse({"error": "Неверный формат почты."})
         else:
-            return JsonResponse({"error": "Login or password not found. Please, try again."})
+            return JsonResponse({"error": "Не найден логин или пароль. Повторите, пожалуйста."})
 
         errors = form.is_valid_username(new_data["email"])
         if not errors:
@@ -104,13 +104,13 @@ https://joinmipt.com%s").decode("utf-8", "replace") % (
                     [new_user.email]
                 )
             except Exception, e:
-                return JsonResponse({"error": "Something happens on the server side."})
+                return JsonResponse({"error": "Что-то случилось на стороне сервера."})
 
             return JsonResponse({"token": activation_key})
         else:
-            return JsonResponse({"error": "This email is already taken."})
+            return JsonResponse({"error": "Эта почта уже занята."})
     else:
-        return JsonResponse({"error": "It should be POST request."})
+        return JsonResponse({"error": "Должен быть POST запрос."})
 
 
 """
@@ -134,7 +134,7 @@ def login(request):
                 "password": request.GET['password']
             }
         else:
-            return JsonResponse({"error": "Login or password not found. Please, try again."})
+            return JsonResponse({"error": "Не найден логин или пароль. Повторите, пожалуйста."})
 
         user = authenticate(username=new_data["email"], password=new_data["password"])
         if user is not None:
@@ -144,15 +144,15 @@ def login(request):
                 if profile:
                     return JsonResponse({"token": profile[0]["activation_key"]})
                 else:
-                    return JsonResponse({"error": "Login not found. Please, try to sign up."})
+                    return JsonResponse({"error": "Не найден логин. Попробуйте зарегистрироваться."})
             else:
                 # account is disabled
-                return JsonResponse({"error": "Please, confirm your email."})
+                return JsonResponse({"error": "Пожалуйста, подтвердите почту."})
         else:
             # invalid login/password
-            return JsonResponse({"error": "Password is wrong. Please, try again or reset it."})
+            return JsonResponse({"error": "Пароль неверен!"})
     else:
-        return JsonResponse({"error": "It should be GET request."})
+        return JsonResponse({"error": "Должен быть GET запрос."})
 
 
 """
@@ -177,11 +177,11 @@ def get_events_by_category(request):
                 "token": request.GET['token']
             }
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Данные пустые."})
         try:
             userprofile = UserProfile.objects.filter(activation_key__exact=new_data["token"])
         except UserProfile.DoesNotExist:
-            return JsonResponse({"error": "Token is not found."})
+            return JsonResponse({"error": "Ваш токен не найден в базе."})
 
         try:
             events_obj = list(Event.objects.filter(
@@ -189,7 +189,7 @@ def get_events_by_category(request):
                 active__exact=True
             ).order_by("-datetime", "title"))
             if not events_obj:
-                return JsonResponse({"error": "Category without events."})
+                return JsonResponse({"error": "В категории нет событий"})
             events = list()
             for event in events_obj:
                 users_obj = list(event.users.all())
@@ -214,11 +214,11 @@ def get_events_by_category(request):
                     "coord": event.coord,
                 })
         except Event.DoesNotExist:
-            return JsonResponse({"error": "Events are not found."})
+            return JsonResponse({"error": "События не найдены."})
         else:
             return JsonResponse({"events": events})
     else:
-        return JsonResponse({"error": "It should be GET request."})
+        return JsonResponse({"error": "Должен быть GET запрос."})
 
 
 """
@@ -239,11 +239,11 @@ def get_next_events(request):
                 "token": request.GET['token']
             }
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Данные пустые."})
         try:
             userprofile = UserProfile.objects.filter(activation_key__exact=new_data["token"])
         except UserProfile.DoesNotExist:
-            return JsonResponse({"error": "Token is not found."})
+            return JsonResponse({"error": "Ваш токен не найден в базе."})
 
         try:
             week = datetime.datetime.now() + datetime.timedelta(days=7)
@@ -257,7 +257,7 @@ def get_next_events(request):
                     categories.append(event.category.title)
 
         except Event.DoesNotExist:
-            return JsonResponse({"error": "Events are not found."})
+            return JsonResponse({"error": "События не найдены."})
         else:
             return JsonResponse({"response": {
                 "count": events_obj.count(),
@@ -265,7 +265,7 @@ def get_next_events(request):
                 "categories": categories
             }})
     else:
-        return JsonResponse({"error": "It should be GET request."})
+        return JsonResponse({"error": "Должен быть GET запрос."})
 
 
 """
@@ -289,25 +289,25 @@ def join_event(request):
                 "token": request.GET['token']
             }
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Данные пустые."})
         try:
             userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
         except UserProfile.DoesNotExist:
-            return JsonResponse({"error": "Token is not found."})
+            return JsonResponse({"error": "Ваш токен не найден в базе."})
 
         try:
             event = Event.objects.get(pk=new_data["pk"])
             if event.author.id != userprofile.id:
                 event.users.add(userprofile)
-                return JsonResponse({"success": "You join this event."})
+                return JsonResponse({"success": "Вы присоединились к событию."})
             else:
-                return JsonResponse({"error": "You are author of this event."})
+                return JsonResponse({"error": "Вы автор события."})
         except Event.DoesNotExist:
-            return JsonResponse({"error": "Events are not found."})
+            return JsonResponse({"error": "Событие не найдено."})
         except Exception:
-            return JsonResponse({"error": "Something happens wrong on the server side."})
+            return JsonResponse({"error": "Что-то случилось на стороне сервера."})
     else:
-        return JsonResponse({"error": "It should be GET request."})
+        return JsonResponse({"error": "Должен быть GET запрос."})
 
 
 """
@@ -331,25 +331,25 @@ def leave_event(request):
                 "token": request.GET['token']
             }
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Данные пустые."})
         try:
             userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
         except UserProfile.DoesNotExist:
-            return JsonResponse({"error": "Token is not found."})
+            return JsonResponse({"error": "Ваш токен не найден в базе."})
 
         try:
             event = Event.objects.get(pk=new_data["pk"])
             if event.author.id != userprofile.id:
                 event.users.remove(userprofile)
-                return JsonResponse({"success": "You leave this event."})
+                return JsonResponse({"success": "Вы покинули событие."})
             else:
-                return JsonResponse({"error": "You are author of this event."})
+                return JsonResponse({"error": "Вы автор события."})
         except Event.DoesNotExist:
-            return JsonResponse({"error": "Events are not found."})
+            return JsonResponse({"error": "Событие не найдено."})
         except Exception:
-            return JsonResponse({"error": "Something happens wrong on the server side."})
+            return JsonResponse({"error": "Что-то случилось на стороне сервера."})
     else:
-        return JsonResponse({"error": "It should be GET request."})
+        return JsonResponse({"error": "Должен быть GET запрос."})
 
 
 """
@@ -373,22 +373,22 @@ def delete_event(request):
                 "token": request.GET['token']
             }
         else:
-            return JsonResponse({"error": "Data is empty."})
+            return JsonResponse({"error": "Данные пустые."})
         try:
             userprofile = UserProfile.objects.get(activation_key__exact=new_data["token"])
         except UserProfile.DoesNotExist:
-            return JsonResponse({"error": "Token is not found."})
+            return JsonResponse({"error": "Ваш токен не найден в базе."})
 
         try:
             event = Event.objects.get(pk=new_data["pk"])
             if event.author.id == userprofile.id:
                 event.delete()
-                return JsonResponse({"success": "You delete this event."})
+                return JsonResponse({"success": "Событие удалено."})
             else:
-                return JsonResponse({"error": "You are not author of this event."})
+                return JsonResponse({"error": "Вы не автор события."})
         except Event.DoesNotExist:
-            return JsonResponse({"error": "Event is not found."})
+            return JsonResponse({"error": "Событие не найдено."})
         except Exception:
-            return JsonResponse({"error": "Something happens wrong on the server side."})
+            return JsonResponse({"error": "Что-то случилось на стороне сервера."})
     else:
-        return JsonResponse({"error": "It should be GET request."})
+        return JsonResponse({"error": "Должен быть GET запрос."})
