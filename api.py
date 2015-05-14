@@ -211,6 +211,7 @@ def get_events_by_category(request):
                     "description_title": truncatewords(event.description, 20),
                     "datetime": event.datetime,
                     "members": users,
+                    "coord": event.coord,
                 })
         except Event.DoesNotExist:
             return JsonResponse({"error": "Events are not found."})
