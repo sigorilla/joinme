@@ -113,7 +113,7 @@ class Event(models.Model):
     description = models.TextField()
     datetime = models.DateTimeField()
     pub_date = models.DateTimeField("date published", default=now)
-    category = models.ForeignKey(Category, default=1)
+    category = models.ForeignKey(Category, default=2)
     author = models.ForeignKey(UserProfile, related_name='author')
     users = models.ManyToManyField(UserProfile, blank=True)
     active = models.BooleanField(default=True)
